@@ -10,4 +10,4 @@ import '@/style/basic.less'
 
 const app = createApp(App)
 // styleImport(app).use(router).use(store, key).mount('#app')
-app.use(router).use(store).use(ElementPlus).mount('#app')
+app.use(store).use(ElementPlus).mount('#app')

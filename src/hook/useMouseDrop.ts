@@ -40,6 +40,7 @@ export default function ({ down, move, up }: Props) {
       y: 0
     }
   })
+  const hover = ref(false)
   const target: Ref<HTMLElement | null> = ref(null)
   const mousedown = (event: MouseEvent) => {
     mouse.down.x = event.pageX
@@ -64,13 +65,39 @@ export default function ({ down, move, up }: Props) {
     mouse.up.x = event.pageX
     mouse.up.y = event.pageY
     mouse.state = 'auto'
+    hover.value = false
+    if (isRef(target) && target.value != null) {
+      if (!hover.value) {
+        target.value.classList.remove('hover')
+      }
+    }
     if (up) up(event, mouse)
+  }
+  const mouseOver = () => {
+    hover.value = true
+    setTimeout(() => {
+      if (isRef(target) && target.value != null) {
+        if (hover.value) {
+          target.value.classList.add('hover')
+        }
+      }
+    }, 100)
+  }
+  const mouseOut = () => {
+    hover.value = false
+    if (isRef(target) && target.value != null) {
+      if (!hover.value && mouse.state === 'auto') {
+        target.value.classList.remove('hover')
+      }
+    }
   }
   onMounted(() => {
     if (isRef(target) && target.value != null) {
       target.value.addEventListener('mousedown', mousedown)
       document.addEventListener('mousemove', mousemove)
       document.addEventListener('mouseup', mouseup)
+      target.value.addEventListener('mouseover', mouseOver)
+      target.value.addEventListener('mouseout', mouseOut)
     }
   })
 
@@ -79,6 +106,8 @@ export default function ({ down, move, up }: Props) {
       target.value.removeEventListener('mousedown', mousedown)
       target.value.removeEventListener('mousemove', mousemove)
       target.value.removeEventListener('mouseup', mouseup)
+      target.value.removeEventListener('mouseup', mouseOver)
+      target.value.removeEventListener('mouseout', mouseOver)
     }
   })
 

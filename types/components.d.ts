@@ -4,16 +4,32 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
+    Content: typeof import('./../src/components/content/index.vue')['default']
+    ContentTablist: typeof import('./../src/components/content/tablist.vue')['default']
+    ContentWelcome: typeof import('./../src/components/content/Welcome.vue')['default']
     Editor: typeof import('./../src/components/Editor.vue')['default']
+    ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
+    ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
     ElButton: typeof import('element-plus/es')['ElButton']
-    ElCard: typeof import('element-plus/es')['ElCard']
-    ElMenu: typeof import('element-plus/es')['ElMenu']
-    ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
+    ElCollapse: typeof import('element-plus/es')['ElCollapse']
+    ElCollapseItem: typeof import('element-plus/es')['ElCollapseItem']
+    ElDropdown: typeof import('element-plus/es')['ElDropdown']
+    ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
+    ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
+    ElIcon: typeof import('element-plus/es')['ElIcon']
+    ElTabPane: typeof import('element-plus/es')['ElTabPane']
+    ElTabs: typeof import('element-plus/es')['ElTabs']
+    ElTree: typeof import('element-plus/es')['ElTree']
+    Footer: typeof import('./../src/components/Footer.vue')['default']
     Header: typeof import('./../src/components/Header.vue')['default']
     Layout: typeof import('./../src/components/Layout.vue')['default']
-    Loading: typeof import('element-plus/es')['ElLoadingDirective']
+    Left: typeof import('./../src/components/left/Index.vue')['default']
+    LeftActivitybar: typeof import('./../src/components/left/Activitybar.vue')['default']
+    LeftSidebar: typeof import('./../src/components/left/Sidebar.vue')['default']
+    LeftTest: typeof import('./../src/components/left/test.vue')['default']
+    LeftWelcome: typeof import('./../src/components/left/Welcome.vue')['default']
     Main: typeof import('./../src/components/Main.vue')['default']
-    Nav: typeof import('./../src/components/Nav.vue')['default']
+    'Main copy': typeof import('./../src/components/Main copy.vue')['default']
   }
 }
 
