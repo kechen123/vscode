@@ -1,19 +1,30 @@
 <template>
   <div class="tablist">
-    <el-tabs v-model="editableTabsValue" type="card" class="demo-tabs">
-      <el-tab-pane v-for="(item, i) in list" :key="item.name" :label="item.name" :name="`${i + 1}`">
+    <el-tabs
+      v-model="tabData.active"
+      closable
+      type="card"
+      class="demo-tabs"
+      @tab-remove="removeTab"
+    >
+      <el-tab-pane
+        v-for="(item, key) in tabData.list"
+        :key="key"
+        :label="item.name"
+        :name="item.name"
+      >
         <template #label>
           <span class="custom-tabs-label">
             <el-icon><calendar /></el-icon>
-            <span class="label">{{ item.name }}</span>
+            <span :class="[item.edit ? '' : 'italic', 'label']">{{ item.name }}</span>
           </span>
         </template>
         <div class="tabs-breadcrumbs">
           <el-breadcrumb :separator-icon="ArrowRight">
             <el-breadcrumb-item :to="{ path: '/' }">homepage</el-breadcrumb-item>
-            <el-breadcrumb-item>promotion management</el-breadcrumb-item>
-            <el-breadcrumb-item>promotion list</el-breadcrumb-item>
-            <el-breadcrumb-item>promotion detail</el-breadcrumb-item>
+            <el-breadcrumb-item> management</el-breadcrumb-item>
+            <el-breadcrumb-item> list</el-breadcrumb-item>
+            <el-breadcrumb-item> detail</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
         <div
@@ -28,17 +39,26 @@
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import { Calendar, ArrowRight } from '@element-plus/icons-vue'
 import { useTabList } from '@/store/content_tablist'
+import { Tab, TabList } from '@/common/types/editor'
 
 const tabHeight = 35
 const breadcrumbHeight = 22
 const pageSize = [document.documentElement.clientWidth, document.documentElement.clientHeight]
-const useTab = useTabList()
-const list = useTab.list
-console.log(list)
-let tabIndex = 1
-const editableTabsValue = ref('1')
+const store = useTabList()
+const tabData = reactive<TabList>({
+  list: [],
+  active: ''
+})
+
+watchEffect(() => {
+  tabData.list = Array.from(store.list.values())
+  tabData.active = store.active
+  console.log(tabData)
+})
+
 const option = {
   language: 'dynamic',
   format: true,
@@ -48,64 +68,9 @@ const option = {
   }
 }
 
-const handleTabsEdit = (targetName: string | number | null, action: 'remove' | 'add') => {
-  if (action === 'add') {
-    // const newTabName = `${++tabIndex}`
-    // editableTabs.value.push({
-    //   title: 'New Tab',
-    //   name: newTabName,
-    //   content: 'New Tab content'
-    // })
-    // editableTabsValue.value = newTabName
-  } else if (action === 'remove') {
-    // const tabs = editableTabs.value
-    // let activeName = editableTabsValue.value
-    // if (activeName === targetName) {
-    //   tabs.forEach((tab, index) => {
-    //     if (tab.name === targetName) {
-    //       const nextTab = tabs[index + 1] || tabs[index - 1]
-    //       if (nextTab) {
-    //         activeName = nextTab.name
-    //       }
-    //     }
-    //   })
-    // }
-    // editableTabsValue.value = activeName
-    // editableTabs.value = tabs.filter((tab) => tab.name !== targetName)
-  }
+const removeTab = (targetName: string | number) => {
+  console.log('删除tab选项卡', targetName)
 }
-
-const change = (val: string) => {
-  console.log(val)
-}
-
-onMounted(() => {
-  let element = document.querySelector('.tablist')
-  if (element) {
-    let obverser = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        if (entry.target.classList.contains('tablist')) {
-          if (element) {
-            let width = getComputedStyle(element).getPropertyValue('width')
-            let height = getComputedStyle(element).getPropertyValue('height')
-            console.log(width, height)
-            element.style.width = width + 'px'
-            element.style.height = height + 'px'
-          }
-        }
-      }
-    })
-    obverser.observe(element)
-  }
-})
-// watch(
-//   list,
-//   (val) => {
-//     if(list[0].name != editableTabsValue.value) {
-//       editableTabsValue.value = list[0].name
-//     }
-//   }
-// )
 </script>
 
 <style scoped lang="less">
@@ -119,6 +84,9 @@ onMounted(() => {
 
   .label {
     margin-left: 6px;
+  }
+  .italic {
+    font-style: italic;
   }
   .tabs-breadcrumbs {
     font-size: 13px;

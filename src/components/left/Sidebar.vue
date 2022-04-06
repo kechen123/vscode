@@ -15,6 +15,7 @@
 <script setup lang="ts">
 import { ArrowRight } from '@element-plus/icons-vue'
 import { useTabList } from '@/store/content_tablist'
+
 const useTab = useTabList()
 const tree = ref([])
 const treeClickCount = ref(0)

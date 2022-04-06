@@ -1,34 +1,31 @@
 import { defineStore } from 'pinia'
-import { File } from '@/common/types/editor'
-interface Tab extends File {
-  edit: boolean
-}
-interface TabList {
-  list: Tab[]
-}
+import { Tab, TabListStore } from '@/common/types/editor'
 
 export const useTabList = defineStore({
   id: 'tablist', // id必填，且需要唯一
   state: () => {
-    return <TabList>{
-      list: []
+    return <TabListStore>{
+      list: new Map(),
+      active: ''
     }
   },
   getters: {
     tabListNumber: (state) => {
-      return state.list.length
+      return state.list.size
     }
   },
   actions: {
     addTab(tab: Tab) {
-      const length = this.list.length
-      let last = length > 0 ? this.list[length - 1] : false
-      if (last && tab.edit === false && last?.edit === false) {
-        this.list[length - 1] = tab
-      } else {
-        this.list.push(tab)
+      const length = this.tabListNumber
+      let lastVal = length > 0 ? Array.from(this.list.values()).pop() : false
+      let lastKey = length > 0 ? Array.from(this.list.keys()).pop() : false
+      if (lastVal && lastKey && lastVal.edit === false) {
+        this.list.delete(lastKey)
       }
+      this.list.set(tab.name, tab)
+      this.active = tab.name
     },
+    removeTab(index: number) {},
     //异步 action
     async login(account: string, pwd: string) {
       // const { data } = await api.login(account, pwd)

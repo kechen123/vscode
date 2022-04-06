@@ -20,7 +20,7 @@
       "@pages/*": ["./pages/*"],
       "@router/*": ["./router/*"],
       "@store/*": ["./store/*"],
-      "@utils/*": ["./utils/*"],
+      "@utils/*": ["./common/utils/*"],
       "@views/*": ["./views/*"]
     }
   },
