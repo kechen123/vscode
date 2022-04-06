@@ -32,11 +32,9 @@ const handleNodeClick = (data: Tree) => {
   setTimeout(() => {
     if (treeClickCount.value == 1) {
       // 进行单击事件处理
-      console.log('单击事件', data)
       getFileText(data.file)
     } else if (treeClickCount.value == 2) {
       // 进行双击事件处理
-      console.log('双击事件', data)
       getFileText(data.file, true)
     }
     treeClickCount.value = 0

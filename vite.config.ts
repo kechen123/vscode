@@ -43,7 +43,15 @@ export default ({ command }: ConfigEnv): UserConfigExport => {
     ],
     resolve: {
       alias: {
-        '@': resolve(__dirname, 'src') // 设置 `@` 指向 `src` 目录
+        '@': resolve(__dirname, 'src'), // 设置 `@` 指向 `src` 目录
+        '@assets': resolve(__dirname, 'src/assets'), // 设置 `@assets` 指向 `src/assets` 目录
+        '@components': resolve(__dirname, 'src/components'), // 设置 `@components` 指向 `src/components` 目录
+        '@config': resolve(__dirname, 'src/config'), // 设置 `@config` 指向 `src/config` 目录
+        '@pages': resolve(__dirname, 'src/pages'), // 设置 `@pages` 指向 `src/pages` 目录
+        '@router': resolve(__dirname, 'src/router'), // 设置 `@router` 指向 `src/router` 目录
+        '@store': resolve(__dirname, 'src/store'), // 设置 `@store` 指向 `src/store` 目录
+        '@utils': resolve(__dirname, 'src/utils'), // 设置 `@utils` 指向 `src/utils` 目录
+        '@views': resolve(__dirname, 'src/views') // 设置 `@views` 指向 `src/views` 目录
       }
     },
     base: './', // 设置打包路径

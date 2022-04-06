@@ -5,7 +5,7 @@
       <div class="line" ref="lineRef"></div>
     </div>
 
-    <div class="content">
+    <div class="content" ref="contentRef" :style="{ width: content.realTimeWidth + 'px' }">
       <slot name="content"></slot>
     </div>
     <div class="right">
@@ -16,12 +16,22 @@
 
 <script setup lang="ts">
 import useMouse from '@/hook/useMouseDrop'
+import useElementResize from '@/hook/useElementResize'
 import { defaultActivitybarWidth, defaultLeftWidth, defaultLeftMinWidth } from '@/config/layout'
-const leftwidth = defaultActivitybarWidth + defaultLeftWidth
-const bodyRef = ref()
+
+const leftWidth = defaultActivitybarWidth + defaultLeftWidth
+const contentRef = ref()
+const body = reactive({
+  realTimeWidth: leftWidth,
+  downWidth: leftWidth
+})
 const left = reactive({
-  realTimeWidth: leftwidth,
-  downWidth: leftwidth
+  realTimeWidth: leftWidth,
+  downWidth: leftWidth
+})
+const content = reactive({
+  realTimeWidth: 0,
+  downWidth: 0
 })
 const down = () => {
   left.downWidth = left.realTimeWidth
@@ -34,10 +44,30 @@ const move = (e: MouseEvent, mouse: any) => {
       w = minWidth
     }
     left.realTimeWidth = w
+    content.realTimeWidth = body.realTimeWidth - w
   }
 }
 
+const bodyReSize = (event: Element, width: number, height: number) => {
+  body.realTimeWidth = width
+  content.realTimeWidth = body.realTimeWidth - left.realTimeWidth
+}
+
 const [lineRef] = useMouse({ down, move })
+const [bodyRef] = useElementResize({ resize: bodyReSize, className: 'layout' })
+
+onMounted(() => {
+  if (bodyRef.value) {
+    const width = bodyRef.value.clientWidth
+    body.realTimeWidth = width
+    body.downWidth = width
+  }
+  if (contentRef.value) {
+    const width = contentRef.value.clientWidth
+    content.realTimeWidth = width
+    content.downWidth = width
+  }
+})
 </script>
 
 <style scoped lang="less">

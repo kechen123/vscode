@@ -10,8 +10,6 @@
   </Layout>
 </template>
 
-<script setup lang="ts">
-import Activitybar from './left/Activitybar.vue'
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="less"></style>

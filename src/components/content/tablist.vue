@@ -1,7 +1,7 @@
 <template>
   <div class="tablist">
     <el-tabs v-model="editableTabsValue" type="card" class="demo-tabs">
-      <el-tab-pane v-for="(item, i) in list" :key="item.name" :label="item.name" :name="item.name">
+      <el-tab-pane v-for="(item, i) in list" :key="item.name" :label="item.name" :name="`${i + 1}`">
         <template #label>
           <span class="custom-tabs-label">
             <el-icon><calendar /></el-icon>
@@ -20,7 +20,7 @@
           class="custom-tabs-content"
           :style="{ height: `${pageSize[1] - tabHeight - breadcrumbHeight}px` }"
         >
-          <Editor :code="item.text" :option="option" />
+          <Editor :code="item.text" :option="option" :name="item.name" />
         </div>
       </el-tab-pane>
     </el-tabs>
@@ -30,15 +30,17 @@
 <script setup lang="ts">
 import { Calendar, ArrowRight } from '@element-plus/icons-vue'
 import { useTabList } from '@/store/content_tablist'
+
 const tabHeight = 35
 const breadcrumbHeight = 22
 const pageSize = [document.documentElement.clientWidth, document.documentElement.clientHeight]
 const useTab = useTabList()
 const list = useTab.list
+console.log(list)
 let tabIndex = 1
-const editableTabsValue = ref(list[0].name)
+const editableTabsValue = ref('1')
 const option = {
-  language: 'html',
+  language: 'dynamic',
   format: true,
   theme: 'vs-dark',
   minimap: {
@@ -96,6 +98,14 @@ onMounted(() => {
     obverser.observe(element)
   }
 })
+// watch(
+//   list,
+//   (val) => {
+//     if(list[0].name != editableTabsValue.value) {
+//       editableTabsValue.value = list[0].name
+//     }
+//   }
+// )
 </script>
 
 <style scoped lang="less">

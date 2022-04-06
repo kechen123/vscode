@@ -15,10 +15,12 @@ import {
   onMounted
 } from 'vue'
 import * as monaco from 'monaco-editor'
+import { editorLanguage } from '@/config/fileLanguage'
 
 //https://v3.cn.vuejs.org/api/sfc-script-setup.html#%E4%BB%85%E9%99%90-typescript-%E7%9A%84%E5%8A%9F%E8%83%BD
 const props = defineProps<{
   code: string
+  name?: string
   option?: any
 }>()
 const emit = defineEmits<{
@@ -91,11 +93,24 @@ const initEditor = (val?: string) => {
   }
 
   let option = Object.assign({}, defaultOption, props.option || {})
+  if (option.language === 'dynamic' && props.name) {
+    let arr = props.name.split('.')
+    if (arr[0] === '') {
+      arr.shift()
+    }
+    option.language = 'javascript'
+    if (arr.length > 1) {
+      const lang = arr[arr.length - 1]
+      if (Object.keys(editorLanguage).includes(lang)) {
+        option.language = editorLanguage[lang]
+      }
+    }
+  }
   if (myRef.value && !editor) {
     editor = monaco.editor.create(myRef.value, option)
     nextTick(() => {
       if (option.format) {
-        editor?.trigger('javascript', 'editor.action.formatDocument', null)
+        editor?.trigger(option.language, 'editor.action.formatDocument', null)
       }
 
       editor.onDidChangeModelContent(() => {

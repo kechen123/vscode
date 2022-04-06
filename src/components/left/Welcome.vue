@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { isChromeOrEdge } from '@/utils/browserVersion'
+import { isChromeOrEdge } from '@/common/utils/browserVersion'
 
 const emit = defineEmits<{
   (e: 'OpenFolder', value: string): void

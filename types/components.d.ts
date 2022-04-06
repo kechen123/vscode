@@ -26,10 +26,8 @@ declare module 'vue' {
     Left: typeof import('./../src/components/left/Index.vue')['default']
     LeftActivitybar: typeof import('./../src/components/left/Activitybar.vue')['default']
     LeftSidebar: typeof import('./../src/components/left/Sidebar.vue')['default']
-    LeftTest: typeof import('./../src/components/left/test.vue')['default']
     LeftWelcome: typeof import('./../src/components/left/Welcome.vue')['default']
     Main: typeof import('./../src/components/Main.vue')['default']
-    'Main copy': typeof import('./../src/components/Main copy.vue')['default']
   }
 }
 

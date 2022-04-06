@@ -1,10 +1,6 @@
-//https://juejin.cn/post/7049196967770980389
-
 import { defineStore } from 'pinia'
-interface Tab {
-  name: string
-  path?: string
-  text: string
+import { File } from '@/common/types/editor'
+interface Tab extends File {
   edit: boolean
 }
 interface TabList {
@@ -25,7 +21,13 @@ export const useTabList = defineStore({
   },
   actions: {
     addTab(tab: Tab) {
-      this.list.push(tab)
+      const length = this.list.length
+      let last = length > 0 ? this.list[length - 1] : false
+      if (last && tab.edit === false && last?.edit === false) {
+        this.list[length - 1] = tab
+      } else {
+        this.list.push(tab)
+      }
     },
     //异步 action
     async login(account: string, pwd: string) {
