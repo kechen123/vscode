@@ -27,21 +27,25 @@ interface Tree {
 interface TreeList {
   Tree: []
 }
-const handleNodeClick = (data: Tree) => {
-  treeClickCount.value++
-  if (treeClickCount.value > 2) return
-  setTimeout(() => {
-    if (treeClickCount.value == 1) {
-      // 进行单击事件处理
-      getFileText(data.file)
-    } else if (treeClickCount.value == 2) {
-      // 进行双击事件处理
-      getFileText(data.file, true)
-    }
-    treeClickCount.value = 0
-  }, 300)
+const handleNodeClick = (data: Tree, attr: any, e: any) => {
+  if (data.file) {
+    treeClickCount.value++
+    if (treeClickCount.value > 2) return
+    setTimeout(() => {
+      if (treeClickCount.value == 1) {
+        // 进行单击事件处理
+        getFileText(data.file)
+      } else if (treeClickCount.value == 2) {
+        // 进行双击事件处理
+        getFileText(data.file, true)
+      }
+      treeClickCount.value = 0
+    }, 300)
+  }
 }
-
+const getFileText1 = (...args: any) => {
+  console.log(args)
+}
 const getFileText = async (file: any, edit: boolean = false) => {
   const text: string = await file.text()
   const name: string = file.name
@@ -65,11 +69,6 @@ const OpenFolder = (data: any) => {
   --el-tree-node-hover-bg-color: #2a2d2e;
   --el-tree-text-color: #ccc;
   --el-tree-expand-icon-color: #ccc;
+  user-select: none;
 }
-// .el-tree-node__label {
-//   color: #ccc;
-// }
-// .el-tree-node__content:hover {
-//   background-color: #2a2d2e !important;
-// }
 </style>

@@ -21,7 +21,8 @@
       "@router/*": ["./router/*"],
       "@store/*": ["./store/*"],
       "@utils/*": ["./common/utils/*"],
-      "@views/*": ["./views/*"]
+      "@views/*": ["./views/*"],
+      "@hook/*": ["./hook/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "types/**/*.ts"],

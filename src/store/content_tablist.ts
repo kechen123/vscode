@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { Tab, TabListStore } from '@/common/types/editor'
+import { getPrevKey, getNextKey } from '@utils/common'
 
 export const useTabList = defineStore({
   id: 'tablist', // id必填，且需要唯一
@@ -25,7 +26,12 @@ export const useTabList = defineStore({
       this.list.set(tab.name, tab)
       this.active = tab.name
     },
-    removeTab(index: number) {},
+    removeTab(name: string) {
+      const prevKeys = getPrevKey(this.list, name)
+      const nextKeys = getNextKey(this.list, name)
+      this.active = prevKeys === '' ? nextKeys : prevKeys
+      this.list.delete(name)
+    },
     //异步 action
     async login(account: string, pwd: string) {
       // const { data } = await api.login(account, pwd)

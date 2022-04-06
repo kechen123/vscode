@@ -9,7 +9,7 @@
     >
       <el-tab-pane
         v-for="(item, key) in tabData.list"
-        :key="key"
+        :key="`${key}_${item.edit}`"
         :label="item.name"
         :name="item.name"
       >
@@ -39,13 +39,20 @@
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
 import { Calendar, ArrowRight } from '@element-plus/icons-vue'
 import { useTabList } from '@/store/content_tablist'
-import { Tab, TabList } from '@/common/types/editor'
+import { TabList } from '@/common/types/editor'
 
 const tabHeight = 35
 const breadcrumbHeight = 22
+const option = {
+  language: 'dynamic',
+  format: true,
+  theme: 'vs-dark',
+  minimap: {
+    enabled: true // 是否启用预览图
+  }
+}
 const pageSize = [document.documentElement.clientWidth, document.documentElement.clientHeight]
 const store = useTabList()
 const tabData = reactive<TabList>({
@@ -59,17 +66,8 @@ watchEffect(() => {
   console.log(tabData)
 })
 
-const option = {
-  language: 'dynamic',
-  format: true,
-  theme: 'vs-dark',
-  minimap: {
-    enabled: true // 是否启用预览图
-  }
-}
-
 const removeTab = (targetName: string | number) => {
-  console.log('删除tab选项卡', targetName)
+  store.removeTab(targetName.toString())
 }
 </script>
 
@@ -84,6 +82,7 @@ const removeTab = (targetName: string | number) => {
 
   .label {
     margin-left: 6px;
+    user-select: none;
   }
   .italic {
     font-style: italic;

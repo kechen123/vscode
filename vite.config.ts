@@ -45,6 +45,7 @@ export default ({ command }: ConfigEnv): UserConfigExport => {
       alias: {
         '@': resolve(__dirname, 'src'), // 设置 `@` 指向 `src` 目录
         '@assets': resolve(__dirname, 'src/assets'), // 设置 `@assets` 指向 `src/assets` 目录
+        '@hook': resolve(__dirname, 'src/hook'),
         '@components': resolve(__dirname, 'src/components'), // 设置 `@components` 指向 `src/components` 目录
         '@config': resolve(__dirname, 'src/config'), // 设置 `@config` 指向 `src/config` 目录
         '@pages': resolve(__dirname, 'src/pages'), // 设置 `@pages` 指向 `src/pages` 目录
