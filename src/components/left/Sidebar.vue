@@ -24,9 +24,7 @@ interface Tree {
   file?: any
   children?: Tree[]
 }
-interface TreeList {
-  Tree: []
-}
+
 const handleNodeClick = (data: Tree, attr: any, e: any) => {
   if (data.file) {
     treeClickCount.value++
@@ -37,7 +35,7 @@ const handleNodeClick = (data: Tree, attr: any, e: any) => {
         getFileText(data.file)
       } else if (treeClickCount.value == 2) {
         // 进行双击事件处理
-        getFileText(data.file, true)
+        getFileText(data.file, 'edit')
       }
       treeClickCount.value = 0
     }, 300)
@@ -46,10 +44,10 @@ const handleNodeClick = (data: Tree, attr: any, e: any) => {
 const getFileText1 = (...args: any) => {
   console.log(args)
 }
-const getFileText = async (file: any, edit: boolean = false) => {
+const getFileText = async (file: any, state: 'preview' | 'edit' | 'dirty' = 'preview') => {
   const text: string = await file.text()
   const name: string = file.name
-  useTab.addTab({ name, text, edit })
+  useTab.addTab({ name, text, state })
 }
 const OpenFolder = (data: any) => {
   console.log(data)

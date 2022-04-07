@@ -4,8 +4,8 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
-    Content: typeof import('./../src/components/content/index.vue')['default']
-    ContentTablist: typeof import('./../src/components/content/tablist.vue')['default']
+    Content: typeof import('./../src/components/content/Index.vue')['default']
+    ContentTablist: typeof import('./../src/components/content/Tablist.vue')['default']
     ContentWelcome: typeof import('./../src/components/content/Welcome.vue')['default']
     Editor: typeof import('./../src/components/Editor.vue')['default']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']

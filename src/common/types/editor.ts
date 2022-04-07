@@ -14,7 +14,7 @@ export interface Editor extends Size {
 }
 
 export interface Tab extends File {
-  edit: boolean
+  state: 'preview' | 'edit' | 'dirty'
 }
 export interface TabListStore {
   list: Map<string, Tab>

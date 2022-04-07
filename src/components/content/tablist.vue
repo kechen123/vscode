@@ -1,23 +1,26 @@
 <template>
   <div class="tablist">
-    <el-tabs
-      v-model="tabData.active"
-      closable
-      type="card"
-      class="demo-tabs"
-      @tab-remove="removeTab"
-    >
+    <el-tabs v-model="tabData.active" type="card" class="demo-tabs" @tab-remove="removeTab">
       <el-tab-pane
         v-for="(item, key) in tabData.list"
-        :key="`${key}_${item.edit}`"
+        :key="`${key}_${item.state}`"
         :label="item.name"
         :name="item.name"
       >
         <template #label>
-          <span class="custom-tabs-label">
-            <el-icon><calendar /></el-icon>
-            <span :class="[item.edit ? '' : 'italic', 'label']">{{ item.name }}</span>
-          </span>
+          <div class="custom-tabs-label" @dblclick="dblclickTab(item.name, item.state)">
+            <div class="file-ext">
+              <i class="iconfont icon-javascript"></i>
+            </div>
+            <div class="file-name">
+              <span :class="[item.state, 'label']">{{ item.name }}</span>
+            </div>
+            <div class="file-state">
+              <div class="btns">
+                <el-icon @click="removeTab(item.name)"><close /></el-icon>
+              </div>
+            </div>
+          </div>
         </template>
         <div class="tabs-breadcrumbs">
           <el-breadcrumb :separator-icon="ArrowRight">
@@ -39,9 +42,9 @@
 </template>
 
 <script setup lang="ts">
-import { Calendar, ArrowRight } from '@element-plus/icons-vue'
+import { Calendar, ArrowRight, Close } from '@element-plus/icons-vue'
 import { useTabList } from '@/store/content_tablist'
-import { TabList } from '@/common/types/editor'
+import { TabList } from '@common/types/editor'
 
 const tabHeight = 35
 const breadcrumbHeight = 22
@@ -69,6 +72,9 @@ watchEffect(() => {
 const removeTab = (targetName: string | number) => {
   store.removeTab(targetName.toString())
 }
+const dblclickTab = (key: string, state: 'preview' | 'edit' | 'dirty') => {
+  if (state === 'preview') store.editTabEdit(key, 'edit')
+}
 </script>
 
 <style scoped lang="less">
@@ -80,13 +86,62 @@ const removeTab = (targetName: string | number) => {
   --el-color-primary: rgba(255, 255, 255, 1);
   --el-text-color-primary: rgba(255, 255, 255, 0.5);
 
-  .label {
-    margin-left: 6px;
-    user-select: none;
+  .custom-tabs-label {
+    display: flex;
+    > div {
+      display: flex;
+    }
+    .file-ext {
+      height: 16px;
+      width: 16px;
+      margin-top: 8px;
+      margin-right: 6px;
+      align-items: center;
+      i {
+        --color: inherit;
+        height: 1em;
+        width: 1em;
+        line-height: 1em;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        fill: currentColor;
+        color: var(--color);
+        font-size: inherit;
+      }
+    }
+    .file-name {
+      line-height: 35px;
+      .label {
+        user-select: none;
+        font-size: 13px;
+      }
+      .preview {
+        font-style: italic;
+      }
+    }
+    .file-state {
+      margin-top: 7px;
+      margin-bottom: auto;
+      width: 28px;
+      height: 20px;
+      align-items: center;
+      justify-content: center;
+      .btns {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+      }
+      .btns:hover {
+        background-color: rgba(90, 93, 94, 0.31);
+        border-radius: 4px;
+      }
+    }
   }
-  .italic {
-    font-style: italic;
-  }
+
   .tabs-breadcrumbs {
     font-size: 13px;
     color: #cccccc;
@@ -140,15 +195,6 @@ const removeTab = (targetName: string | number) => {
   visibility: hidden;
 }
 
-.el-tabs--card > .el-tabs__header .el-tabs__item.is-active.is-closable .is-icon-close {
-  visibility: visible;
-}
-.el-tabs--card > .el-tabs__header .el-tabs__item.is-closable:hover .is-icon-close {
-  visibility: visible;
-}
-.el-tabs--card > .el-tabs__header .el-tabs__item.is-closable:hover {
-  padding: 0 20px !important;
-}
 .el-tabs--card > .el-tabs__header .el-tabs__nav {
   border: 0 !important;
 }

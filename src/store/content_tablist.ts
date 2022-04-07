@@ -20,7 +20,7 @@ export const useTabList = defineStore({
       const length = this.tabListNumber
       let lastVal = length > 0 ? Array.from(this.list.values()).pop() : false
       let lastKey = length > 0 ? Array.from(this.list.keys()).pop() : false
-      if (lastVal && lastKey && lastVal.edit === false) {
+      if (lastVal && lastKey && lastVal.state === 'preview') {
         this.list.delete(lastKey)
       }
       this.list.set(tab.name, tab)
@@ -31,6 +31,11 @@ export const useTabList = defineStore({
       const nextKeys = getNextKey(this.list, name)
       this.active = prevKeys === '' ? nextKeys : prevKeys
       this.list.delete(name)
+    },
+    editTabEdit(name: string, state: 'preview' | 'edit' | 'dirty') {
+      if (this.list.has(name)) {
+        ;(this.list.get(name) as Tab).state = state
+      }
     },
     //异步 action
     async login(account: string, pwd: string) {

@@ -27,7 +27,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'changeCode', value: string): void
 }>()
-
+const isEdit = ref(false) // 是否编辑过
 let editor: monaco.editor.IStandaloneCodeEditor
 const myRef = ref<null | HTMLElement>(null)
 
@@ -109,10 +109,11 @@ const initEditor = (val?: string) => {
       if (option.format) {
         editor?.trigger(option.language, 'editor.action.formatDocument', null)
       }
-
       editor.onDidChangeModelContent(() => {
+        isEdit.value = true
         let value: string = editor?.getValue()
-        emit('changeCode', value)
+        console.log(value)
+        // emit('changeCode', value)
       })
     })
   } else if (val) {
