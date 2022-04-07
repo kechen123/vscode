@@ -10,7 +10,7 @@
         <template #label>
           <div class="custom-tabs-label" @dblclick="dblclickTab(item.name, item.state)">
             <div class="file-ext">
-              <i class="iconfont icon-javascript"></i>
+              <div class="svg" :style="{ fill: item.color }" v-html="item.svg"></div>
             </div>
             <div class="file-name">
               <span :class="[item.state, 'label']">{{ item.name }}</span>
@@ -44,7 +44,7 @@
 <script setup lang="ts">
 import { Calendar, ArrowRight, Close } from '@element-plus/icons-vue'
 import { useTabList } from '@/store/content_tablist'
-import { TabList } from '@common/types/editor'
+import { TabList, File } from '@common/types/editor'
 
 const tabHeight = 35
 const breadcrumbHeight = 22
@@ -66,7 +66,6 @@ const tabData = reactive<TabList>({
 watchEffect(() => {
   tabData.list = Array.from(store.list.values())
   tabData.active = store.active
-  console.log(tabData)
 })
 
 const removeTab = (targetName: string | number) => {
@@ -92,23 +91,31 @@ const dblclickTab = (key: string, state: 'preview' | 'edit' | 'dirty') => {
       display: flex;
     }
     .file-ext {
-      height: 16px;
-      width: 16px;
-      margin-top: 8px;
-      margin-right: 6px;
+      width: 24px;
+      height: 20px;
       align-items: center;
-      i {
-        --color: inherit;
-        height: 1em;
-        width: 1em;
-        line-height: 1em;
-        display: inline-flex;
-        justify-content: center;
+      margin-top: 7px;
+      margin-bottom: auto;
+      .svg {
+        fill: #fff;
+        display: flex;
         align-items: center;
-        position: relative;
-        fill: currentColor;
-        color: var(--color);
-        font-size: inherit;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        svg {
+          --fill: inherit;
+          height: 1em;
+          width: 1em;
+          line-height: 1em;
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+          position: relative;
+          fill: currentColor;
+          fill: var(--color);
+          font-size: inherit;
+        }
       }
     }
     .file-name {

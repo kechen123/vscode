@@ -2,6 +2,8 @@ export interface File {
   name: string
   path?: string
   text: string
+  svg?: string
+  color?: string
 }
 
 export interface Size {

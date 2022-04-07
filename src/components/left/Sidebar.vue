@@ -8,7 +8,14 @@
       node-key="id"
       :icon="ArrowRight"
       @node-click="handleNodeClick"
-    />
+    >
+      <template #default="{ node, data }">
+        <div class="custom-tree-node">
+          <div v-if="data.svg" class="icon" :style="{ fill: data.color }" v-html="data.svg"></div>
+          <div>{{ node.label }}</div>
+        </div>
+      </template>
+    </el-tree>
   </div>
 </template>
 
@@ -25,17 +32,18 @@ interface Tree {
   children?: Tree[]
 }
 
-const handleNodeClick = (data: Tree, attr: any, e: any) => {
+const handleNodeClick = (data: Tree) => {
+  console.log(data)
   if (data.file) {
     treeClickCount.value++
     if (treeClickCount.value > 2) return
     setTimeout(() => {
       if (treeClickCount.value == 1) {
         // 进行单击事件处理
-        getFileText(data.file)
+        getFileText(data)
       } else if (treeClickCount.value == 2) {
         // 进行双击事件处理
-        getFileText(data.file, 'edit')
+        getFileText(data, 'edit')
       }
       treeClickCount.value = 0
     }, 300)
@@ -44,10 +52,9 @@ const handleNodeClick = (data: Tree, attr: any, e: any) => {
 const getFileText1 = (...args: any) => {
   console.log(args)
 }
-const getFileText = async (file: any, state: 'preview' | 'edit' | 'dirty' = 'preview') => {
-  const text: string = await file.text()
-  const name: string = file.name
-  useTab.addTab({ name, text, state })
+const getFileText = async (data: any, state: 'preview' | 'edit' | 'dirty' = 'preview') => {
+  const text: string = await data.file.text()
+  useTab.addTab({ name: data.file.name, text, state, svg: data.svg, color: data.color })
 }
 const OpenFolder = (data: any) => {
   console.log(data)
@@ -68,5 +75,37 @@ const OpenFolder = (data: any) => {
   --el-tree-text-color: #ccc;
   --el-tree-expand-icon-color: #ccc;
   user-select: none;
+}
+
+.custom-tree-node {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  padding-right: 8px;
+  .icon {
+    width: 18px;
+    height: 18px;
+    fill: #ccc;
+    margin-right: 2px;
+    svg {
+      --fill: inherit;
+      height: 1em;
+      width: 1em;
+      line-height: 1em;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      fill: currentColor;
+      fill: var(--color);
+      font-size: inherit;
+    }
+  }
+}
+</style>
+<style>
+.el-tree .el-tree-node__expand-icon.is-leaf {
+  display: none;
 }
 </style>
