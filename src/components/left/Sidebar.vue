@@ -11,7 +11,12 @@
     >
       <template #default="{ node, data }">
         <div class="custom-tree-node">
-          <div v-if="node.isLeaf" class="icon" :style="{ fill: data.color }" v-html="data.svg"></div>
+          <div
+            v-if="node.isLeaf"
+            class="icon"
+            :style="{ fill: data.color }"
+            v-html="data.svg"
+          ></div>
           <div>{{ node.label }}</div>
         </div>
       </template>
@@ -38,6 +43,9 @@ const handleNodeClick = (data: Tree) => {
     if (treeClickCount.value > 2) return
     setTimeout(() => {
       if (treeClickCount.value == 1) {
+        if (useTab.list.has(data.file.name)) {
+          return
+        }
         // 进行单击事件处理
         getFileText(data)
       } else if (treeClickCount.value == 2) {

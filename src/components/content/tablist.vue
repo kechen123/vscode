@@ -1,9 +1,9 @@
 <template>
   <div class="tablist">
-    <el-tabs v-model="tabData.active" type="card" class="demo-tabs" @tab-remove="removeTab">
+    <el-tabs v-model="tabData.active" type="card" class="demo-tabs">
       <el-tab-pane
         v-for="(item, key) in tabData.list"
-        :key="`${key}_${item.state}`"
+        :key="`${key}`"
         :label="item.name"
         :name="item.name"
       >
@@ -15,10 +15,12 @@
             <div class="file-name">
               <span :class="[item.state, 'label']">{{ item.name }}</span>
             </div>
-            <div class="file-state">
-              <div class="btns">
-                <el-icon @click="removeTab(item.name)"><close /></el-icon>
-              </div>
+            <div :class="['icon-' + item.state, 'file-state']">
+              <ul>
+                <li>
+                  <i class="iconfont icon-guanbi" @click="removeTab(item.name)"></i>
+                </li>
+              </ul>
             </div>
           </div>
         </template>
@@ -34,7 +36,7 @@
           class="custom-tabs-content"
           :style="{ height: `${pageSize[1] - tabHeight - breadcrumbHeight}px` }"
         >
-          <Editor :code="item.text" :option="option" :name="item.name" />
+          <Editor :code="item.text" :option="option" :name="item.name" @changeCode="changeCode" />
         </div>
       </el-tab-pane>
     </el-tabs>
@@ -42,6 +44,7 @@
 </template>
 
 <script setup lang="ts">
+import { ElMessage } from 'element-plus'
 import { Calendar, ArrowRight, Close } from '@element-plus/icons-vue'
 import { useTabList } from '@/store/content_tablist'
 import { TabList, File } from '@common/types/editor'
@@ -68,11 +71,20 @@ watchEffect(() => {
   tabData.active = store.active
 })
 
-const removeTab = (targetName: string | number) => {
+const removeTab = (targetName: string) => {
+  if (store.tabListStateByName(targetName) === 'dirty') {
+    ElMessage.error(`${targetName} 已修改，请先保存`)
+    return
+  }
   store.removeTab(targetName.toString())
 }
 const dblclickTab = (key: string, state: 'preview' | 'edit' | 'dirty') => {
   if (state === 'preview') store.editTabEdit(key, 'edit')
+}
+const changeCode = (name: string, code: string) => {
+  if (store.tabListStateByName(name) !== 'dirty') {
+    store.editTabEdit(name, 'dirty')
+  }
 }
 </script>
 
@@ -135,16 +147,56 @@ const dblclickTab = (key: string, state: 'preview' | 'edit' | 'dirty') => {
       height: 20px;
       align-items: center;
       justify-content: center;
-      .btns {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      ul {
         width: 20px;
         height: 20px;
+        position: relative;
+        li {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: absolute;
+          left: 0;
+          top: 0;
+          height: 100%;
+          width: 100%;
+          i {
+            --color: inherit;
+            height: 1em;
+            width: 1em;
+            line-height: 1em;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            fill: currentColor;
+            color: var(--color);
+            font-size: inherit;
+            z-index: 0;
+          }
+          .dirty {
+            z-index: 0;
+          }
+        }
+      }
+      ul:hover {
+        .el-icon {
+          z-index: 1;
+        }
       }
       .btns:hover {
         background-color: rgba(90, 93, 94, 0.31);
         border-radius: 4px;
+      }
+    }
+    .icon-dirty {
+      .icon-guanbi::before {
+        content: '\e604';
+      }
+    }
+    .icon-dirty:hover {
+      .icon-guanbi::before {
+        content: '\eca0';
       }
     }
   }
@@ -163,6 +215,7 @@ const dblclickTab = (key: string, state: 'preview' | 'edit' | 'dirty') => {
   }
 }
 </style>
+
 <style>
 .demo-tabs {
   width: 100%;
