@@ -37,7 +37,8 @@ const emit = defineEmits<{
 
 const btnClick = async () => {
   if (isChromeOrEdge()) {
-    const dirHandle = await (window as any).showDirectoryPicker()
+    //https://stackoverflow.com/questions/69803693/svelte-how-to-use-native-web-apis/69804292#69804292
+    const dirHandle = await window.showDirectoryPicker()
     let list = <any>[]
     let obj = <any>[
       {
@@ -47,7 +48,7 @@ const btnClick = async () => {
       }
     ]
     await handleDirectoryEntry(dirHandle, list)
-    let arr = <any>mySort(list)
+    let arr = mySort(list)
     obj[0].children = arr
     emit('OpenFolder', obj)
   } else {
@@ -82,7 +83,7 @@ const handleDirectoryEntry = async (dirHandle: any, out: any) => {
   }
 }
 
-const mySort = (list: any) => {
+const mySort = (list: any):[] => {
   let newData = <any>[]
   for (let i = 0; i < list.length; i++) {
     const item = list[i]

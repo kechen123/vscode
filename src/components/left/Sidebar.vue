@@ -11,7 +11,7 @@
     >
       <template #default="{ node, data }">
         <div class="custom-tree-node">
-          <div v-if="data.svg" class="icon" :style="{ fill: data.color }" v-html="data.svg"></div>
+          <div v-if="node.isLeaf" class="icon" :style="{ fill: data.color }" v-html="data.svg"></div>
           <div>{{ node.label }}</div>
         </div>
       </template>
@@ -33,7 +33,6 @@ interface Tree {
 }
 
 const handleNodeClick = (data: Tree) => {
-  console.log(data)
   if (data.file) {
     treeClickCount.value++
     if (treeClickCount.value > 2) return
@@ -49,9 +48,7 @@ const handleNodeClick = (data: Tree) => {
     }, 300)
   }
 }
-const getFileText1 = (...args: any) => {
-  console.log(args)
-}
+
 const getFileText = async (data: any, state: 'preview' | 'edit' | 'dirty' = 'preview') => {
   const text: string = await data.file.text()
   useTab.addTab({ name: data.file.name, text, state, svg: data.svg, color: data.color })
