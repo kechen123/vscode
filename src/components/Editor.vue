@@ -13,8 +13,11 @@ import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
 import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 import { editorLanguage } from '@/config/fileLanguage'
 import { getFileExt } from '@utils/common'
-
-//https://github.com/vitejs/vite/discussions/1791#discussioncomment-321046
+/**
+ * 不支持vue语法=> https://github.com/microsoft/monaco-editor/issues/1630
+ * 动态language切换=> https://github.com/vitejs/vite/discussions/1791#discussioncomment-321046
+ *  更改语言 => https://stackoverflow.com/questions/57781013/how-to-change-the-monaco-editors-locale
+ */
 // @ts-ignore
 self.MonacoEnvironment = {
   getWorker(_: string, label: string) {
@@ -33,7 +36,7 @@ self.MonacoEnvironment = {
     return new editorWorker()
   }
 }
-//https://stackoverflow.com/questions/57781013/how-to-change-the-monaco-editors-locale  更改语言
+
 export default defineComponent({
   props:{
     code: {
