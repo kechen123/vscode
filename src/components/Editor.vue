@@ -64,7 +64,7 @@ export default defineComponent({
     let editor: monaco.editor.IStandaloneCodeEditor
     const initEditor = (val?: string) =>{
       let defaultOption = {
-          format: true, //自定义属性，是否自动格式化
+          format: false, //自定义属性，是否自动格式化
           value: val || props.code,
           readOnly: false, // 是否可编辑 // 是否为只读模式
           language: 'javascript', // 语言类型
