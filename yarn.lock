@@ -2728,11 +2728,6 @@ vite-plugin-mock@^2.9.6:
     fast-glob "^3.2.7"
     path-to-regexp "^6.2.0"
 
-vite-plugin-monaco-editor@^1.0.10:
-  version "1.0.10"
-  resolved "https://registry.npmmirror.com/vite-plugin-monaco-editor/-/vite-plugin-monaco-editor-1.0.10.tgz"
-  integrity sha512-7yTAFIE0SefjCmfnjrvXOl53wkxeSASc/ZIcB5tZeEK3vAmHhveV8y3f90Vp8b+PYdbUipjqf91mbFbSENkpcw==
-
 vite@^2.8.0:
   version "2.8.6"
   resolved "https://registry.npmmirror.com/vite/-/vite-2.8.6.tgz"

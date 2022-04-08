@@ -37,7 +37,6 @@
     "unplugin-vue-components": "^0.18.4",
     "vite": "^2.8.0",
     "vite-plugin-mock": "^2.9.6",
-    "vite-plugin-monaco-editor": "^1.0.10",
     "vue-tsc": "^0.29.8"
   }
 }
