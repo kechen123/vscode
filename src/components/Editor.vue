@@ -13,6 +13,7 @@ import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
 import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 import { editorLanguage } from '@/config/fileLanguage'
 import { getFileExt } from '@utils/common'
+
 /**
  * 不支持vue语法=> https://github.com/microsoft/monaco-editor/issues/1630
  * 动态language切换=> https://github.com/vitejs/vite/discussions/1791#discussioncomment-321046
@@ -60,7 +61,6 @@ export default defineComponent({
   },
   setup(props, context) {
     const myRef = ref<HTMLElement>()
-    const isEdit = ref(false) // 是否编辑过
     let editor: monaco.editor.IStandaloneCodeEditor
     const initEditor = (val?: string) => {
       let defaultOption = {
@@ -129,7 +129,6 @@ export default defineComponent({
             editor?.trigger(option.language, 'editor.action.formatDocument', null)
           }
           editor.onDidChangeModelContent(() => {
-            isEdit.value = true
             let value: string = editor?.getValue()
             context.emit('changeCode', props.name, value)
           })
@@ -142,6 +141,13 @@ export default defineComponent({
         editor.setValue(val)
         // formatCode()
       }
+    }
+    const formatCode = () => {
+      editor?.trigger('javascript', 'editor.action.formatDocument', null)
+    }
+
+    const getValue = () => {
+      return editor?.getValue()
     }
     onMounted(() => {
       initEditor()
@@ -162,7 +168,8 @@ export default defineComponent({
     })
     return {
       myRef,
-      isEdit
+      formatCode,
+      getValue
     }
   }
 })

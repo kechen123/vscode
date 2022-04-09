@@ -36,7 +36,13 @@
           class="custom-tabs-content"
           :style="{ height: `${pageSize[1] - tabHeight - breadcrumbHeight}px` }"
         >
-          <Editor :code="item.text" :option="option" :name="item.name" @changeCode="changeCode" />
+          <Editor
+            :ref="(el:any) => (editorRef[item.name] = el)"
+            :code="item.text"
+            :option="option"
+            :name="item.name"
+            @changeCode="changeCode"
+          />
         </div>
       </el-tab-pane>
     </el-tabs>
@@ -44,11 +50,13 @@
 </template>
 
 <script setup lang="ts">
+import { Ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Calendar, ArrowRight, Close } from '@element-plus/icons-vue'
 import { useTabList } from '@/store/content_tablist'
-import { TabList, File } from '@common/types/editor'
-
+import { TabList, File } from '@/common/types/editor'
+import useKeyPress from '@/hook/useKeyPress'
+const editorRef = ref<any>({})
 const tabHeight = 35
 const breadcrumbHeight = 22
 const option = {
@@ -66,10 +74,43 @@ const tabData = reactive<TabList>({
   active: ''
 })
 
+useKeyPress(['ctrl', 's'], (event) => {
+  event.preventDefault()
+  const active = store.active
+  if (store.tabListStateByName(active) === 'dirty') {
+    let val = editorRef.value[active].getValue()
+    saveFile(active, val)
+  }
+})
+
 watchEffect(() => {
   tabData.list = Array.from(store.list.values())
   tabData.active = store.active
 })
+
+// https://developer.mozilla.org/en-US/docs/Web/API/FileSystemDirectoryHandle
+//写入文件
+async function writeFile(fileHandle: any, contents: string) {
+  try {
+    const writable = await fileHandle.createWritable()
+    await writable.write(contents)
+    await writable.close()
+    return true
+  } catch (error) {
+    return false
+  }
+}
+
+const saveFile = async (name: string, text: string) => {
+  const res = await writeFile(store.getListByName(name)?.entry, text)
+  if (res) {
+    store.editTabListState(name, 'edit')
+  } else {
+    ElMessage.error({
+      message: '保存失败'
+    })
+  }
+}
 
 const removeTab = (targetName: string) => {
   if (store.tabListStateByName(targetName) === 'dirty') {
@@ -79,11 +120,11 @@ const removeTab = (targetName: string) => {
   store.removeTab(targetName.toString())
 }
 const dblclickTab = (key: string, state: 'preview' | 'edit' | 'dirty') => {
-  if (state === 'preview') store.editTabEdit(key, 'edit')
+  if (state === 'preview') store.editTabListState(key, 'edit')
 }
 const changeCode = (name: string, code: string) => {
   if (store.tabListStateByName(name) !== 'dirty') {
-    store.editTabEdit(name, 'dirty')
+    store.editTabListState(name, 'dirty')
   }
 }
 </script>

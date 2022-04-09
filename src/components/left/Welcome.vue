@@ -63,6 +63,7 @@ const handleDirectoryEntry = async (dirHandle: any, out: any) => {
       let obj = {
         label: file.name,
         file,
+        entry,
         svg,
         color
       }
@@ -83,7 +84,7 @@ const handleDirectoryEntry = async (dirHandle: any, out: any) => {
   }
 }
 
-const mySort = (list: any):[] => {
+const mySort = (list: any): [] => {
   let newData = <any>[]
   for (let i = 0; i < list.length; i++) {
     const item = list[i]

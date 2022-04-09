@@ -1,6 +1,7 @@
 export interface File {
   name: string
   path?: string
+  [propName: string]: any
   text: string
   svg?: string
   color?: string

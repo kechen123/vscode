@@ -58,8 +58,17 @@ const handleNodeClick = (data: Tree) => {
 }
 
 const getFileText = async (data: any, state: 'preview' | 'edit' | 'dirty' = 'preview') => {
+  console.log(data)
   const text: string = await data.file.text()
-  useTab.addTab({ name: data.file.name, text, state, svg: data.svg, color: data.color })
+  useTab.addTab({
+    entry: data.entry,
+    file: data.file,
+    name: data.file.name,
+    text,
+    state,
+    svg: data.svg,
+    color: data.color
+  })
 }
 const OpenFolder = (data: any) => {
   console.log(data)

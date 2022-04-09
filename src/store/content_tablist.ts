@@ -16,6 +16,9 @@ export const useTabList = defineStore({
     },
     tabListStateByName: (state) => (name: string) => {
       return state.list.get(name)?.state
+    },
+    getListByName: (state) => (name: string) => {
+      return state.list.get(name)
     }
   },
   actions: {
@@ -35,7 +38,7 @@ export const useTabList = defineStore({
       this.active = prevKeys === '' ? nextKeys : prevKeys
       this.list.delete(name)
     },
-    editTabEdit(name: string, state: 'preview' | 'edit' | 'dirty') {
+    editTabListState(name: string, state: 'preview' | 'edit' | 'dirty') {
       if (this.list.has(name)) {
         ;(this.list.get(name) as Tab).state = state
       }

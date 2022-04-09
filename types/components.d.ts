@@ -5,10 +5,11 @@
 declare module 'vue' {
   export interface GlobalComponents {
     Content: typeof import('./../src/components/content/Index.vue')['default']
+    ContentAaa: typeof import('./../src/components/content/aaa.vue')['default']
     ContentTablist: typeof import('./../src/components/content/Tablist.vue')['default']
     ContentWelcome: typeof import('./../src/components/content/Welcome.vue')['default']
     Editor: typeof import('./../src/components/Editor.vue')['default']
-    'Editor copy': typeof import('./../src/components/Editor copy.vue')['default']
+    Editorcopy: typeof import('./../src/components/Editorcopy.vue')['default']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
     ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
     ElButton: typeof import('element-plus/es')['ElButton']
