@@ -37,42 +37,55 @@ interface Tree {
   children?: Tree[]
 }
 
-const handleNodeClick = (data: Tree) => {
+const handleNodeClick = (data: Tree, node: any) => {
   if (data.file) {
     treeClickCount.value++
     if (treeClickCount.value > 2) return
     setTimeout(() => {
+      let path = getFilePath(node)
       if (treeClickCount.value == 1) {
-        if (useTab.list.has(data.file.name)) {
-          return
+        if (!useTab.list.has(data.file.name)) {
+          treeClickCount.value = 0
+          // 进行单击事件处理
+          getFileText(data, path)
         }
-        // 进行单击事件处理
-        getFileText(data)
       } else if (treeClickCount.value == 2) {
+        treeClickCount.value = 0
         // 进行双击事件处理
-        getFileText(data, 'edit')
+        getFileText(data, path, 'edit')
       }
-      treeClickCount.value = 0
     }, 300)
   }
 }
 
-const getFileText = async (data: any, state: 'preview' | 'edit' | 'dirty' = 'preview') => {
-  console.log(data)
+const getFileText = async (
+  data: any,
+  path: string[],
+  state: 'preview' | 'edit' | 'dirty' = 'preview'
+) => {
   const text: string = await data.file.text()
   useTab.addTab({
-    entry: data.entry,
-    file: data.file,
     name: data.file.name,
     text,
     state,
     svg: data.svg,
-    color: data.color
+    color: data.color,
+    path: path.reverse(),
+    entry: data.entry,
+    file: data.file
   })
 }
 const OpenFolder = (data: any) => {
-  console.log(data)
   tree.value = data
+}
+const getFilePath = (node: any, path: string[] = []) => {
+  if (node?.data?.label) {
+    path.push(node.data.label)
+  }
+  if (node?.parent && node?.parent.level > 1) {
+    getFilePath(node.parent, path)
+  }
+  return path
 }
 </script>
 

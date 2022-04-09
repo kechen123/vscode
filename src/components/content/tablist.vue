@@ -26,10 +26,17 @@
         </template>
         <div class="tabs-breadcrumbs">
           <el-breadcrumb :separator-icon="ArrowRight">
-            <el-breadcrumb-item :to="{ path: '/' }">homepage</el-breadcrumb-item>
-            <el-breadcrumb-item> management</el-breadcrumb-item>
-            <el-breadcrumb-item> list</el-breadcrumb-item>
-            <el-breadcrumb-item> detail</el-breadcrumb-item>
+            <el-breadcrumb-item v-for="(pathItem, pathIndex) in item.path">
+              <span class="tabs-breadcrumbs-item">
+                <span
+                  v-if="pathIndex === item.path.length - 1"
+                  class="svg"
+                  :style="{ fill: item.color }"
+                  v-html="item.svg"
+                ></span>
+                <span>{{ pathItem }}</span>
+              </span>
+            </el-breadcrumb-item>
           </el-breadcrumb>
         </div>
         <div
@@ -89,6 +96,7 @@ useKeyPress(['ctrl', 's'], (event) => {
 
 watchEffect(() => {
   tabData.list = Array.from(store.list.values())
+  console.log(tabData.list)
   tabData.active = store.active
 })
 
@@ -252,6 +260,37 @@ const changeCode = (name: string, code: string) => {
     flex: 1 100%;
     height: 22px;
     cursor: default;
+    .tabs-breadcrumbs-item {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      color: rgba(204, 204, 204, 0.8);
+      .svg {
+        fill: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        svg {
+          --fill: inherit;
+          height: 1em;
+          width: 1em;
+          line-height: 1em;
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+          position: relative;
+          fill: currentColor;
+          fill: var(--color);
+          font-size: inherit;
+        }
+      }
+      .el-breadcrumb__separator {
+        margin: 0 5px;
+      }
+    }
+
     .el-breadcrumb {
       line-height: 22px;
       font-size: 13px;

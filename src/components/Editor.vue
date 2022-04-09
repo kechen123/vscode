@@ -128,9 +128,11 @@ export default defineComponent({
           if (option.format) {
             editor?.trigger(option.language, 'editor.action.formatDocument', null)
           }
-          editor.onDidChangeModelContent(() => {
-            let value: string = editor?.getValue()
-            context.emit('changeCode', props.name, value)
+          editor.onDidChangeModelContent((event) => {
+            if (event.isFlush === false) {
+              let value: string = editor?.getValue()
+              context.emit('changeCode', props.name, value)
+            }
           })
         })
       } else if (val) {
@@ -155,11 +157,11 @@ export default defineComponent({
     watch(
       () => props.code,
       (newValue, oldValue) => {
-        console.log('父组件code改变')
-        console.log(newValue)
-        console.log(oldValue)
+        // console.log('父组件code改变')
+        // console.log(newValue)
+        // console.log(oldValue)
         // editor.dispose()
-        // initEditor(val)
+        initEditor(newValue)
       }
     )
 
