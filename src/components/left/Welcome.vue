@@ -37,6 +37,7 @@ const emit = defineEmits<{
 
 const btnClick = async () => {
   if (isChromeOrEdge()) {
+    //https://developer.mozilla.org/en-US/docs/Web/API/File_and_Directory_Entries_API
     //https://stackoverflow.com/questions/69803693/svelte-how-to-use-native-web-apis/69804292#69804292
     const dirHandle = await window.showDirectoryPicker()
     let list = <any>[]

@@ -78,8 +78,12 @@ useKeyPress(['ctrl', 's'], (event) => {
   event.preventDefault()
   const active = store.active
   if (store.tabListStateByName(active) === 'dirty') {
-    let val = editorRef.value[active].getValue()
-    saveFile(active, val)
+    const editor = editorRef.value[active]
+    editor.formatCode()
+    setTimeout(() => {
+      let val = editor.getValue()
+      saveFile(active, val)
+    }, 20)
   }
 })
 
