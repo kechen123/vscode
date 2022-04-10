@@ -20,6 +20,9 @@ export const useTabList = defineStore({
     getActiveTabState: (state) => () => {
       return state.list.get(state.active)?.state
     },
+    getActiveTabContent: (state) => () => {
+      return state.list.get(state.active)
+    },
     getListByName: (state) => (name: string) => {
       return state.list.get(name)
     }

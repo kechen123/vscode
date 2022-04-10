@@ -60,6 +60,11 @@ export default defineComponent({
     }
   },
   setup(props, context) {
+    const data = reactive({
+      isSave: true, //文件改动状态，是否保存
+      oldValue: '', //保存后的文本
+      oldHash: 1
+    })
     const myRef = ref<HTMLElement>()
     let editor: monaco.editor.IStandaloneCodeEditor
     const initEditor = (val?: string) => {
@@ -124,28 +129,40 @@ export default defineComponent({
           noSemanticValidation: true,
           noSyntaxValidation: true
         })
-        nextTick(() => {
-          if (option.format) {
-            editor?.trigger(option.language, 'editor.action.formatDocument', null)
-          }
-          editor.getModel()?.onDidChangeContent((event) => {
-            if (event.isFlush === false) {
-              let value: string = editor?.getValue()
-              context.emit('changeCode', props.name, value)
-            }
-          })
-        })
+        if (option.format) {
+          editor?.trigger(option.language, 'editor.action.formatDocument', null)
+        }
       } else if (val) {
         monaco.editor.setModelLanguage(
           editor.getModel() as monaco.editor.ITextModel,
           option.language
         )
         editor.setValue(val)
-        // formatCode()
       }
     }
     const formatCode = () => {
       editor?.trigger('javascript', 'editor.action.formatDocument', null)
+    }
+    const onChange = () => {
+      editor.getModel()?.onDidChangeContent((event) => {
+        const newVal = editor?.getValue()
+        const newHash = hashVal(newVal)
+        if (data.oldHash !== newHash) {
+          context.emit('changeCode', props.name, newVal)
+        }
+      })
+    }
+    function hashVal(string: string) {
+      var hash = 0,
+        i,
+        chr
+      if (string.length === 0) return hash
+      for (i = 0; i < string.length; i++) {
+        chr = string.charCodeAt(i)
+        hash = (hash << 5) - hash + chr
+        hash |= 0 // Convert to 32bit integer
+      }
+      return hash
     }
 
     const getValue = () => {
@@ -153,14 +170,14 @@ export default defineComponent({
     }
     onMounted(() => {
       initEditor()
+      onChange()
     })
+
     watch(
       () => props.code,
       (newValue, oldValue) => {
-        // console.log('父组件code改变')
-        // console.log(newValue)
-        // console.log(oldValue)
-        // editor.dispose()
+        data.oldValue = newValue
+        data.oldHash = hashVal(newValue)
         initEditor(newValue)
       }
     )

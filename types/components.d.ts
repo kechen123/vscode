@@ -28,6 +28,7 @@ declare module 'vue' {
     LeftSidebar: typeof import('./../src/components/left/Sidebar.vue')['default']
     LeftWelcome: typeof import('./../src/components/left/Welcome.vue')['default']
     Main: typeof import('./../src/components/Main.vue')['default']
+    Test: typeof import('./../src/components/Test.vue')['default']
   }
 }
 

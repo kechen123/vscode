@@ -13,7 +13,7 @@
               <div class="svg" :style="{ fill: item.color }" v-html="item.svg"></div>
             </div>
             <div class="file-name">
-              <span :class="[item.state, 'label']">{{ item.name }}</span>
+              <span :class="[item.state, tabData.test, 'label']">{{ item.name }}</span>
             </div>
             <div :class="['icon-' + item.state, 'file-state']">
               <ul>
@@ -39,31 +39,30 @@
             </el-breadcrumb-item>
           </el-breadcrumb>
         </div>
-        <div
-          class="custom-tabs-content"
-          :style="{ height: `${pageSize[1] - tabHeight - breadcrumbHeight}px` }"
-        >
-          <Editor
-            :ref="(el:any) => (editorRef[item.name] = el)"
-            :code="item.text"
-            :option="option"
-            :name="item.name"
-            @changeCode="changeCode"
-          />
-        </div>
       </el-tab-pane>
     </el-tabs>
+  </div>
+  <div
+    class="custom-tabs-content"
+    :style="{ height: `${pageSize[1] - tabHeight - breadcrumbHeight}px` }"
+  >
+    <Editor
+      ref="editorRef"
+      :code="activeData.text"
+      :option="option"
+      :name="activeData.name"
+      @changeCode="changeCode"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { Ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Calendar, ArrowRight, Close } from '@element-plus/icons-vue'
 import { useTabList } from '@/store/content_tablist'
 import { TabList, File } from '@/common/types/editor'
 import useKeyPress from '@/hook/useKeyPress'
-const editorRef = ref<any>({})
+const editorRef = ref()
 const tabHeight = 35
 const breadcrumbHeight = 22
 const option = {
@@ -78,14 +77,22 @@ const pageSize = [document.documentElement.clientWidth, document.documentElement
 const store = useTabList()
 const tabData = reactive<TabList>({
   list: [],
+  test: '',
   active: ''
+})
+const activeData = ref({
+  name: '',
+  text: '',
+  state: '',
+  color: '',
+  path: []
 })
 
 useKeyPress(['ctrl', 's'], (event) => {
   event.preventDefault()
   const active = store.active
   if (store.tabListStateByName(active) === 'dirty') {
-    const editor = editorRef.value[active]
+    const editor = editorRef.value
     editor.formatCode()
     setTimeout(() => {
       let val = editor.getValue()
@@ -95,9 +102,19 @@ useKeyPress(['ctrl', 's'], (event) => {
 })
 
 watchEffect(() => {
-  tabData.list = Array.from(store.list.values())
-  console.log(tabData.list)
+  tabData.list = Array.from(store.list.values()).map((item: File) => {
+    const { name, state, path, color, svg } = item
+    return {
+      name,
+      state,
+      color,
+      path,
+      svg
+    }
+  })
+  tabData.test = Array.from(store.list.values())[0]?.state
   tabData.active = store.active
+  activeData.value = store.getActiveTabContent()
 })
 
 // https://developer.mozilla.org/en-US/docs/Web/API/FileSystemDirectoryHandle
@@ -135,6 +152,7 @@ const dblclickTab = (key: string, state: 'preview' | 'edit' | 'dirty') => {
   if (state === 'preview') store.editTabListState(key, 'edit')
 }
 const changeCode = (name: string, code: string) => {
+  console.log('changeCode', name)
   if (store.tabListStateByName(name) !== 'dirty') {
     store.editTabListState(name, 'dirty')
   }
@@ -144,7 +162,6 @@ const changeCode = (name: string, code: string) => {
 <style scoped lang="less">
 .tablist {
   display: flex;
-  height: 100%;
   width: 100%;
   background-color: rgb(30, 30, 30);
   --el-color-primary: rgba(255, 255, 255, 1);
@@ -303,7 +320,7 @@ const changeCode = (name: string, code: string) => {
 <style>
 .demo-tabs {
   width: 100%;
-  height: 100%;
+  height: 57px;
 }
 .demo-tabs > .el-tabs__content {
   color: #6b778c;

@@ -1,8 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import Home from '@/views/home.vue'
 import Pinia from '@/views/Pinia.vue'
-import Test from '@/views/test.vue'
-
+import Test from '@/components/Test.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -11,16 +10,14 @@ const routes: Array<RouteRecordRaw> = [
     component: Home
   },
   {
-    path: '/pinia',
-    name: 'Pinia',
-    component: Pinia
-  },
-
-
-  {
     path: '/test',
     name: 'Test',
     component: Test
+  },
+  {
+    path: '/pinia',
+    name: 'Pinia',
+    component: Pinia
   },
 
   {
