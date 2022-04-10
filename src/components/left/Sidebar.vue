@@ -7,10 +7,15 @@
       :data="tree"
       node-key="id"
       :icon="ArrowRight"
-      @node-click="handleNodeClick"
+      highlight-current
+      :check-on-click-node="true"
     >
       <template #default="{ node, data }">
-        <div class="custom-tree-node">
+        <div
+          class="custom-tree-node"
+          @click="treeClick(data, node)"
+          @dblclick.native="treeDbClick(data, node)"
+        >
           <div
             v-if="node.isLeaf"
             class="icon"
@@ -31,10 +36,30 @@ import { useTabList } from '@/store/content_tablist'
 const useTab = useTabList()
 const tree = ref([])
 const treeClickCount = ref(0)
+let time: any = null
 interface Tree {
   label: string
   file?: any
   children?: Tree[]
+}
+
+const treeClick = (data: Tree, node: any) => {
+  clearTimeout(time)
+  time = setTimeout(() => {
+    if (data.file) {
+      let path = getFilePath(node)
+      getFileText(data, path)
+    }
+  }, 300)
+}
+
+const treeDbClick = (data: Tree, node: any) => {
+  clearTimeout(time)
+  const state = useTab.getActiveTabState()
+  if (data.file && state === 'preview') {
+    let path = getFilePath(node)
+    getFileText(data, path, 'edit')
+  }
 }
 
 const handleNodeClick = (data: Tree, node: any) => {
@@ -101,6 +126,7 @@ const getFilePath = (node: any, path: string[] = []) => {
   --el-tree-node-hover-bg-color: #2a2d2e;
   --el-tree-text-color: #ccc;
   --el-tree-expand-icon-color: #ccc;
+  --el-color-primary-light-9: #37373d;
   user-select: none;
 }
 
@@ -131,8 +157,18 @@ const getFilePath = (node: any, path: string[] = []) => {
   }
 }
 </style>
-<style>
+
+<style lang="less">
 .el-tree .el-tree-node__expand-icon.is-leaf {
-  display: none;
+  width: 3px;
+  padding: 0;
+}
+
+.el-tree-node:focus {
+  > .el-tree-node__content {
+    background-color: #094771 !important;
+    outline: 1px solid #007fd4;
+    outline-offset: -1px;
+  }
 }
 </style>

@@ -20,16 +20,16 @@
       </div>
     </div>
     <el-collapse v-model="activeNames" @change="handleChange">
-      <el-collapse-item title="Consistency" name="1">
+      <el-collapse-item title="No Folder Opened" name="1">
         <LeftSidebar />
       </el-collapse-item>
-      <el-collapse-item title="Feedback" name="2">
+      <el-collapse-item title="Outline" name="2">
         <div>
           Operation feedback: enable the users to clearly perceive their operations by style updates
           and interactive effects;
         </div>
       </el-collapse-item>
-      <el-collapse-item title="Efficiency" name="3">
+      <el-collapse-item title="Timeline" name="3">
         <div>Simplify the process: keep operating process simple and intuitive;</div>
       </el-collapse-item>
     </el-collapse>
@@ -105,6 +105,7 @@ const handleChange = (val: any) => {
 .el-collapse-item__header {
   position: relative;
   padding-left: 20px;
+  text-transform: uppercase;
 }
 .el-collapse-item__arrow {
   margin: 4px !important;

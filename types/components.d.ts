@@ -5,8 +5,7 @@
 declare module 'vue' {
   export interface GlobalComponents {
     Content: typeof import('./../src/components/content/Index.vue')['default']
-    ContentAaa: typeof import('./../src/components/content/aaa.vue')['default']
-    ContentTablist: typeof import('./../src/components/content/Tablist.vue')['default']
+    ContentTablist: typeof import('./../src/components/content/tablist.vue')['default']
     ContentWelcome: typeof import('./../src/components/content/Welcome.vue')['default']
     Editor: typeof import('./../src/components/Editor.vue')['default']
     Editorcopy: typeof import('./../src/components/Editorcopy.vue')['default']
@@ -18,7 +17,6 @@ declare module 'vue' {
     ElDropdown: typeof import('element-plus/es')['ElDropdown']
     ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
     ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
-    ElIcon: typeof import('element-plus/es')['ElIcon']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTree: typeof import('element-plus/es')['ElTree']

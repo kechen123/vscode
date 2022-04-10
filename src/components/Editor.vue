@@ -128,7 +128,7 @@ export default defineComponent({
           if (option.format) {
             editor?.trigger(option.language, 'editor.action.formatDocument', null)
           }
-          editor.onDidChangeModelContent((event) => {
+          editor.getModel()?.onDidChangeContent((event) => {
             if (event.isFlush === false) {
               let value: string = editor?.getValue()
               context.emit('changeCode', props.name, value)
