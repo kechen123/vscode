@@ -160,7 +160,6 @@ const removeTab = (targetName: string) => {
 const clickTab = (key: string) => {
   clearTimeout(time)
   time = setTimeout(() => {
-    console.log('click<<<<<')
     if (store.active !== key) {
       store.changeActive(key)
     }
