@@ -175,7 +175,7 @@ const dblclickTab = (key: string, state: 'preview' | 'edit' | 'dirty') => {
 }
 
 const changeCode = (name: string, code: string) => {
-  console.log('changeCode', name)
+  // console.log('changeCode', name)
   if (store.tabListStateByName(name) !== 'dirty') {
     store.editTabListState(name, 'dirty')
   }
