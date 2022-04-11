@@ -8,26 +8,28 @@
         :name="item.name"
       >
         <template #label>
-          <div
-            class="custom-tabs-label"
-            @click="clickTab(item.name)"
-            @dblclick="dblclickTab(item.name, item.state)"
-          >
-            <div class="file-ext">
-              <div class="svg" :style="{ fill: item.color }" v-html="item.svg"></div>
-            </div>
-            <div class="file-name">
-              <span :class="[item.state, 'label']">{{ item.name }}</span>
-            </div>
-            <div :class="['icon-' + item.state, 'file-state']">
-              <ul
-                @click.stop="removeTab(item.name)"
-                :class="[tabData.active === item.name ? 'selected' : '']"
-              >
-                <li>
-                  <i class="iconfont icon-guanbi"></i>
-                </li>
-              </ul>
+          <div class="tabs-label-content">
+            <div
+              class="tabs-label"
+              @click.stop="clickTab(item.name)"
+              @dblclick.stop="dblclickTab(item.name, item.state)"
+            >
+              <div class="file-ext">
+                <div class="svg" :style="{ fill: item.color }" v-html="item.svg"></div>
+              </div>
+              <div class="file-name">
+                <span :class="[item.state, 'label']">{{ item.name }}</span>
+              </div>
+              <div :class="['icon-' + item.state, 'file-state']">
+                <ul
+                  @click.stop="removeTab(item.name)"
+                  :class="[tabData.active === item.name ? 'selected' : '']"
+                >
+                  <li>
+                    <i class="iconfont icon-guanbi"></i>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </template>
@@ -70,7 +72,6 @@ import { useTabList } from '@/store/content_tablist'
 import { TabList, File } from '@/common/types/editor'
 import useKeyPress from '@/hook/useKeyPress'
 
-let time: any = null
 const editorRef = ref()
 const tabHeight = 35
 const breadcrumbHeight = 22
@@ -158,18 +159,12 @@ const removeTab = (targetName: string) => {
 }
 
 const clickTab = (key: string) => {
-  clearTimeout(time)
-  time = setTimeout(() => {
-    if (store.active !== key) {
-      store.changeActive(key)
-    }
-  }, 300)
+  if (store.active !== key) {
+    store.changeActive(key)
+  }
 }
 
 const dblclickTab = (key: string, state: 'preview' | 'edit' | 'dirty') => {
-  clearTimeout(time)
-  if (store.active !== key) store.changeActive(key)
-
   if (state === 'preview') store.editTabListState(key, 'edit')
 }
 
@@ -188,77 +183,28 @@ const changeCode = (name: string, code: string) => {
   background-color: rgb(30, 30, 30);
   --el-color-primary: rgba(255, 255, 255, 1);
   --el-text-color-primary: rgba(255, 255, 255, 0.5);
-
-  .custom-tabs-label {
-    padding: 0 4px 0 10px;
-    display: flex;
-    > div {
+  .tabs-label-content {
+    .tabs-label {
+      padding: 0 4px 0 10px;
       display: flex;
-    }
-    .file-ext {
-      width: 24px;
-      height: 20px;
-      align-items: center;
-      margin-top: 7px;
-      margin-bottom: auto;
-      .svg {
-        fill: #fff;
+      > div {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 20px;
+      }
+      .file-ext {
+        width: 24px;
         height: 20px;
-        svg {
-          --fill: inherit;
-          height: 1em;
-          width: 1em;
-          line-height: 1em;
-          display: inline-flex;
-          justify-content: center;
-          align-items: center;
-          position: relative;
-          fill: currentColor;
-          fill: var(--color);
-          font-size: inherit;
-        }
-      }
-    }
-    .file-name {
-      line-height: 35px;
-      .label {
-        user-select: none;
-        font-size: 13px;
-      }
-      .preview {
-        font-style: italic;
-      }
-    }
-    .file-state {
-      margin-top: 7px;
-      margin-bottom: auto;
-      width: 28px;
-      height: 22px;
-      align-items: center;
-      justify-content: center;
-      .selected {
-        display: block;
-      }
-      ul {
-        width: 22px;
-        height: 22px;
-        display: none;
-        position: relative;
-        li {
+        align-items: center;
+        margin-top: 7px;
+        margin-bottom: auto;
+        .svg {
+          fill: #fff;
           display: flex;
           align-items: center;
           justify-content: center;
-          position: absolute;
-          left: 0;
-          top: 0;
-          height: 100%;
-          width: 100%;
-          i {
-            --color: inherit;
+          width: 20px;
+          height: 20px;
+          svg {
+            --fill: inherit;
             height: 1em;
             width: 1em;
             line-height: 1em;
@@ -267,31 +213,81 @@ const changeCode = (name: string, code: string) => {
             align-items: center;
             position: relative;
             fill: currentColor;
-            color: var(--color);
+            fill: var(--color);
             font-size: inherit;
-            z-index: 0;
-          }
-          .dirty {
-            z-index: 0;
           }
         }
       }
-      ul:hover {
-        background-color: rgba(90, 93, 94, 0.31);
-        border-radius: 4px;
-        .el-icon {
-          z-index: 1;
+      .file-name {
+        line-height: 35px;
+        .label {
+          user-select: none;
+          font-size: 13px;
+        }
+        .preview {
+          font-style: italic;
         }
       }
-    }
-    .icon-dirty {
-      .icon-guanbi::before {
-        content: '\e604';
+      .file-state {
+        margin-top: 7px;
+        margin-bottom: auto;
+        width: 28px;
+        height: 22px;
+        align-items: center;
+        justify-content: center;
+        .selected {
+          display: block;
+        }
+        ul {
+          width: 22px;
+          height: 22px;
+          display: none;
+          position: relative;
+          li {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            i {
+              --color: inherit;
+              height: 1em;
+              width: 1em;
+              line-height: 1em;
+              display: inline-flex;
+              justify-content: center;
+              align-items: center;
+              position: relative;
+              fill: currentColor;
+              color: var(--color);
+              font-size: inherit;
+              z-index: 0;
+            }
+            .dirty {
+              z-index: 0;
+            }
+          }
+        }
+        ul:hover {
+          background-color: rgba(90, 93, 94, 0.31);
+          border-radius: 4px;
+          .el-icon {
+            z-index: 1;
+          }
+        }
       }
-    }
-    .icon-dirty:hover {
-      .icon-guanbi::before {
-        content: '\eca0';
+      .icon-dirty {
+        .icon-guanbi::before {
+          content: '\e604';
+        }
+      }
+      .icon-dirty:hover {
+        .icon-guanbi::before {
+          content: '\eca0';
+        }
       }
     }
   }
