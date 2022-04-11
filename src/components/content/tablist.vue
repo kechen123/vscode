@@ -20,9 +20,12 @@
               <span :class="[item.state, 'label']">{{ item.name }}</span>
             </div>
             <div :class="['icon-' + item.state, 'file-state']">
-              <ul>
+              <ul
+                @click.stop="removeTab(item.name)"
+                :class="[tabData.active === item.name ? 'selected' : '']"
+              >
                 <li>
-                  <i class="iconfont icon-guanbi" @click="removeTab(item.name)"></i>
+                  <i class="iconfont icon-guanbi"></i>
                 </li>
               </ul>
             </div>
@@ -62,7 +65,7 @@
 
 <script setup lang="ts">
 import { ElMessage } from 'element-plus'
-import { Calendar, ArrowRight, Close } from '@element-plus/icons-vue'
+import { ArrowRight } from '@element-plus/icons-vue'
 import { useTabList } from '@/store/content_tablist'
 import { TabList, File } from '@/common/types/editor'
 import useKeyPress from '@/hook/useKeyPress'
@@ -157,6 +160,7 @@ const removeTab = (targetName: string) => {
 const clickTab = (key: string) => {
   clearTimeout(time)
   time = setTimeout(() => {
+    console.log('click<<<<<')
     if (store.active !== key) {
       store.changeActive(key)
     }
@@ -169,6 +173,7 @@ const dblclickTab = (key: string, state: 'preview' | 'edit' | 'dirty') => {
 
   if (state === 'preview') store.editTabListState(key, 'edit')
 }
+
 const changeCode = (name: string, code: string) => {
   console.log('changeCode', name)
   if (store.tabListStateByName(name) !== 'dirty') {
@@ -186,6 +191,7 @@ const changeCode = (name: string, code: string) => {
   --el-text-color-primary: rgba(255, 255, 255, 0.5);
 
   .custom-tabs-label {
+    padding: 0 4px 0 10px;
     display: flex;
     > div {
       display: flex;
@@ -232,12 +238,16 @@ const changeCode = (name: string, code: string) => {
       margin-top: 7px;
       margin-bottom: auto;
       width: 28px;
-      height: 20px;
+      height: 22px;
       align-items: center;
       justify-content: center;
+      .selected {
+        display: block;
+      }
       ul {
-        width: 20px;
-        height: 20px;
+        width: 22px;
+        height: 22px;
+        display: none;
         position: relative;
         li {
           display: flex;
@@ -268,13 +278,11 @@ const changeCode = (name: string, code: string) => {
         }
       }
       ul:hover {
+        background-color: rgba(90, 93, 94, 0.31);
+        border-radius: 4px;
         .el-icon {
           z-index: 1;
         }
-      }
-      .btns:hover {
-        background-color: rgba(90, 93, 94, 0.31);
-        border-radius: 4px;
       }
     }
     .icon-dirty {
@@ -288,7 +296,11 @@ const changeCode = (name: string, code: string) => {
       }
     }
   }
-
+  .el-tabs__item:hover {
+    ul {
+      display: block;
+    }
+  }
   .tabs-breadcrumbs {
     font-size: 13px;
     color: #cccccc;
@@ -381,6 +393,7 @@ const changeCode = (name: string, code: string) => {
   border: 0 !important;
   background-color: rgb(37, 37, 38);
   height: 35px;
+  padding: 0 !important;
 }
 .el-tabs--card > .el-tabs__header {
   border-bottom: 0 !important;

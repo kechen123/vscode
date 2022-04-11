@@ -39,10 +39,12 @@ export const useTabList = defineStore({
       this.active = tab.name
     },
     removeTab(name: string) {
+      this.list.delete(name)
       const prevKeys = getPrevKey(this.list, name)
       const nextKeys = getNextKey(this.list, name)
+      console.log('prevKeys:' + prevKeys + '---:' + (prevKeys === ''))
+      console.log('nextKeys:' + nextKeys)
       this.active = prevKeys === '' ? nextKeys : prevKeys
-      this.list.delete(name)
     },
     editTabListState(name: string, state: 'preview' | 'edit' | 'dirty') {
       if (this.list.has(name)) {
