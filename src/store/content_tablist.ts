@@ -49,6 +49,9 @@ export const useTabList = defineStore({
         ;(this.list.get(name) as Tab).state = state
       }
     },
+    changeActive(name: string) {
+      this.active = name
+    },
     //异步 action
     async login(account: string, pwd: string) {
       // const { data } = await api.login(account, pwd)

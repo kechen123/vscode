@@ -2,7 +2,7 @@
 // We suggest you to commit this file into source control
 // Read more: https://github.com/vuejs/vue-next/pull/3399
 
-declare module 'vue' {
+declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Content: typeof import('./../src/components/content/Index.vue')['default']
     ContentTablist: typeof import('./../src/components/content/tablist.vue')['default']
@@ -28,7 +28,8 @@ declare module 'vue' {
     LeftSidebar: typeof import('./../src/components/left/Sidebar.vue')['default']
     LeftWelcome: typeof import('./../src/components/left/Welcome.vue')['default']
     Main: typeof import('./../src/components/Main.vue')['default']
-    Test: typeof import('./../src/components/Test.vue')['default']
+    RouterLink: typeof import('vue-router')['RouterLink']
+    RouterView: typeof import('vue-router')['RouterView']
   }
 }
 

@@ -3,17 +3,21 @@
     <el-tabs v-model="tabData.active" type="card" class="demo-tabs">
       <el-tab-pane
         v-for="(item, key) in tabData.list"
-        :key="`${key}`"
+        :key="`${key}-${item.state}`"
         :label="item.name"
         :name="item.name"
       >
         <template #label>
-          <div class="custom-tabs-label" @dblclick="dblclickTab(item.name, item.state)">
+          <div
+            class="custom-tabs-label"
+            @click="clickTab(item.name)"
+            @dblclick="dblclickTab(item.name, item.state)"
+          >
             <div class="file-ext">
               <div class="svg" :style="{ fill: item.color }" v-html="item.svg"></div>
             </div>
             <div class="file-name">
-              <span :class="[item.state, tabData.test, 'label']">{{ item.name }}</span>
+              <span :class="[item.state, 'label']">{{ item.name }}</span>
             </div>
             <div :class="['icon-' + item.state, 'file-state']">
               <ul>
@@ -62,6 +66,8 @@ import { Calendar, ArrowRight, Close } from '@element-plus/icons-vue'
 import { useTabList } from '@/store/content_tablist'
 import { TabList, File } from '@/common/types/editor'
 import useKeyPress from '@/hook/useKeyPress'
+
+let time: any = null
 const editorRef = ref()
 const tabHeight = 35
 const breadcrumbHeight = 22
@@ -112,7 +118,6 @@ watchEffect(() => {
       svg
     }
   })
-  tabData.test = Array.from(store.list.values())[0]?.state
   tabData.active = store.active
   activeData.value = store.getActiveTabContent()
 })
@@ -148,7 +153,20 @@ const removeTab = (targetName: string) => {
   }
   store.removeTab(targetName.toString())
 }
+
+const clickTab = (key: string) => {
+  clearTimeout(time)
+  time = setTimeout(() => {
+    if (store.active !== key) {
+      store.changeActive(key)
+    }
+  }, 300)
+}
+
 const dblclickTab = (key: string, state: 'preview' | 'edit' | 'dirty') => {
+  clearTimeout(time)
+  if (store.active !== key) store.changeActive(key)
+
   if (state === 'preview') store.editTabListState(key, 'edit')
 }
 const changeCode = (name: string, code: string) => {
