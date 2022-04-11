@@ -11,6 +11,7 @@ import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
 import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
 import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
+import { language, conf } from '@/config/vueLanguage'
 import { editorLanguage } from '@/config/fileLanguage'
 import { getFileExt } from '@utils/common'
 
@@ -60,6 +61,7 @@ export default defineComponent({
     }
   },
   setup(props, context) {
+    const vueLanguageId = 'vue'
     const data = reactive({
       isSave: true, //文件改动状态，是否保存
       oldValue: '', //保存后的文本
@@ -124,6 +126,15 @@ export default defineComponent({
         }
       }
       if (myRef.value && !editor) {
+        monaco.languages.register({
+          id: 'vue',
+          extensions: ['.vue'],
+          aliases: ['Vue', 'vuejs']
+        })
+
+        monaco.languages.setMonarchTokensProvider('vue', language)
+        monaco.languages.setLanguageConfiguration('vue', conf)
+
         editor = monaco.editor.create(myRef.value, option)
         monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
           noSemanticValidation: true,

@@ -2,6 +2,7 @@ interface language {
   [key: string]: string
 }
 export const editorLanguage: language = {
+  vue: 'vue',
   ts: 'typescript',
   js: 'javascript',
   html: 'html',
