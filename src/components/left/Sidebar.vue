@@ -46,7 +46,12 @@ interface Tree {
 const treeClick = (data: Tree, node: any) => {
   clearTimeout(time)
   time = setTimeout(() => {
-    if (data.file) {
+    const name = data.file?.name
+    if (useTab.list.has(name)) {
+      //已经打开当前文件，选中当前文件选项卡
+      useTab.changeActive(name)
+    } else if (data.file) {
+      // 读取文件内容并打开新选项卡,当前状态为预览状态
       let path = getFilePath(node)
       getFileText(data, path)
     }
@@ -55,31 +60,19 @@ const treeClick = (data: Tree, node: any) => {
 
 const treeDbClick = (data: Tree, node: any) => {
   clearTimeout(time)
+  const name = data.file?.name
   const state = useTab.getActiveTabState()
-  if (data.file && state === 'preview') {
+  if (useTab.list.has(name)) {
+    //已经打开当前文件，选中当前文件选项卡
+    useTab.changeActive(name)
+    if (state === 'preview') {
+      //当前选项卡为预览状态，则切换到编辑状态
+      useTab.editTabListState(name, 'edit')
+    }
+  } else if (data.file) {
+    // 读取文件内容并打开新选项卡,当前状态为编辑状态
     let path = getFilePath(node)
     getFileText(data, path, 'edit')
-  }
-}
-
-const handleNodeClick = (data: Tree, node: any) => {
-  if (data.file) {
-    treeClickCount.value++
-    if (treeClickCount.value > 2) return
-    setTimeout(() => {
-      let path = getFilePath(node)
-      if (treeClickCount.value == 1) {
-        if (!useTab.list.has(data.file.name)) {
-          treeClickCount.value = 0
-          // 进行单击事件处理
-          getFileText(data, path)
-        }
-      } else if (treeClickCount.value == 2) {
-        treeClickCount.value = 0
-        // 进行双击事件处理
-        getFileText(data, path, 'edit')
-      }
-    }, 300)
   }
 }
 
