@@ -4,6 +4,7 @@ import store from '@/store/index'
 import App from './App.vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import '@vscode/codicons/dist/codicon.css'
 
 import styleImport from '@/common/utils/style-import'
 import '@/style/basic.less'

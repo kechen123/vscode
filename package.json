@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^1.1.4",
+    "@vscode/codicons": "^0.0.29",
     "axios": "^0.26.1",
     "element-plus": "^2.1.8",
     "mockjs": "^1.1.0",

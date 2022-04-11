@@ -3,9 +3,17 @@
     <div class="content">
       <div class="composite-bar">
         <div class="monaco-action-bar">
+          <div class="menubar">
+            <a class="toolbar-toggle-more codicon codicon-menu"></a>
+          </div>
           <ul class="actions-container">
-            <li class="action-item">
-              <a class="iconfont icon-folderOpen"></a>
+            <li
+              v-for="(item, key) in actions"
+              @click="click(item)"
+              :class="['action-item', item.id === active ? 'selected' : '']"
+            >
+              <a :class="['action-label', 'codicon', item.icon]"></a>
+              <div class="active-item-indicator"></div>
             </li>
           </ul>
         </div>
@@ -14,7 +22,39 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const actions = reactive([
+  {
+    id: 1,
+    icon: 'codicon-files',
+    name: '文件'
+  },
+  {
+    id: 2,
+    icon: 'codicon-search',
+    name: '搜索'
+  },
+  {
+    id: 3,
+    icon: 'codicon-source-control',
+    name: '源码'
+  },
+  {
+    id: 4,
+    icon: 'codicon-debug-alt-small',
+    name: '调试'
+  },
+  {
+    id: 5,
+    icon: 'codicon-extensions',
+    name: '扩展'
+  }
+])
+const active = ref(1)
+const click = (obj: any) => {
+  active.value = obj.id
+}
+</script>
 
 <style scoped lang="less">
 .activitybar {
@@ -29,9 +69,28 @@
     .monaco-action-bar {
       white-space: nowrap;
       height: 100%;
+      color: rgba(255, 255, 255, 0.4);
+      .menubar {
+        width: 100%;
+        height: 35px;
+        flex-shrink: 0;
+        overflow: visible;
+        .toolbar-toggle-more {
+          position: relative;
+          left: 0;
+          top: 0;
+          cursor: pointer;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
       .actions-container {
         display: flex;
         margin: 0 auto;
+        flex-direction: column;
         padding: 0;
         height: 100%;
         width: 100%;
@@ -42,7 +101,17 @@
           justify-content: center;
           cursor: pointer;
           position: relative;
-          a {
+          .active-item-indicator {
+            content: '';
+            position: absolute;
+            z-index: 1;
+            top: 0;
+            height: 100%;
+            width: 0;
+            border-left: 2px solid #fff;
+            display: none;
+          }
+          .action-label {
             position: relative;
             z-index: 1;
             display: flex;
@@ -54,6 +123,13 @@
             font-size: 24px;
             align-items: center;
             justify-content: center;
+          }
+        }
+        .selected {
+          .active-item-indicator {
+            display: block;
+          }
+          .action-label {
             color: #fff;
           }
         }
