@@ -5,7 +5,7 @@
       <div class="actions">
         <div class="content">
           <el-dropdown trigger="click">
-            <a class="iconfont icon-qita el-dropdown-link"> </a>
+            <a class="codicon codicon-ellipsis el-dropdown-link"> </a>
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item>Action 1</el-dropdown-item>

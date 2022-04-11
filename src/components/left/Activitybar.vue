@@ -23,6 +23,7 @@
 </template>
 
 <script setup lang="ts">
+//icon https://microsoft.github.io/vscode-codicons/dist/codicon.html
 const actions = reactive([
   {
     id: 1,
