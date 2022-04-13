@@ -68,7 +68,7 @@
 <script setup lang="ts">
 import { ElMessage } from 'element-plus'
 import { ArrowRight } from '@element-plus/icons-vue'
-import { useTabList } from '@/store/content_tablist'
+import { useTabList } from '@/store/tabs'
 import { TabList, File } from '@/common/types/editor'
 import useKeyPress from '@/hook/useKeyPress'
 

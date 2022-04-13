@@ -3,7 +3,7 @@ import { Tab, TabListStore } from '@/common/types/editor'
 import { getPrevKey, getNextKey } from '@utils/common'
 
 export const useTabList = defineStore({
-  id: 'tablist', // id必填，且需要唯一
+  id: 'tabs', // id必填，且需要唯一
   state: () => {
     return <TabListStore>{
       list: new Map(),
