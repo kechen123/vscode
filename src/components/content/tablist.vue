@@ -1,6 +1,6 @@
 <template>
   <div class="tablist">
-    <el-tabs v-model="tabData.active" type="card" class="demo-tabs">
+    <el-tabs ref="tabsRef" v-model="tabData.active" type="card" class="demo-tabs">
       <el-tab-pane
         v-for="(item, key) in tabData.list"
         :key="`${key}-${item.state}`"
@@ -13,6 +13,7 @@
               class="tabs-label"
               @click.stop="clickTab(item.name)"
               @dblclick.stop="dblclickTab(item.name, item.state)"
+              @contextmenu.stop="contextmenuTab(item.name, $event)"
             >
               <div class="file-ext">
                 <div class="svg" :style="{ fill: item.color }" v-html="item.svg"></div>
@@ -63,16 +64,34 @@
       @changeCode="changeCode"
     />
   </div>
+  <ContentTabContextMenu
+    :name="contextMenu.name"
+    :rect="contextMenu.rect"
+    :menu="contextMenu.menu"
+    @click="contextMenuClick"
+  />
 </template>
 
 <script setup lang="ts">
 import { ElMessage } from 'element-plus'
 import { ArrowRight } from '@element-plus/icons-vue'
-import { useTabList } from '@/store/tabs'
-import { TabList, File, Tab } from '@/common/types/editor'
-import useKeyPress from '@/hook/useKeyPress'
+import { useTabList } from '@store/tabs'
+import { TabList, File, Tab } from '@common/types/editor'
+import { TabContextMenu as TabContextMenuType } from '@common/types/tabs'
+import useKeyPress from '@hook/useKeyPress'
+import useEventListener from '@hook/useEventListener'
+import { tabContextMenu } from '@config/contextmenu'
 
+const tabsRef = ref()
 const editorRef = ref()
+const contextMenu = reactive({
+  rect: {
+    x: 0,
+    y: 0
+  },
+  name: '',
+  menu: tabContextMenu
+})
 const tabHeight = 35
 const breadcrumbHeight = 22
 const option = {
@@ -156,11 +175,24 @@ const dblclickTab = (key: string, state: 'preview' | 'edit' | 'dirty') => {
   if (state === 'preview') store.editTabListState(key, 'edit')
 }
 
+const contextmenuTab = (name: string, event: any) => {
+  event.preventDefault()
+  contextMenu.name = name
+  contextMenu.rect = {
+    x: event?.clientX,
+    y: event?.clientY
+  }
+}
+
 const changeCode = (name: string, code: string) => {
   // console.log('changeCode', name)
   if (store.tabListStateByName(name) !== 'dirty') {
     store.editTabListState(name, 'dirty')
   }
+}
+
+const contextMenuClick = (data: TabContextMenuType) => {
+  console.log('tab右键菜单点击', data)
 }
 </script>
 

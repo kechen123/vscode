@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { Tab, TabListStore } from '@/common/types/editor'
-import { getPrevKey, getNextKey } from '@utils/common'
+import { getPrevKey, getNextKey } from '@commonUtils/common'
 
 export const useTabList = defineStore({
   id: 'tabs', // id必填，且需要唯一

@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { useTabList } from '@/store/tabs'
+import { useTabList } from '@store/tabs'
 const tablist = useTabList()
 </script>
 

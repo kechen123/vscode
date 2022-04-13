@@ -15,8 +15,8 @@ import {
   onMounted
 } from 'vue'
 import * as monaco from 'monaco-editor'
-import { editorLanguage } from '@/config/fileLanguage'
-import { getFileExt } from '@utils/common'
+import { editorLanguage } from '@config/fileLanguage'
+import { getFileExt } from '@commonUtils/common'
 
 //https://v3.cn.vuejs.org/api/sfc-script-setup.html#%E4%BB%85%E9%99%90-typescript-%E7%9A%84%E5%8A%9F%E8%83%BD
 const props = defineProps<{

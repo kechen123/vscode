@@ -11,9 +11,9 @@ import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
 import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
 import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
-import { language, conf } from '@/config/vueLanguage'
-import { editorLanguage } from '@/config/fileLanguage'
-import { getFileExt } from '@utils/common'
+import { language, conf } from '@config/vueLanguage'
+import { editorLanguage } from '@config/fileLanguage'
+import { getFileExt } from '@commonUtils/common'
 
 /**
  * 不支持vue语法=> https://github.com/microsoft/monaco-editor/issues/1630

@@ -15,14 +15,16 @@
     "paths": {
       "@/*": ["./*"],
       "@assets/*": ["./assets/*"],
+      "@common/*": ["./common/*"],
+      "@commonTypes/*": ["./common/types/*"],
+      "@commonUtils/*": ["./common/utils/*"],
       "@components/*": ["./components/*"],
       "@config/*": ["./config/*"],
-      "@pages/*": ["./pages/*"],
+      "@hook/*": ["./hook/*"],
+      "@mock/*": ["./mock/*"],
       "@router/*": ["./router/*"],
       "@store/*": ["./store/*"],
-      "@utils/*": ["./common/utils/*"],
-      "@views/*": ["./views/*"],
-      "@hook/*": ["./hook/*"]
+      "@views/*": ["./views/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "types/**/*.ts"],

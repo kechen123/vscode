@@ -15,9 +15,9 @@
 </template>
 
 <script setup lang="ts">
-import useMouse from '@/hook/useMouseDrop'
-import useElementResize from '@/hook/useElementResize'
-import { defaultActivitybarWidth, defaultLeftWidth, defaultLeftMinWidth } from '@/config/layout'
+import useMouse from '@hook/useMouseDrop'
+import useElementResize from '@hook/useElementResize'
+import { defaultActivitybarWidth, defaultLeftWidth, defaultLeftMinWidth } from '@config/layout'
 
 const leftWidth = defaultActivitybarWidth + defaultLeftWidth
 const contentRef = ref()
