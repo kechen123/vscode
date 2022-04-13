@@ -69,7 +69,7 @@
 import { ElMessage } from 'element-plus'
 import { ArrowRight } from '@element-plus/icons-vue'
 import { useTabList } from '@/store/tabs'
-import { TabList, File } from '@/common/types/editor'
+import { TabList, File, Tab } from '@/common/types/editor'
 import useKeyPress from '@/hook/useKeyPress'
 
 const editorRef = ref()
@@ -89,13 +89,7 @@ const tabData = reactive<TabList>({
   list: [],
   active: ''
 })
-const activeData = ref({
-  name: '',
-  text: '',
-  state: '',
-  color: '',
-  path: []
-})
+const activeData = ref<Tab | undefined>()
 
 useKeyPress(['ctrl', 's'], (event) => {
   event.preventDefault()
@@ -111,14 +105,9 @@ useKeyPress(['ctrl', 's'], (event) => {
 })
 
 watchEffect(() => {
-  tabData.list = Array.from(store.list.values()).map((item: File) => {
-    const { name, state, path, color, svg } = item
+  tabData.list = Array.from(store.list.values()).map((item: Tab) => {
     return {
-      name,
-      state,
-      color,
-      path,
-      svg
+      ...item
     }
   })
   tabData.active = store.active
