@@ -87,7 +87,6 @@ const pageSize = [document.documentElement.clientWidth, document.documentElement
 const store = useTabList()
 const tabData = reactive<TabList>({
   list: [],
-  test: '',
   active: ''
 })
 const activeData = ref({
