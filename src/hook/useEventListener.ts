@@ -62,6 +62,7 @@ function useEventListener(eventName: string, handler: noop, options: Options = {
     }
   }
   onMounted(() => {
+    console.log(target)
     target.addEventListener(eventName, eventListener, {
       capture: options.capture,
       once: options.once,

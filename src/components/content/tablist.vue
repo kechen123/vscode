@@ -1,6 +1,6 @@
 <template>
-  <div class="tablist">
-    <el-tabs ref="tabsRef" v-model="tabData.active" type="card" class="demo-tabs">
+  <div class="tablist" ref="tabsRef">
+    <el-tabs v-model="tabData.active" type="card" class="demo-tabs">
       <el-tab-pane
         v-for="(item, key) in tabData.list"
         :key="`${key}-${item.state}`"
@@ -139,6 +139,16 @@ useKeyPress(['ctrl', 's'], (event) => {
   event.preventDefault()
   saveFileHandler()
 })
+useEventListener(
+  'contextmenu',
+  (event) => {
+    event.preventDefault()
+  },
+  {
+    target: document,
+    selector: '.tablist'
+  }
+)
 
 watchEffect(() => {
   tabData.list = Array.from(store.list.values()).map((item: Tab) => {
