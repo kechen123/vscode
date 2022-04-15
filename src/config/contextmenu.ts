@@ -1,4 +1,4 @@
-import { TabContextMenu } from '@common/types/tabs'
+import { TabContextMenu } from '@commonTypes/contextMenu'
 export const tabContextMenu: Array<Array<TabContextMenu>> = [
   [
     {

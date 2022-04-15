@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { TabContextMenu } from '@common/types/tabs'
+import { TabContextMenu } from '@commonTypes/contextMenu'
 import { onClickOutside } from '@vueuse/core'
 interface Rect {
   x: number
@@ -81,6 +81,9 @@ watch([() => props.name, () => props.rect], (val) => {
         display: flex;
         width: 324px;
         justify-content: space-between;
+        span {
+          text-transform: capitalize;
+        }
 
         &:hover {
           background: #0e639c;
