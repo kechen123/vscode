@@ -182,6 +182,8 @@ export default defineComponent({
     }
     onMounted(() => {
       initEditor()
+      data.oldValue = props.code
+      data.oldHash = hashVal(props.code)
       onChange()
     })
 
@@ -195,6 +197,7 @@ export default defineComponent({
     )
 
     onUnmounted(() => {
+      console.log('unmount')
       editor.dispose()
     })
     return {

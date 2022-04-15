@@ -25,5 +25,8 @@ const tablist = useTabList()
     height: 100%;
     overflow: auto;
   }
+  // .views:deep(.tabsDialog) {
+  //   --el-dialog-padding-primary: 14px;
+  // }
 }
 </style>

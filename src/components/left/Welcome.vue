@@ -16,20 +16,7 @@
 
 <script setup lang="ts">
 import { isChromeOrEdge } from '@/common/utils/browserVersion'
-import { themeIcons } from 'seti-icons'
-const getIcon = themeIcons({
-  blue: '#268bd2',
-  grey: '#657b83',
-  'grey-light': '#839496',
-  green: '#859900',
-  orange: '#cb4b16',
-  pink: '#d33682',
-  purple: '#6c71c4',
-  red: '#dc322f',
-  white: '#fdf6e3',
-  yellow: '#b58900',
-  ignore: '#586e75'
-})
+import { showDirectoryPicker, handleDirectoryEntry } from '@commonUtils/fileSystemAccessApi'
 
 const emit = defineEmits<{
   (e: 'OpenFolder', value: string): void
@@ -39,7 +26,7 @@ const btnClick = async () => {
   if (isChromeOrEdge()) {
     //https://developer.mozilla.org/en-US/docs/Web/API/File_and_Directory_Entries_API
     //https://stackoverflow.com/questions/69803693/svelte-how-to-use-native-web-apis/69804292#69804292
-    const dirHandle = await window.showDirectoryPicker()
+    const dirHandle = await showDirectoryPicker()
     let list = <any>[]
     let obj = <any>[
       {
@@ -54,34 +41,6 @@ const btnClick = async () => {
     emit('OpenFolder', obj)
   } else {
     console.log('当前的浏览器不支持本地文件系统访问')
-  }
-}
-const handleDirectoryEntry = async (dirHandle: any, out: any) => {
-  for await (const entry of dirHandle.values()) {
-    if (entry.kind === 'file') {
-      const file = await entry.getFile()
-      const { svg, color } = getIcon(file.name)
-      let obj = {
-        label: file.name,
-        file,
-        entry,
-        svg,
-        color
-      }
-
-      out.push(obj)
-    }
-    if (entry.kind === 'directory') {
-      const newHandle = await dirHandle.getDirectoryHandle(entry.name, { create: false })
-      let obj = {
-        label: entry.name,
-        children: []
-      }
-      if (entry.name !== 'node_modules') {
-        await handleDirectoryEntry(newHandle, obj.children)
-        out.push(obj)
-      }
-    }
   }
 }
 

@@ -70,6 +70,29 @@
     :menu="contextMenu.menu"
     @click="contextMenuClick"
   />
+  <el-dialog
+    v-model="closeDialogVisible"
+    title="vscode"
+    width="300px"
+    :modal="false"
+    draggable
+    custom-class="tabsDialog"
+    :close-on-click-modal="false"
+  >
+    <h2>是否保存更改？</h2>
+    <h3>如果不保存，你的更改将会消失</h3>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button size="small" type="primary" plain @click="saveFileHandler"> 保存 </el-button>
+        <el-button size="small" type="warning" plain @click="removeTab(undefined, false)">
+          不保存
+        </el-button>
+        <el-button size="small" type="warning" plain @click="closeDialogVisible = false">
+          取消
+        </el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
@@ -77,21 +100,15 @@ import { ElMessage } from 'element-plus'
 import { ArrowRight } from '@element-plus/icons-vue'
 import { useTabList } from '@store/tabs'
 import { TabList, File, Tab } from '@common/types/editor'
-import { TabContextMenu as TabContextMenuType } from '@common/types/tabs'
+import { TabContextMenu as TabContextMenuType } from '@commonTypes/contextmenu'
 import useKeyPress from '@hook/useKeyPress'
 import useEventListener from '@hook/useEventListener'
 import { tabContextMenu } from '@config/contextmenu'
+import { writeFile } from '@commonUtils/fileSystemAccessApi'
 
+const closeDialogVisible = ref(false)
 const tabsRef = ref()
 const editorRef = ref()
-const contextMenu = reactive({
-  rect: {
-    x: 0,
-    y: 0
-  },
-  name: '',
-  menu: tabContextMenu
-})
 const tabHeight = 35
 const breadcrumbHeight = 22
 const option = {
@@ -102,6 +119,14 @@ const option = {
     enabled: true // 是否启用预览图
   }
 }
+const contextMenu = reactive({
+  rect: {
+    x: 0,
+    y: 0
+  },
+  name: '',
+  menu: tabContextMenu
+})
 const pageSize = [document.documentElement.clientWidth, document.documentElement.clientHeight]
 const store = useTabList()
 const tabData = reactive<TabList>({
@@ -112,15 +137,7 @@ const activeData = ref<Tab | undefined>()
 
 useKeyPress(['ctrl', 's'], (event) => {
   event.preventDefault()
-  const active = store.active
-  if (store.tabListStateByName(active) === 'dirty') {
-    const editor = editorRef.value
-    editor.formatCode()
-    setTimeout(() => {
-      let val = editor.getValue()
-      saveFile(active, val)
-    }, 20)
-  }
+  saveFileHandler()
 })
 
 watchEffect(() => {
@@ -133,19 +150,6 @@ watchEffect(() => {
   activeData.value = store.getActiveTabContent()
 })
 
-// https://developer.mozilla.org/en-US/docs/Web/API/FileSystemDirectoryHandle
-//写入文件
-async function writeFile(fileHandle: any, contents: string) {
-  try {
-    const writable = await fileHandle.createWritable()
-    await writable.write(contents)
-    await writable.close()
-    return true
-  } catch (error) {
-    return false
-  }
-}
-
 const saveFile = async (name: string, text: string) => {
   const res = await writeFile(store.getListByName(name)?.entry, text)
   if (res) {
@@ -157,12 +161,20 @@ const saveFile = async (name: string, text: string) => {
   }
 }
 
-const removeTab = (targetName: string) => {
-  if (store.tabListStateByName(targetName) === 'dirty') {
-    ElMessage.error(`${targetName} 已修改，请先保存`)
+const removeTab = (targetName: string | undefined, save: boolean = true) => {
+  if (!targetName) {
+    targetName = store.active
+  }
+  if (!targetName) {
     return
   }
+  if (save && store.getStateByName(targetName) === 'dirty') {
+    closeDialogVisible.value = true
+    return
+  }
+  console.log(targetName)
   store.removeTab(targetName.toString())
+  closeDialogVisible.value = false
 }
 
 const clickTab = (key: string) => {
@@ -186,8 +198,20 @@ const contextmenuTab = (name: string, event: any) => {
 
 const changeCode = (name: string, code: string) => {
   // console.log('changeCode', name)
-  if (store.tabListStateByName(name) !== 'dirty') {
+  if (store.getStateByName(name) !== 'dirty') {
     store.editTabListState(name, 'dirty')
+  }
+}
+
+const saveFileHandler = () => {
+  const active = store.active
+  if (store.getStateByName(active) === 'dirty') {
+    const editor = editorRef.value
+    editor.formatCode()
+    setTimeout(() => {
+      let val = editor.getValue()
+      saveFile(active, val)
+    }, 20)
   }
 }
 
@@ -203,6 +227,7 @@ const contextMenuClick = (data: TabContextMenuType) => {
   background-color: rgb(30, 30, 30);
   --el-color-primary: rgba(255, 255, 255, 1);
   --el-text-color-primary: rgba(255, 255, 255, 0.5);
+
   .tabs-label-content {
     .tabs-label {
       padding: 0 4px 0 10px;
@@ -420,5 +445,16 @@ const contextMenuClick = (data: TabContextMenuType) => {
   color: var(--el-color-primary) !important;
   border-right: 1px solid rgb(37, 37, 38);
   background-color: rgb(30, 30, 30) !important;
+}
+.el-dialog__header {
+  padding: 10px 14px !important;
+}
+.el-dialog__body {
+  padding: 20px !important;
+}
+
+.el-dialog__headerbtn {
+  width: 45px !important;
+  height: 45px !important;
 }
 </style>
