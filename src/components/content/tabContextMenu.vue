@@ -65,10 +65,10 @@ watch([() => props.name, () => props.rect], (val) => {
   position: absolute;
   width: initial;
   .context {
-    background: #252526;
-    color: #ccc;
+    background: #333333;
+    color: #fff;
     border-radius: 4px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgb(0 0 0 / 10%);
     display: flex;
     flex-direction: column;
     .group {

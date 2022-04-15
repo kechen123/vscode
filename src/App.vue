@@ -2,10 +2,10 @@
   <Main />
 </template>
 
-<script lang="ts">
-export default defineComponent({
-  name: 'App'
-})
+<script setup lang="ts">
+import { useMonacoStore } from '@store/monaco'
+const useMonaco = useMonacoStore()
+useMonaco.init()
 </script>
 
 <style lang="less">

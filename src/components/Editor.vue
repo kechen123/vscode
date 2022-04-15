@@ -11,10 +11,10 @@ import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
 import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
 import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
+import { useMonacoStore } from '@store/monaco'
 import { language, conf } from '@config/vueLanguage'
 import { editorLanguage } from '@config/fileLanguage'
 import { getFileExt } from '@commonUtils/common'
-
 /**
  * 不支持vue语法=> https://github.com/microsoft/monaco-editor/issues/1630
  * 动态language切换=> https://github.com/vitejs/vite/discussions/1791#discussioncomment-321046
@@ -38,7 +38,6 @@ self.MonacoEnvironment = {
     return new editorWorker()
   }
 }
-
 export default defineComponent({
   props: {
     code: {
@@ -61,6 +60,8 @@ export default defineComponent({
     }
   },
   setup(props, context) {
+    const useMonaco = useMonacoStore()
+    const monacoStore = useMonaco.monaco
     const vueLanguageId = 'vue'
     const data = reactive({
       isSave: true, //文件改动状态，是否保存
@@ -126,17 +127,17 @@ export default defineComponent({
         }
       }
       if (myRef.value && !editor) {
-        monaco.languages.register({
+        monacoStore.languages.register({
           id: 'vue',
           extensions: ['.vue'],
           aliases: ['Vue', 'vuejs']
         })
 
-        monaco.languages.setMonarchTokensProvider('vue', language)
-        monaco.languages.setLanguageConfiguration('vue', conf)
+        monacoStore.languages.setMonarchTokensProvider('vue', language)
+        monacoStore.languages.setLanguageConfiguration('vue', conf)
 
-        editor = monaco.editor.create(myRef.value, option)
-        monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+        editor = monacoStore.editor.create(myRef.value, option)
+        monacoStore.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
           noSemanticValidation: true,
           noSyntaxValidation: true
         })
@@ -144,7 +145,7 @@ export default defineComponent({
           editor?.trigger(option.language, 'editor.action.formatDocument', null)
         }
       } else if (val) {
-        monaco.editor.setModelLanguage(
+        monacoStore.editor.setModelLanguage(
           editor.getModel() as monaco.editor.ITextModel,
           option.language
         )
