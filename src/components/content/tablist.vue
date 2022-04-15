@@ -56,12 +56,21 @@
     class="custom-tabs-content"
     :style="{ height: `${pageSize[1] - tabHeight - breadcrumbHeight}px` }"
   >
-    <Editor
+    <!-- <Editor
       ref="editorRef"
       :code="activeData.text"
       :option="option"
       :name="activeData.name"
       @changeCode="changeCode"
+    /> -->
+    <FileView
+      :file="activeData.file"
+      :name="activeData.name"
+      :path="activeData.path"
+      :state="activeData.state"
+      :svg="activeData.svg"
+      :text="activeData.text"
+      @editHandler="changeCode"
     />
   </div>
   <ContentTabContextMenu
@@ -99,7 +108,7 @@
 import { ElMessage } from 'element-plus'
 import { ArrowRight } from '@element-plus/icons-vue'
 import { useTabList } from '@store/tabs'
-import { TabList, File, Tab } from '@common/types/editor'
+import { TabList, Tab } from '@common/types/editor'
 import { TabContextMenu as TabContextMenuType } from '@commonTypes/contextmenu'
 import useKeyPress from '@hook/useKeyPress'
 import useEventListener from '@hook/useEventListener'
@@ -158,6 +167,7 @@ watchEffect(() => {
   })
   tabData.active = store.active
   activeData.value = store.getActiveTabContent()
+  console.log(activeData.value)
 })
 
 const saveFile = async (name: string, text: string) => {

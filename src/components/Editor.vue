@@ -13,7 +13,7 @@ import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
 import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 import { useMonacoStore } from '@store/monaco'
 import { language, conf } from '@config/vueLanguage'
-import { editorLanguage } from '@config/fileLanguage'
+import { editorLanguage } from '@config/fileExt'
 import { getFileExt } from '@commonUtils/common'
 /**
  * 不支持vue语法=> https://github.com/microsoft/monaco-editor/issues/1630
@@ -197,7 +197,6 @@ export default defineComponent({
     )
 
     onUnmounted(() => {
-      console.log('unmount')
       editor.dispose()
     })
     return {
