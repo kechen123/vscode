@@ -226,14 +226,14 @@ export default defineComponent({
       // onChange()
     })
 
-    watch(
-      () => props.tabData.fileNames,
-      (newValue, oldValue) => {
-        if (newValue.join('-') !== oldValue.join('-')) {
-          initEditor()
-        }
+    watch([() => props.tabData.fileNames, () => props.tabData.active], (newValue, oldValue) => {
+      if (newValue[0].join('-') !== oldValue[0].join('-')) {
+        initEditor()
+      } else if (newValue[1] !== oldValue[1]) {
+        let active = props.tabData.list.find((item) => item.name === newValue[1])
+        if (active) openFile(active.path, active.name)
       }
-    )
+    })
 
     onUnmounted(() => {
       editor.dispose()
