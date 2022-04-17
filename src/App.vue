@@ -6,8 +6,6 @@
 // import { useMonacoStore } from '@store/monaco'
 // const useMonaco = useMonacoStore()
 // useMonaco.init()
-import useMonacoEditor from '@hook/useMonacoEditor'
-useMonacoEditor()
 </script>
 
 <style lang="less">

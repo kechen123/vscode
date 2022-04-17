@@ -15,6 +15,7 @@ import { language, conf } from '@config/vueLanguage'
 import { editorLanguage } from '@config/fileExt'
 import { TabList, Tab } from '@common/types/editor'
 import { getFileExt, getFileType } from '@commonUtils/common'
+import usePrettier from '@hook/usePrettier'
 /**
  * 不支持vue语法=> https://github.com/microsoft/monaco-editor/issues/1630
  * 动态language切换=> https://github.com/vitejs/vite/discussions/1791#discussioncomment-321046
@@ -59,7 +60,7 @@ export default defineComponent({
     const editorStatus = ref(new Map())
     const preFilePath = ref('')
     const listener = ref<any>(null)
-
+    usePrettier()
     let defaultOption = {
       format: false, //自定义属性，是否自动格式化
       value: '', //自定义属性，默认值
@@ -194,7 +195,8 @@ export default defineComponent({
       }
     }
     const formatCode = () => {
-      editor?.trigger('javascript', 'editor.action.formatDocument', null)
+      // editor?.trigger('javascript', 'editor.action.formatDocument', null)
+      editor.getAction('editor.action.formatDocument').run()
     }
 
     const getValue = () => {

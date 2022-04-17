@@ -156,6 +156,11 @@ useKeyPress(['ctrl', 's'], (event) => {
   event.preventDefault()
   saveFileHandler()
 })
+useKeyPress(['ctrl', 'alt', 'l'], (event) => {
+  event.preventDefault()
+  const editor = editorRef.value
+  editor.formatCode()
+})
 useEventListener(
   'contextmenu',
   (event) => {
