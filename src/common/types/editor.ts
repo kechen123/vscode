@@ -27,7 +27,9 @@ export interface TabListStore {
 export interface TabList {
   list: Tab[]
   active: string
+  fileNames: string[]
 }
+
 export interface EditorWindow {
   Editor: Editor[]
 }

@@ -11,7 +11,7 @@
           <div class="tabs-label-content">
             <div
               class="tabs-label"
-              @click.stop="clickTab(item.name)"
+              @click.stop="clickTab(item.name, item.path)"
               @dblclick.stop="dblclickTab(item.name, item.state)"
               @contextmenu.stop="contextmenuTab(item.name, $event)"
             >
@@ -56,14 +56,15 @@
     class="custom-tabs-content"
     :style="{ height: `${pageSize[1] - tabHeight - breadcrumbHeight}px` }"
   >
-    <!-- <Editor
+    <Editor
+      v-show="activeData?.fileType != `image`"
       ref="editorRef"
-      :code="activeData.text"
+      :tabData="tabData"
       :option="option"
-      :name="activeData.name"
       @changeCode="changeCode"
-    /> -->
-    <FileView
+    />
+    <VSImage v-if="activeData?.fileType === `image`" :file="activeData?.file" />
+    <!-- <FileView
       :file="activeData.file"
       :name="activeData.name"
       :path="activeData.path"
@@ -71,7 +72,7 @@
       :svg="activeData.svg"
       :text="activeData.text"
       @editHandler="changeCode"
-    />
+    /> -->
   </div>
   <ContentTabContextMenu
     :name="contextMenu.name"
@@ -113,7 +114,12 @@ import { TabContextMenu as TabContextMenuType } from '@commonTypes/contextmenu'
 import useKeyPress from '@hook/useKeyPress'
 import useEventListener from '@hook/useEventListener'
 import { tabContextMenu } from '@config/contextmenu'
+import { getFileExt, getFileType } from '@commonUtils/common'
 import { writeFile } from '@commonUtils/fileSystemAccessApi'
+
+interface ActiveData extends Tab {
+  fileType: string
+}
 
 const closeDialogVisible = ref(false)
 const tabsRef = ref()
@@ -140,9 +146,11 @@ const pageSize = [document.documentElement.clientWidth, document.documentElement
 const store = useTabList()
 const tabData = reactive<TabList>({
   list: [],
+  fileNames: [],
   active: ''
 })
-const activeData = ref<Tab | undefined>()
+const activeFileType = ref('text')
+const activeData = ref<ActiveData | undefined>()
 
 useKeyPress(['ctrl', 's'], (event) => {
   event.preventDefault()
@@ -165,9 +173,19 @@ watchEffect(() => {
       ...item
     }
   })
+  tabData.fileNames = Array.from(store.list.keys())
   tabData.active = store.active
-  activeData.value = store.getActiveTabContent()
-  console.log(activeData.value)
+  let active = store.getActiveTabContent()
+
+  if (active) {
+    activeData.value = {
+      ...active,
+      fileType: getFileType(active?.file)
+    }
+  }
+
+  //  fileType: getFileType(active?.file)
+  // console.log(activeData.value)
 })
 
 const saveFile = async (name: string, text: string) => {
@@ -197,9 +215,10 @@ const removeTab = (targetName: string | undefined, save: boolean = true) => {
   closeDialogVisible.value = false
 }
 
-const clickTab = (key: string) => {
-  if (store.active !== key) {
-    store.changeActive(key)
+const clickTab = (name: string, path: string[]) => {
+  if (store.active !== name) {
+    store.changeActive(name)
+    editorRef.value.openFile(path, name)
   }
 }
 
@@ -217,7 +236,6 @@ const contextmenuTab = (name: string, event: any) => {
 }
 
 const changeCode = (name: string, code: string) => {
-  // console.log('changeCode', name)
   if (store.getStateByName(name) !== 'dirty') {
     store.editTabListState(name, 'dirty')
   }

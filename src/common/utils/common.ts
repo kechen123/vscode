@@ -10,6 +10,25 @@ export function getFileExt(fileName: string): string {
   }
   return ''
 }
+
+//获取文件类型
+export function getFileType(file: any): string {
+  if (!file) {
+    return 'text'
+  }
+  let type = file.type
+  if (type) {
+    return file.type.split('/')[0]
+  } else {
+    return 'text'
+    // let fileName = file.name
+    // let ext = getFileExt(fileName)
+    // if (ext) {
+    //   return ext.toLowerCase()
+    // }
+  }
+}
+
 //根据当前key获取Map上一个key
 export function getPrevKey(map: Map<string, any>, key: string): string {
   const keys = Array.from(map.keys())

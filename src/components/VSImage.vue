@@ -9,13 +9,25 @@ const props = defineProps<{
   file: any
 }>()
 const url = ref('')
-var reader = new FileReader()
-reader.readAsDataURL(props.file)
-reader.onloadend = function () {
-  if (reader.result) {
-    url.value = reader.result.toString()
+const init = () => {
+  var reader = new FileReader()
+  reader.readAsDataURL(props.file)
+  reader.onloadend = function () {
+    if (reader.result) {
+      url.value = reader.result.toString()
+    }
   }
 }
+
+watch(
+  () => props.file,
+  (newValue, oldValue) => {
+    init()
+  },
+  {
+    immediate: true
+  }
+)
 </script>
 
 <style scoped lang="less">

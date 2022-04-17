@@ -9,7 +9,10 @@ declare module '@vue/runtime-core' {
     ContentTablist: typeof import('./../src/components/content/tablist.vue')['default']
     ContentWelcome: typeof import('./../src/components/content/Welcome.vue')['default']
     Editor: typeof import('./../src/components/Editor.vue')['default']
-    Editorcopy: typeof import('./../src/components/Editorcopy.vue')['default']
+    Editor1: typeof import('./../src/components/Editor1.vue')['default']
+    Editor111: typeof import('../src/components/Editor.vue')['default']
+    Editor2: typeof import('./../src/components/Editor2.vue')['default']
+    Editorcopy: typeof import('../src/components/Editor.vue')['default']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
     ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -27,6 +30,7 @@ declare module '@vue/runtime-core' {
     FileView: typeof import('./../src/components/FileView.vue')['default']
     Footer: typeof import('./../src/components/Footer.vue')['default']
     Header: typeof import('./../src/components/Header.vue')['default']
+    Image: typeof import('../src/components/VSImage.vue')['default']
     Layout: typeof import('./../src/components/Layout.vue')['default']
     Left: typeof import('./../src/components/left/Index.vue')['default']
     LeftActivitybar: typeof import('./../src/components/left/Activitybar.vue')['default']
@@ -36,6 +40,7 @@ declare module '@vue/runtime-core' {
     Resize: typeof import('./../src/components/Resize.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    VSImage: typeof import('./../src/components/VSImage.vue')['default']
   }
 }
 
