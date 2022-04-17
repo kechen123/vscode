@@ -172,6 +172,27 @@ export default defineComponent({
       let active = props.tabData.list.find((item) => item.name === props.tabData.active)
       if (active) openFile(active.path, active.name)
     }
+
+    function updateModel(path: Array<string> | string, value: string) {
+      let pathStr = getFileUrl(path)
+      let model = monaco.editor.getModels().find((model) => model.uri.path === path)
+
+      if (model && model.getValue() !== value) {
+        // 通过该方法，可以实现undo堆栈的保留
+        model.pushEditOperations(
+          [],
+          [
+            {
+              range: model.getFullModelRange(),
+              text: value
+            }
+          ],
+          function () {
+            return []
+          }
+        )
+      }
+    }
     const formatCode = () => {
       editor?.trigger('javascript', 'editor.action.formatDocument', null)
     }
