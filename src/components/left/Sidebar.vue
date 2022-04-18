@@ -6,6 +6,7 @@
       :default-expanded-keys="[1]"
       :data="tree"
       node-key="id"
+      :indent="5"
       :icon="ArrowRight"
       highlight-current
       :check-on-click-node="true"
@@ -113,6 +114,7 @@ const getFilePath = (node: any, path: string[] = []) => {
   outline-color: rgba(83, 89, 93, 0.5);
   width: 100%;
   height: 100%;
+  overflow: auto;
 }
 .el-tree {
   background-color: unset !important;
@@ -121,6 +123,7 @@ const getFilePath = (node: any, path: string[] = []) => {
   --el-tree-expand-icon-color: #ccc;
   --el-color-primary-light-9: #37373d;
   user-select: none;
+  margin-bottom: 20px;
 }
 
 .custom-tree-node {
@@ -156,7 +159,9 @@ const getFilePath = (node: any, path: string[] = []) => {
   width: 3px;
   padding: 0;
 }
-
+.el-tree-node__content {
+  height: 22px !important;
+}
 .el-tree-node:focus {
   > .el-tree-node__content {
     background-color: #094771 !important;

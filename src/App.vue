@@ -3,9 +3,18 @@
 </template>
 
 <script setup lang="ts">
-// import { useMonacoStore } from '@store/monaco'
-// const useMonaco = useMonacoStore()
-// useMonaco.init()
+import { ElLoading } from 'element-plus'
+const loading = ElLoading.service({
+  lock: true,
+  text: 'Loading',
+  background: 'rgba(0, 0, 0, 0.7)'
+})
+const interval = setInterval(() => {
+  if (window.monaco) {
+    clearInterval(interval)
+    loading.close()
+  }
+}, 100)
 </script>
 
 <style lang="less">

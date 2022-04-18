@@ -359,7 +359,10 @@ const contextMenuClick = (data: TabContextMenuType) => {
             }
           }
         }
-        ul:hover {
+      }
+      .file-state:hover {
+        ul {
+          display: block;
           background-color: rgba(90, 93, 94, 0.31);
           border-radius: 4px;
           .el-icon {
@@ -368,6 +371,9 @@ const contextMenuClick = (data: TabContextMenuType) => {
         }
       }
       .icon-dirty {
+        ul {
+          display: block;
+        }
         .icon-guanbi::before {
           content: '\e604';
         }
