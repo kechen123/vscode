@@ -1,20 +1,16 @@
 <template>
-  <Main />
+  <Suspense>
+    <template v-slot:default>
+      <Main />
+    </template>
+    <template v-slot:fallback>
+      <Skeleton />
+    </template>
+  </Suspense>
 </template>
 
 <script setup lang="ts">
-import { ElLoading } from 'element-plus'
-const loading = ElLoading.service({
-  lock: true,
-  text: 'Loading',
-  background: 'rgba(0, 0, 0, 0.7)'
-})
-const interval = setInterval(() => {
-  if (window.monaco) {
-    clearInterval(interval)
-    loading.close()
-  }
-}, 100)
+const Main = defineAsyncComponent(() => import('@components/Main.vue'))
 </script>
 
 <style lang="less">

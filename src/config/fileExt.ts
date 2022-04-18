@@ -9,6 +9,6 @@ export const editorLanguage: language = {
   css: 'css',
   json: 'json',
   md: 'markdown',
-  tsx: 'typescriptreact',
+  tsx: 'typescript',
   less: 'less'
 }

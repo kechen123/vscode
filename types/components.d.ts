@@ -25,15 +25,18 @@ declare module '@vue/runtime-core' {
     FileView: typeof import('./../src/components/FileView.vue')['default']
     Footer: typeof import('./../src/components/Footer.vue')['default']
     Header: typeof import('./../src/components/Header.vue')['default']
+    Home: typeof import('./../src/components/Home.vue')['default']
     Layout: typeof import('./../src/components/Layout.vue')['default']
     Left: typeof import('./../src/components/left/Index.vue')['default']
     LeftActivitybar: typeof import('./../src/components/left/Activitybar.vue')['default']
     LeftSidebar: typeof import('./../src/components/left/Sidebar.vue')['default']
     LeftWelcome: typeof import('./../src/components/left/Welcome.vue')['default']
+    Loader: typeof import('../src/components/Skeleton.vue')['default']
     Main: typeof import('./../src/components/Main.vue')['default']
     Resize: typeof import('./../src/components/Resize.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Skeleton: typeof import('./../src/components/Skeleton.vue')['default']
     VSImage: typeof import('./../src/components/VSImage.vue')['default']
   }
 }
