@@ -1,7 +1,7 @@
 <template>
   <div class="left">
     <div class="title">
-      <div class="label"><h2>资源管理器</h2></div>
+      <div class="label"><h2>源代码管理</h2></div>
       <div class="actions">
         <div class="content">
           <el-dropdown trigger="click">
@@ -19,9 +19,12 @@
         </div>
       </div>
     </div>
-    <el-collapse v-model="activeNames" @change="handleChange">
-      <el-collapse-item title="No Folder Opened" name="1">
-        <LeftSidebar />
+    <el-collapse v-model="activeNames" @change="handleChange" accordion>
+      <el-collapse-item v-if="tree.length === 0" title="无法打开文件夹" name="1">
+        <LeftWelcome @OpenFolder="OpenFolder" />
+      </el-collapse-item>
+      <el-collapse-item v-else-if="tree[0].children" :title="tree[0].label" name="1">
+        <LeftSidebar :tree="tree[0].children" />
       </el-collapse-item>
       <el-collapse-item title="Outline" name="2">
         <div>
@@ -37,13 +40,39 @@
 </template>
 
 <script setup lang="ts">
-const state = reactive({
-  isShow: false
+import { useDebounceFn } from '@vueuse/core'
+import useEventListener from '@hook/useEventListener'
+interface Tree {
+  label: string
+  file?: any
+  children?: Tree[]
+}
+const otherHeight = 35 + 22 * 3
+const size = ref({
+  width: document.documentElement.clientWidth,
+  height: document.documentElement.clientHeight,
+  h: document.documentElement.clientHeight - otherHeight + 'px'
 })
 const activeNames = ref(['1'])
+const tree = ref<Tree[]>([])
+
+const OpenFolder = (data: any) => {
+  tree.value = data
+}
 const handleChange = (val: any) => {
   console.log(val)
 }
+
+const setWindowSize = useDebounceFn((event: Event) => {
+  size.value = {
+    width: document.documentElement.clientWidth,
+    height: document.documentElement.clientHeight,
+    h: document.documentElement.clientHeight - otherHeight + 'px'
+  }
+})
+useEventListener('resize', setWindowSize, {
+  target: window
+})
 </script>
 
 <style scoped lang="less">
@@ -114,7 +143,7 @@ const handleChange = (val: any) => {
 }
 .el-collapse-item__content {
   padding-bottom: 0 !important;
-  height: calc(100vh - 101px);
+  height: v-bind(size.h);
 }
 .el-collapse-item:last-child .el-collapse-item__header {
   border-bottom: none;

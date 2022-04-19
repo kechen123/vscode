@@ -1,10 +1,8 @@
 <template>
   <div class="sidebar">
-    <LeftWelcome v-if="tree.length === 0" @OpenFolder="OpenFolder" />
     <el-tree
-      v-else
       :default-expanded-keys="[1]"
-      :data="tree"
+      :data="props.tree"
       node-key="id"
       :indent="5"
       :icon="ArrowRight"
@@ -13,16 +11,15 @@
     >
       <template #default="{ node, data }">
         <div
+          v-if="node.isLeaf"
           class="custom-tree-node"
           @click="treeClick(data, node)"
           @dblclick.native="treeDbClick(data, node)"
         >
-          <div
-            v-if="node.isLeaf"
-            class="icon"
-            :style="{ fill: data.color }"
-            v-html="data.svg"
-          ></div>
+          <div class="icon" :style="{ fill: data.color }" v-html="data.svg"></div>
+          <div>{{ node.label }}</div>
+        </div>
+        <div v-else class="custom-tree-node">
           <div>{{ node.label }}</div>
         </div>
       </template>
@@ -33,16 +30,18 @@
 <script setup lang="ts">
 import { ArrowRight } from '@element-plus/icons-vue'
 import { useTabList } from '@store/tabs'
-
-const useTab = useTabList()
-const tree = ref([])
-const treeClickCount = ref(0)
-let time: any = null
 interface Tree {
   label: string
   file?: any
   children?: Tree[]
 }
+interface Props {
+  tree: Tree[]
+}
+const props = defineProps<Props>()
+
+let time: any = null
+const useTab = useTabList()
 
 const treeClick = (data: Tree, node: any) => {
   clearTimeout(time)
@@ -56,7 +55,7 @@ const treeClick = (data: Tree, node: any) => {
       let path = getFilePath(node)
       getFileText(data, path)
     }
-  }, 300)
+  }, 100)
 }
 
 const treeDbClick = (data: Tree, node: any) => {
@@ -94,9 +93,7 @@ const getFileText = async (
     file: data.file
   })
 }
-const OpenFolder = (data: any) => {
-  tree.value = data
-}
+
 const getFilePath = (node: any, path: string[] = []) => {
   if (node?.data?.label) {
     path.push(node.data.label)
@@ -114,7 +111,26 @@ const getFilePath = (node: any, path: string[] = []) => {
   outline-color: rgba(83, 89, 93, 0.5);
   width: 100%;
   height: 100%;
+  padding: 0 10px;
   overflow: auto;
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+.sidebar:hover::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #333;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  border-radius: 0;
+  background: transparent;
 }
 .el-tree {
   background-color: unset !important;
