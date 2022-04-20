@@ -5,15 +5,15 @@
         v-for="(item, key) in tabData.list"
         :key="`${key}-${item.state}`"
         :label="item.name"
-        :name="item.name"
+        :name="item.pathStr"
       >
         <template #label>
           <div class="tabs-label-content">
             <div
               class="tabs-label"
-              @click.stop="clickTab(item.name, item.path)"
-              @dblclick.stop="dblclickTab(item.name, item.state)"
-              @contextmenu.stop="contextmenuTab(item.name, $event)"
+              @click.stop="clickTab(item.pathStr, item.path)"
+              @dblclick.stop="dblclickTab(item.pathStr, item.state)"
+              @contextmenu.stop="contextmenuTab(item.pathStr, $event)"
             >
               <div class="file-ext">
                 <div class="svg" :style="{ fill: item.color }" v-html="item.svg"></div>
@@ -23,8 +23,8 @@
               </div>
               <div :class="['icon-' + item.state, 'file-state']">
                 <ul
-                  @click.stop="removeTab(item.name)"
-                  :class="[tabData.active === item.name ? 'selected' : '']"
+                  @click.stop="removeTab(item.pathStr)"
+                  :class="[tabData.active === item.pathStr ? 'selected' : '']"
                 >
                   <li>
                     <i class="iconfont icon-guanbi"></i>
@@ -193,10 +193,10 @@ watchEffect(() => {
   // console.log(activeData.value)
 })
 
-const saveFile = async (name: string, text: string) => {
-  const res = await writeFile(store.getListByName(name)?.entry, text)
+const saveFile = async (pathStr: string, text: string) => {
+  const res = await writeFile(store.getListByName(pathStr)?.entry, text)
   if (res) {
-    store.editTabListState(name, 'edit')
+    store.editTabListState(pathStr, 'edit')
   } else {
     ElMessage.error({
       message: '保存失败'
@@ -215,15 +215,14 @@ const removeTab = (targetName: string | undefined, save: boolean = true) => {
     closeDialogVisible.value = true
     return
   }
-  console.log(targetName)
   store.removeTab(targetName.toString())
   closeDialogVisible.value = false
 }
 
-const clickTab = (name: string, path: string[]) => {
-  if (store.active !== name) {
-    store.changeActive(name)
-    editorRef.value.openFile(path, name)
+const clickTab = (pathStr: string, path: string[]) => {
+  if (store.active !== pathStr) {
+    store.changeActive(pathStr)
+    editorRef.value.openFile(path, pathStr)
   }
 }
 

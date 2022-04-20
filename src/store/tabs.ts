@@ -14,11 +14,11 @@ export const useTabList = defineStore({
     tabListNumber: (state) => {
       return state.list.size
     },
-    getStateByName: (state) => (name: string) => {
-      return state.list.get(name)?.state
+    getStateByName: (state) => (pathStr: string) => {
+      return state.list.get(pathStr)?.state
     },
-    getItemByName: (state) => (name: string) => {
-      return state.list.get(name)
+    getItemByName: (state) => (pathStr: string) => {
+      return state.list.get(pathStr)
     },
     getActiveTabState: (state) => () => {
       return state.list.get(state.active)?.state
@@ -26,8 +26,8 @@ export const useTabList = defineStore({
     getActiveTabContent: (state) => () => {
       return state.list.get(state.active)
     },
-    getListByName: (state) => (name: string) => {
-      return state.list.get(name)
+    getListByName: (state) => (pathStr: string) => {
+      return state.list.get(pathStr)
     }
   },
   actions: {
@@ -38,22 +38,22 @@ export const useTabList = defineStore({
       if (lastVal && lastKey && lastVal.state === 'preview') {
         this.list.delete(lastKey)
       }
-      this.list.set(tab.name, tab)
-      this.active = tab.name
+      this.list.set(tab.pathStr, tab)
+      this.active = tab.pathStr
     },
-    removeTab(name: string) {
-      this.list.delete(name)
-      const prevKeys = getPrevKey(this.list, name)
-      const nextKeys = getNextKey(this.list, name)
+    removeTab(pathStr: string) {
+      this.list.delete(pathStr)
+      const prevKeys = getPrevKey(this.list, pathStr)
+      const nextKeys = getNextKey(this.list, pathStr)
       this.active = prevKeys === '' ? nextKeys : prevKeys
     },
-    editTabListState(name: string, state: 'preview' | 'edit' | 'dirty') {
-      if (this.list.has(name)) {
-        ;(this.list.get(name) as Tab).state = state
+    editTabListState(pathStr: string, state: 'preview' | 'edit' | 'dirty') {
+      if (this.list.has(pathStr)) {
+        ;(this.list.get(pathStr) as Tab).state = state
       }
     },
-    changeActive(name: string) {
-      this.active = name
+    changeActive(pathStr: string) {
+      this.active = pathStr
     },
     //异步 action
     async login(account: string, pwd: string) {

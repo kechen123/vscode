@@ -104,7 +104,9 @@ export default defineComponent({
       overviewRulerBorder: false, // 是否应围绕概览标尺绘制边框
       renderLineHighlight: 'gutter', // 当前行突出显示方式
       roundedSelection: false, // 选区是否有圆角
-      scrollBeyondLastLine: false // 设置编辑器是否可以滚动到最后一行之后
+      scrollBeyondLastLine: false, // 设置编辑器是否可以滚动到最后一行之后
+      fontSize: 16,
+      fontFamily: `Consolas, 'Courier New', monospace`
     }
     const myRef = ref<HTMLElement>()
     let editor: monaco.editor.IStandaloneCodeEditor
@@ -117,7 +119,6 @@ export default defineComponent({
     }
     const openFile = (path: string[], name: string) => {
       let pathStr = getFileUrl(path)
-
       const model = window.monaco.editor.getModels().find((model) => model.uri.path === pathStr)
       if (pathStr !== preFilePath.value) {
         // 储存上一个path的编辑器的状态
@@ -159,7 +160,7 @@ export default defineComponent({
         const type = getFileType(item.file)
         if (!models.find((model) => model.uri.path === path) && type !== 'image') {
           let language = 'javascript'
-          let fileExt = getFileExt(item.name)
+          let fileExt = getFileExt(item.pathStr)
           if (fileExt != '' && Object.keys(editorLanguage).includes(fileExt)) {
             language = editorLanguage[fileExt]
           }
@@ -170,8 +171,8 @@ export default defineComponent({
           )
         }
       })
-      let active = props.tabData.list.find((item) => item.name === props.tabData.active)
-      if (active) openFile(active.path, active.name)
+      let active = props.tabData.list.find((item) => item.pathStr === props.tabData.active)
+      if (active) openFile(active.path, active.pathStr)
     }
 
     function updateModel(path: Array<string> | string, value: string) {
@@ -230,8 +231,8 @@ export default defineComponent({
       if (newValue[0].join('-') !== oldValue[0].join('-')) {
         initEditor()
       } else if (newValue[1] !== oldValue[1]) {
-        let active = props.tabData.list.find((item) => item.name === newValue[1])
-        if (active) openFile(active.path, active.name)
+        let active = props.tabData.list.find((item) => item.pathStr === newValue[1])
+        if (active) openFile(active.path, active.pathStr)
       }
     })
 

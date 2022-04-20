@@ -1,10 +1,13 @@
 export interface File {
   name: string
-  path: string[]
-  [propName: string]: any
   text: string
+  state: string
   svg?: string
   color?: string
+  path: string[]
+  pathStr: string
+  entry: string
+  file: any
 }
 
 export interface Size {

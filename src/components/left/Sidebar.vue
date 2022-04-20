@@ -82,13 +82,15 @@ const getFileText = async (
   state: 'preview' | 'edit' | 'dirty' = 'preview'
 ) => {
   const text: string = await data.file.text()
+  path.reverse()
   useTab.addTab({
     name: data.file.name,
     text,
     state,
     svg: data.svg,
     color: data.color,
-    path: path.reverse(),
+    pathStr: path.join('/'),
+    path: path,
     entry: data.entry,
     file: data.file
   })
@@ -98,7 +100,7 @@ const getFilePath = (node: any, path: string[] = []) => {
   if (node?.data?.label) {
     path.push(node.data.label)
   }
-  if (node?.parent && node?.parent.level > 1) {
+  if (node?.parent && node?.parent.level > 0) {
     getFilePath(node.parent, path)
   }
   return path
