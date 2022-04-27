@@ -3,9 +3,6 @@
     <div class="content">
       <div class="composite-bar">
         <div class="monaco-action-bar">
-          <div class="menubar">
-            <a class="toolbar-toggle-more codicon codicon-menu"></a>
-          </div>
           <ul class="actions-container">
             <li
               v-for="(item, key) in actions"
@@ -71,23 +68,7 @@ const click = (obj: any) => {
       white-space: nowrap;
       height: 100%;
       color: rgba(255, 255, 255, 0.4);
-      .menubar {
-        width: 100%;
-        height: 35px;
-        flex-shrink: 0;
-        overflow: visible;
-        .toolbar-toggle-more {
-          position: relative;
-          left: 0;
-          top: 0;
-          cursor: pointer;
-          width: 100%;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-      }
+
       .actions-container {
         display: flex;
         margin: 0 auto;
