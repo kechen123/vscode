@@ -1,13 +1,13 @@
 <template>
   <div class="welcome">
-    <p>You have not yet opened a folder.</p>
+    <p>尚未打开文件夹.</p>
     <div class="button-container">
       <el-button size="small" type="primary" @click="openFinder">打开文件夹</el-button>
     </div>
     <div class="button-container">
       <el-button size="small" type="primary">最近</el-button>
     </div>
-    <p>You can remotely open a repository or pull request.</p>
+    <p>可以打开服务器文件.</p>
     <div class="button-container">
       <el-button size="small" type="primary" @click="cloudFinder">服务器文件夹</el-button>
     </div>

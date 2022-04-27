@@ -8,6 +8,7 @@ declare module '@vue/runtime-core' {
     ContentTabContextMenu: typeof import('./../src/components/content/tabContextMenu.vue')['default']
     ContentTablist: typeof import('./../src/components/content/tablist.vue')['default']
     ContentWelcome: typeof import('./../src/components/content/Welcome.vue')['default']
+    ContextMenu: typeof import('./../src/components/ContextMenu.vue')['default']
     Editor: typeof import('./../src/components/Editor.vue')['default']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
     ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
@@ -32,10 +33,12 @@ declare module '@vue/runtime-core' {
     LeftSidebar: typeof import('./../src/components/left/Sidebar.vue')['default']
     LeftWelcome: typeof import('./../src/components/left/Welcome.vue')['default']
     Main: typeof import('./../src/components/Main.vue')['default']
+    QuickInput: typeof import('./../src/components/QuickInput.vue')['default']
     Resize: typeof import('./../src/components/Resize.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Skeleton: typeof import('./../src/components/Skeleton.vue')['default']
+    TabContextMenu: typeof import('./../src/components/tabContextMenu.vue')['default']
     VSImage: typeof import('./../src/components/VSImage.vue')['default']
   }
 }

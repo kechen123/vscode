@@ -74,7 +74,7 @@
       @editHandler="changeCode"
     /> -->
   </div>
-  <ContentTabContextMenu
+  <ContextMenu
     :name="contextMenu.name"
     :rect="contextMenu.rect"
     :menu="contextMenu.menu"

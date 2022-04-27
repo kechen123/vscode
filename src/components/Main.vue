@@ -8,9 +8,18 @@
       <Content />
     </template>
   </Layout>
+  <QuickInput ref="quickInput" />
 </template>
 
 <script setup lang="ts">
+import useKeyPress from '@hook/useKeyPress'
+
+const quickInput = ref()
+
+useKeyPress(['f1'], (event) => {
+  event.preventDefault()
+  quickInput.value.show()
+})
 new Promise((resolve, reject) => {
   const interval = setInterval(() => {
     if (window.monaco) {
