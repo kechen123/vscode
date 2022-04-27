@@ -48,6 +48,7 @@ const emit = defineEmits<{
 }>()
 let time: any = null
 let pubId: any = null
+let idle: any = null
 const useTab = useTabList()
 
 const treeClick = (data: Tree, node: any) => {
@@ -109,26 +110,9 @@ const getLocalFileText = async (
 }
 
 const getServerFileText = async (data: any, state: 'preview' | 'edit' | 'dirty' = 'preview') => {
-  window.WS.getFileText(data.url)
-  if (pubId) {
-    pubsub.unsubscribe(pubId)
-  }
-  pubId = pubsub.subscribe('webSocket', (msg: string, result: any) => {
-    if (result.type === 'fileText') {
-      console.log(result)
-      // let path = data.path.split('/')
-      // path.reverse()
-      // useTab.addTab({
-      //   name: data.file.name,
-      //   text: result.data,
-      //   state,
-      //   svg: data.svg,
-      //   color: data.color,
-      //   pathStr: data.path,
-      //   path: path
-      // })
-    }
-  })
+  const { label, url, path, svg, color } = data
+  window.WS.getFileText(url)
+  idle = { state, ...data }
 }
 
 const getFilePath = (node: any, path: string[] = []) => {
@@ -140,6 +124,29 @@ const getFilePath = (node: any, path: string[] = []) => {
   }
   return path
 }
+
+onMounted(() => {
+  pubId = pubsub.subscribe('webSocket', (msg: string, result: any) => {
+    if (result.type === 'fileText' && idle) {
+      const { state, label, url, path, svg, color, relativePath } = idle
+      let pathUrl = relativePath.split('\\')
+      pathUrl.reverse()
+      useTab.addTab({
+        name: label,
+        text: result.data,
+        state,
+        svg: svg,
+        color: color,
+        pathStr: relativePath,
+        path: pathUrl
+      })
+    }
+  })
+})
+
+onUnmounted(() => {
+  pubsub.unsubscribe(pubId)
+})
 </script>
 
 <style scoped lang="less">

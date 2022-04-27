@@ -5,7 +5,6 @@
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Content: typeof import('./../src/components/content/Index.vue')['default']
-    ContentTabContextMenu: typeof import('./../src/components/content/tabContextMenu.vue')['default']
     ContentTablist: typeof import('./../src/components/content/tablist.vue')['default']
     ContentWelcome: typeof import('./../src/components/content/Welcome.vue')['default']
     ContextMenu: typeof import('./../src/components/ContextMenu.vue')['default']
@@ -38,7 +37,6 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Skeleton: typeof import('./../src/components/Skeleton.vue')['default']
-    TabContextMenu: typeof import('./../src/components/tabContextMenu.vue')['default']
     VSImage: typeof import('./../src/components/VSImage.vue')['default']
   }
 }

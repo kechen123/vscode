@@ -148,7 +148,7 @@ onMounted(() => {
     if (data.type === 'finderTree') {
       const { data: list } = data
       setTreeFileIcon(list[0].children)
-      emit('OpenFolder', list, false)
+      emit('openFolder', list, false)
     }
   })
 })

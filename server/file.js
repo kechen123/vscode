@@ -14,14 +14,17 @@ function getFinderPathTree(startPath) {
     let files = fs.readdirSync(url)
     files.forEach((val, index) => {
       let fPath = path.join(url, val)
+      const relativePath = fPath.replace(startPath + '\\', '')
       const name = path.basename(fPath)
+
       const find = filterList.find((item) => item === name)
       if (!find) {
         let stats = fs.statSync(fPath)
         let obj = {
           label: name,
           type: 'file',
-          url: fPath
+          url: fPath,
+          relativePath
         }
         if (stats.isDirectory()) {
           obj.children = []
