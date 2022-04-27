@@ -93,7 +93,6 @@ const getLocalFileText = async (
   state: 'preview' | 'edit' | 'dirty' = 'preview'
 ) => {
   let text: string = ''
-  console.log(1)
   text = await data.file.text()
   path.reverse()
   useTab.addTab({

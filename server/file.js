@@ -75,7 +75,6 @@ function getFinderPathTree(startPath) {
 }
 
 function getFileText(url) {
-  console.log('获取文件内容', url)
   const text = fs.readFileSync(url)
   return text.toString('utf-8')
 }
