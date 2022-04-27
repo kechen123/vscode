@@ -60,7 +60,9 @@ interface Tree {
   children?: Tree[]
 }
 const loading = ref()
-const otherHeight = 35 + 22 * 3
+const headerHeight = 30
+const footerHeight = 22
+const otherHeight = headerHeight + footerHeight + 35 + 4 + 22 * 3
 const size = ref({
   width: document.documentElement.clientWidth,
   height: document.documentElement.clientHeight,
@@ -129,8 +131,7 @@ useEventListener('resize', setWindowSize, {
   }
   .loading {
     position: relative;
-    height: 4px;
-    top: -2px;
+    height: 2px;
     overflow: hidden;
   }
   .actions {

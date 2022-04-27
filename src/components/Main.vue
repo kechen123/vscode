@@ -1,4 +1,5 @@
 <template>
+  <Header />
   <Layout>
     <template #left>
       <LeftActivitybar />
@@ -8,6 +9,7 @@
       <Content />
     </template>
   </Layout>
+  <Footer />
   <QuickInput ref="quickInput" />
 </template>
 

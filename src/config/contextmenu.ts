@@ -71,3 +71,81 @@ export const tabContextMenu: Array<Array<TabContextMenu>> = [
     }
   ]
 ]
+export const fileContextMenu: Array<Array<TabContextMenu>> = [
+  [
+    {
+      id: 'close',
+      label: '新建文件',
+      keyPress: 'ctrl',
+      keyCode: 81
+    },
+    {
+      id: 'close',
+      label: '新建窗口',
+      keyPress: 'ctrl',
+      keyCode: 81
+    }
+  ],
+  [
+    {
+      id: 'close-other',
+      label: '打开文件'
+    },
+    {
+      id: 'close-to-right',
+      label: '打开文件夹'
+    },
+    {
+      id: 'close-to-saved',
+      label: '打开最近的文件',
+      keyPress: 'ctrl',
+      keyCode: 81
+    }
+  ],
+  [
+    {
+      id: 'keep-open',
+      label: '保存'
+    },
+    {
+      id: 'pin',
+      label: '另存为',
+      keyPress: 'ctrl',
+      keyCode: 81
+    },
+    {
+      id: 'split-up',
+      label: '全部保存'
+    }
+  ],
+  [
+    {
+      id: 'split-up',
+      label: '自动保存'
+    },
+    {
+      id: 'split-down',
+      label: '首选项'
+    }
+  ],
+  [
+    {
+      id: 'split-left',
+      label: '关闭编辑器',
+      keyPress: 'ctrl',
+      keyCode: 81
+    },
+    {
+      id: 'split-right',
+      label: '关闭文件夹',
+      keyPress: 'ctrl',
+      keyCode: 81
+    },
+    {
+      id: 'split-right',
+      label: '退出',
+      keyPress: 'ctrl',
+      keyCode: 81
+    }
+  ]
+]

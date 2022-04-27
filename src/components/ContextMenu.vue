@@ -36,6 +36,7 @@ interface Props {
 }
 interface Emit {
   (e: 'click', value: TabContextMenu): void
+  (e: 'onClose', event: Event): void
 }
 const props = defineProps<Props>()
 const emit = defineEmits<Emit>()
@@ -44,7 +45,10 @@ const isShow = ref(false)
 
 const target = ref(null)
 
-onClickOutside(target, (event) => (isShow.value = false))
+onClickOutside(target, (event) => {
+  emit('onClose', event)
+  isShow.value = false
+})
 
 const click = (item1: TabContextMenu, item: TabContextMenu[]) => {
   emit('click', item1)
@@ -65,10 +69,10 @@ watch([() => props.name, () => props.rect], (val) => {
   position: absolute;
   width: initial;
   .context {
-    background: #333333;
+    background: #252526;
     color: #fff;
     border-radius: 4px;
-    box-shadow: 0 0 10px rgb(0 0 0 / 10%);
+    box-shadow: 0 0 10px rgb(0 0 0 / 40%);
     display: flex;
     flex-direction: column;
     .group {

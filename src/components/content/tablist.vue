@@ -27,7 +27,7 @@
                   :class="[tabData.active === item.pathStr ? 'selected' : '']"
                 >
                   <li>
-                    <i class="iconfont icon-guanbi"></i>
+                    <i class="codicon codicon-chrome-close"></i>
                   </li>
                 </ul>
               </div>
@@ -54,7 +54,9 @@
   </div>
   <div
     class="custom-tabs-content"
-    :style="{ height: `${pageSize[1] - tabHeight - breadcrumbHeight}px` }"
+    :style="{
+      height: `${pageSize[1] - headerHeight - footerHeight - tabHeight - breadcrumbHeight}px`
+    }"
   >
     <Editor
       v-show="activeData?.fileType != `image`"
@@ -125,6 +127,8 @@ const closeDialogVisible = ref(false)
 const tabsRef = ref()
 const editorRef = ref()
 const tabHeight = 35
+const headerHeight = 30
+const footerHeight = 22
 const breadcrumbHeight = 22
 const option = {
   language: 'dynamic',

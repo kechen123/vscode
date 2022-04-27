@@ -15,13 +15,16 @@ const Main = defineAsyncComponent(() => import('@components/Main.vue'))
 
 <style lang="less">
 #vscode {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Segoe WPC, Segoe UI, Microsoft YaHei, sans-serif;
+  // font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box;
   position: relative;
-  width: 100%;
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
 }
 </style>
