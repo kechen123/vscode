@@ -11,10 +11,10 @@
       <div class="list">
         <div class="content">
           <ul>
-            <li class="select">erterter</li>
-            <li>erterter</li>
-            <li>erterter</li>
-            <li>erterter</li>
+            <li class="select">balabalala</li>
+            <li>balabalala</li>
+            <li>balabalala</li>
+            <li>balabalala</li>
           </ul>
         </div>
       </div>
