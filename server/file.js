@@ -1,18 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const filterList = [
-  '.git',
-  '.gitignore',
-  '.idea',
-  '.vscode',
-  'node_modules',
-  'dist',
-  'build',
-  'server',
-  'package-lock.json',
-  'yarn.lock',
-  'yarn-error.log'
-]
+const filterList = ['.git', '.gitignore', '.idea', '.vscode', 'node_modules']
 
 function getFinderPathTree(startPath) {
   let result = [

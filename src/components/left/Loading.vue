@@ -7,18 +7,7 @@
 <script setup lang="ts">
 const progressRef = ref()
 const bitRef = ref()
-const size = reactive({
-  pw: 0,
-  bw: 0
-})
-onMounted(() => {
-  const progress = progressRef.value
-  const bit = bitRef.value
-  const pw = progress.clientWidth
-  const bw = bit.clientWidth
-  size.bw = bw
-  size.pw = pw
-})
+
 const showLoading = () => {
   progressRef.value.style.display = 'block'
   bitRef.value.style.display = 'block'
