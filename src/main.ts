@@ -6,6 +6,7 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import '@vscode/codicons/dist/codicon.css'
 import { initLoadScript } from '@commonUtils/loadMonacoEditor'
+import WS from '@commonUtils/webSocket'
 
 import styleImport from '@/common/utils/style-import'
 import '@style/basic.less'
@@ -15,3 +16,10 @@ const app = createApp(App)
 app.use(store).use(ElementPlus).mount('#vscode')
 
 initLoadScript()
+const ws = new WS()
+declare global {
+  interface Window {
+    WS: any
+  }
+}
+window.WS = ws

@@ -28,32 +28,37 @@
 </template>
 
 <script setup lang="ts">
+import pubsub from 'pubsub-js'
 import { ArrowRight } from '@element-plus/icons-vue'
 import { useTabList } from '@store/tabs'
 interface Tree {
   label: string
   file?: any
+  url?: string
   children?: Tree[]
 }
 interface Props {
   tree: Tree[]
+  isLocal: boolean
 }
 const props = defineProps<Props>()
-
 let time: any = null
+let pubId: any = null
 const useTab = useTabList()
 
 const treeClick = (data: Tree, node: any) => {
   clearTimeout(time)
   time = setTimeout(() => {
-    const name = data.file?.name
+    const name = node.label
     if (useTab.list.has(name)) {
       //已经打开当前文件，选中当前文件选项卡
       useTab.changeActive(name)
-    } else if (data.file) {
+    } else if (data.file && props.isLocal) {
       // 读取文件内容并打开新选项卡,当前状态为预览状态
       let path = getFilePath(node)
-      getFileText(data, path)
+      getLocalFileText(data, path)
+    } else if (data?.url && props.isLocal === false) {
+      getServerFileText(data)
     }
   }, 100)
 }
@@ -75,13 +80,15 @@ const treeDbClick = (data: Tree, node: any) => {
     getFileText(data, path, 'edit')
   }
 }
-
-const getFileText = async (
+//本地文件内容
+const getLocalFileText = async (
   data: any,
   path: string[],
   state: 'preview' | 'edit' | 'dirty' = 'preview'
 ) => {
-  const text: string = await data.file.text()
+  let text: string = ''
+  console.log(1)
+  text = await data.file.text()
   path.reverse()
   useTab.addTab({
     name: data.file.name,
@@ -93,6 +100,29 @@ const getFileText = async (
     path: path,
     entry: data.entry,
     file: data.file
+  })
+}
+
+const getServerFileText = async (data: any, state: 'preview' | 'edit' | 'dirty' = 'preview') => {
+  window.WS.getFileText(data.url)
+  if (pubId) {
+    pubsub.unsubscribe(pubId)
+  }
+  pubId = pubsub.subscribe('webSocket', (msg: string, result: any) => {
+    if (result.type === 'fileText') {
+      console.log(result)
+      // let path = data.path.split('/')
+      // path.reverse()
+      // useTab.addTab({
+      //   name: data.file.name,
+      //   text: result.data,
+      //   state,
+      //   svg: data.svg,
+      //   color: data.color,
+      //   pathStr: data.path,
+      //   path: path
+      // })
+    }
   })
 }
 

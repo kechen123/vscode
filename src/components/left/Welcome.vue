@@ -2,27 +2,46 @@
   <div class="welcome">
     <p>You have not yet opened a folder.</p>
     <div class="button-container">
-      <el-button size="small" type="primary" @click="btnClick">Open Folder</el-button>
+      <el-button size="small" type="primary" @click="openFinder">打开文件夹</el-button>
     </div>
     <div class="button-container">
-      <el-button size="small" type="primary">Open Recent</el-button>
+      <el-button size="small" type="primary">最近</el-button>
     </div>
     <p>You can remotely open a repository or pull request.</p>
     <div class="button-container">
-      <el-button size="small" type="primary">Open Remote Repository</el-button>
+      <el-button size="small" type="primary" @click="cloudFinder">服务器文件夹</el-button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import pubsub from 'pubsub-js'
 import { isChromeOrEdge } from '@/common/utils/browserVersion'
 import { showDirectoryPicker, handleDirectoryEntry } from '@commonUtils/fileSystemAccessApi'
+import { themeIcons } from 'seti-icons'
+const getIcon = themeIcons({
+  blue: '#268bd2',
+  grey: '#657b83',
+  'grey-light': '#839496',
+  green: '#859900',
+  orange: '#cb4b16',
+  pink: '#d33682',
+  purple: '#6c71c4',
+  red: '#dc322f',
+  white: '#fdf6e3',
+  yellow: '#b58900',
+  ignore: '#586e75'
+})
 
+interface Em {
+  data: any
+  local: boolean
+}
 const emit = defineEmits<{
-  (e: 'OpenFolder', value: string): void
+  (e: 'OpenFolder', data: any, local: boolean): void
 }>()
 
-const btnClick = async () => {
+const openFinder = async () => {
   if (isChromeOrEdge()) {
     //https://developer.mozilla.org/en-US/docs/Web/API/File_and_Directory_Entries_API
     //https://stackoverflow.com/questions/69803693/svelte-how-to-use-native-web-apis/69804292#69804292
@@ -37,8 +56,10 @@ const btnClick = async () => {
     ]
     await handleDirectoryEntry(dirHandle, list)
     let arr = mySort(list)
+    setTreeFileIcon(arr)
     obj[0].children = arr
-    emit('OpenFolder', obj)
+    console.log('本地文件>', obj)
+    emit('OpenFolder', obj, true)
   } else {
     console.log('当前的浏览器不支持本地文件系统访问')
   }
@@ -101,6 +122,33 @@ const sortList = (list: any, newList?: any) => {
   }
   return newList
 }
+
+//文件图标
+const setTreeFileIcon = (list: any) => {
+  for (let i = 0; i < list.length; i++) {
+    const element = list[i]
+    if (element.children || element?.type === 'dir') {
+      setTreeFileIcon(element.children)
+    } else {
+      const { svg, color } = getIcon(element.label)
+      element.svg = svg
+      element.color = color
+    }
+  }
+}
+
+const cloudFinder = () => {
+  window.WS.finderTree()
+}
+onMounted(() => {
+  pubsub.subscribe('webSocket', (msg: string, data: any) => {
+    if (data.type === 'finderTree') {
+      const { data: list } = data
+      setTreeFileIcon(list[0].children)
+      emit('OpenFolder', list, false)
+    }
+  })
+})
 </script>
 
 <style scoped lang="less">

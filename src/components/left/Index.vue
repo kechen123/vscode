@@ -24,7 +24,7 @@
         <LeftWelcome @OpenFolder="OpenFolder" />
       </el-collapse-item>
       <el-collapse-item v-else-if="tree[0].children" :title="tree[0].label" name="1">
-        <LeftSidebar :tree="tree[0].children" />
+        <LeftSidebar :tree="tree[0].children" :isLocal="isLocal" />
       </el-collapse-item>
       <el-collapse-item title="Outline" name="2">
         <div>
@@ -53,11 +53,16 @@ const size = ref({
   height: document.documentElement.clientHeight,
   h: document.documentElement.clientHeight - otherHeight + 'px'
 })
+const isLocal = ref(false)
 const activeNames = ref(['1'])
 const tree = ref<Tree[]>([])
-
-const OpenFolder = (data: any) => {
+interface Em {
+  data: any
+  local: boolean
+}
+const OpenFolder = (data: any, local: boolean) => {
   tree.value = data
+  isLocal.value = local
 }
 const handleChange = (val: any) => {
   console.log(val)

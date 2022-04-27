@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -16,12 +16,14 @@
     "mockjs": "^1.1.0",
     "monaco-editor": "^0.33.0",
     "pinia": "^2.0.12",
+    "pubsub-js": "^1.9.4",
     "seti-icons": "^0.0.4",
     "vue": "^3.2.25",
     "vue-router": "^4.0.14"
   },
   "devDependencies": {
     "@types/node": "^17.0.23",
+    "@types/pubsub-js": "^1.8.3",
     "@types/wicg-file-system-access": "^2020.9.5",
     "@typescript-eslint/eslint-plugin": "^5.18.0",
     "@typescript-eslint/parser": "^5.18.0",

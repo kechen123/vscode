@@ -6,8 +6,8 @@ export interface File {
   color?: string
   path: string[]
   pathStr: string
-  entry: string
-  file: any
+  entry?: string
+  file?: any
 }
 
 export interface Size {

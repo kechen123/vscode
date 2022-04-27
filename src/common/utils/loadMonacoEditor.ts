@@ -19,14 +19,14 @@ function loadScript(url: string, cb: () => void) {
 
 export function initLoadScript() {
   loadScript(
-    '/node_modules/monaco-editor/min/vs/loader.js',
-    // 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.1/min/vs/loader.min.js',
+    // '/node_modules/monaco-editor/min/vs/loader.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.1/min/vs/loader.min.js',
     // '/loader.min.js',
     () => {
       window.require.config({
         paths: {
-          // vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.1/min/vs'
-          vs: '/node_modules/monaco-editor/min/vs'
+          vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.1/min/vs'
+          // vs: '/node_modules/monaco-editor/min/vs'
         }
       })
       window.require.config({
