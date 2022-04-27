@@ -38,7 +38,9 @@ interface Em {
   local: boolean
 }
 const emit = defineEmits<{
-  (e: 'OpenFolder', data: any, local: boolean): void
+  (e: 'openFolder', data: any, local: boolean): void
+  (e: 'showLoading'): void
+  (e: 'hideLoading'): void
 }>()
 
 const openFinder = async () => {
@@ -54,12 +56,13 @@ const openFinder = async () => {
         children: []
       }
     ]
+    emit('showLoading')
     await handleDirectoryEntry(dirHandle, list)
     let arr = mySort(list)
     setTreeFileIcon(arr)
     obj[0].children = arr
-    console.log('本地文件>', obj)
-    emit('OpenFolder', obj, true)
+    emit('openFolder', obj, true)
+    emit('hideLoading')
   } else {
     console.log('当前的浏览器不支持本地文件系统访问')
   }

@@ -19,12 +19,24 @@
         </div>
       </div>
     </div>
+    <div class="loading">
+      <LeftLoading ref="loading" />
+    </div>
     <el-collapse v-model="activeNames" @change="handleChange" accordion>
       <el-collapse-item v-if="tree.length === 0" title="无法打开文件夹" name="1">
-        <LeftWelcome @OpenFolder="OpenFolder" />
+        <LeftWelcome
+          @openFolder="OpenFolder"
+          @showLoading="showLoading"
+          @hideLoading="hideLoading"
+        />
       </el-collapse-item>
       <el-collapse-item v-else-if="tree[0].children" :title="tree[0].label" name="1">
-        <LeftSidebar :tree="tree[0].children" :isLocal="isLocal" />
+        <LeftSidebar
+          :tree="tree[0].children"
+          :isLocal="isLocal"
+          @showLoading="showLoading"
+          @hideLoading="hideLoading"
+        />
       </el-collapse-item>
       <el-collapse-item title="Outline" name="2">
         <div>
@@ -47,6 +59,7 @@ interface Tree {
   file?: any
   children?: Tree[]
 }
+const loading = ref()
 const otherHeight = 35 + 22 * 3
 const size = ref({
   width: document.documentElement.clientWidth,
@@ -66,6 +79,14 @@ const OpenFolder = (data: any, local: boolean) => {
 }
 const handleChange = (val: any) => {
   console.log(val)
+}
+
+const showLoading = () => {
+  loading.value.showLoading()
+}
+
+const hideLoading = () => {
+  loading.value.hideLoading()
 }
 
 const setWindowSize = useDebounceFn((event: Event) => {
@@ -105,6 +126,12 @@ useEventListener('resize', setWindowSize, {
       white-space: nowrap;
       text-overflow: ellipsis;
     }
+  }
+  .loading {
+    position: relative;
+    height: 4px;
+    top: -2px;
+    overflow: hidden;
   }
   .actions {
     flex: 1;

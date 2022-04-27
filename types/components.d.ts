@@ -28,6 +28,7 @@ declare module '@vue/runtime-core' {
     Layout: typeof import('./../src/components/Layout.vue')['default']
     Left: typeof import('./../src/components/left/Index.vue')['default']
     LeftActivitybar: typeof import('./../src/components/left/Activitybar.vue')['default']
+    LeftLoading: typeof import('./../src/components/left/Loading.vue')['default']
     LeftSidebar: typeof import('./../src/components/left/Sidebar.vue')['default']
     LeftWelcome: typeof import('./../src/components/left/Welcome.vue')['default']
     Main: typeof import('./../src/components/Main.vue')['default']

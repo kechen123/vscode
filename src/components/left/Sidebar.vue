@@ -42,6 +42,10 @@ interface Props {
   isLocal: boolean
 }
 const props = defineProps<Props>()
+const emit = defineEmits<{
+  (e: 'showLoading'): void
+  (e: 'hideLoading'): void
+}>()
 let time: any = null
 let pubId: any = null
 const useTab = useTabList()
@@ -50,6 +54,7 @@ const treeClick = (data: Tree, node: any) => {
   clearTimeout(time)
   time = setTimeout(() => {
     const name = node.label
+    emit('showLoading')
     if (useTab.list.has(name)) {
       //已经打开当前文件，选中当前文件选项卡
       useTab.changeActive(name)
@@ -60,6 +65,7 @@ const treeClick = (data: Tree, node: any) => {
     } else if (data?.url && props.isLocal === false) {
       getServerFileText(data)
     }
+    emit('hideLoading')
   }, 100)
 }
 
