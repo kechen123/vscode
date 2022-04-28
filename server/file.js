@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const filterList = ['.git', '.gitignore', '.idea', '.vscode', 'node_modules']
 
+//文件夹目录
 function getFinderPathTree(startPath) {
   let result = [
     {
@@ -77,11 +78,22 @@ function getFinderPathTree(startPath) {
   return result
 }
 
+//文件内容
 function getFileText(url) {
   const text = fs.readFileSync(url)
   return text.toString('utf-8')
 }
+
+function watchFile(url) {
+  let p3 = 'D:\\code\\vscode_web\\server\\shell.txt'
+  fs.watch(p3, (event, filename) => {
+    if (filename && event == 'change') {
+      console.log(`${filename}文件发生更新`)
+    }
+  })
+}
 module.exports = {
   getFinderPathTree,
-  getFileText
+  getFileText,
+  watchFile
 }
