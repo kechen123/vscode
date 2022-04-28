@@ -8,6 +8,9 @@
     <template #content>
       <Content />
     </template>
+    <template #right>
+      <Right />
+    </template>
   </Layout>
   <Footer />
   <QuickInput ref="quickInput" />
@@ -32,4 +35,8 @@ new Promise((resolve, reject) => {
 })
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+* {
+  user-select: none;
+}
+</style>
