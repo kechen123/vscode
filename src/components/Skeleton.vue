@@ -7,6 +7,9 @@
     <template #content>
       <div class="content"></div>
     </template>
+    <template #right>
+      <div class="right"></div>
+    </template>
   </Layout>
 </template>
 
@@ -31,5 +34,11 @@
   min-width: 300px;
   position: relative;
   background-color: #1e1e1e;
+}
+.right {
+  width: 100%;
+  height: 100%;
+  background-color: #1e1e1e;
+  border-left: solid 1px rgba(128, 128, 128, 0.35);
 }
 </style>

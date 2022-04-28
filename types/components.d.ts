@@ -36,7 +36,6 @@ declare module '@vue/runtime-core' {
     Resize: typeof import('./../src/components/Resize.vue')['default']
     Right: typeof import('./../src/components/right/Index.vue')['default']
     RightContainer: typeof import('./../src/components/right/Container.vue')['default']
-    RightHeader: typeof import('../src/components/right/Title.vue')['default']
     RightTitle: typeof import('./../src/components/right/Title.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

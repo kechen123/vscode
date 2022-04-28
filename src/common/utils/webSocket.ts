@@ -61,5 +61,21 @@ class WS {
     }
     this.send(JSON.stringify(data))
   }
+  openTerminal(path?: string) {
+    const data = {
+      type: 'openTerminal',
+      data: {}
+    }
+    this.send(JSON.stringify(data))
+  }
+  terminal(cmd: string) {
+    const data = {
+      type: 'terminal',
+      data: {
+        cmd: cmd
+      }
+    }
+    this.send(JSON.stringify(data))
+  }
 }
 export default WS
