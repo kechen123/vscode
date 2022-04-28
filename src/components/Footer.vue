@@ -20,14 +20,29 @@
       <li>
         <a tabindex="-1" role="button" aria-label="信息: 8 条">
           <span class="codicon codicon-link"></span>
-          <span>webSocket已连接</span>
+          <span>webSocket{{ webSocketState }}</span>
         </a>
       </li>
     </ul>
   </footer>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import pubsub from 'pubsub-js'
+const webSocketState = ref('未连接')
+let pubId: any
+onMounted(() => {
+  pubId = pubsub.subscribe('webSocket', (msg: string, result: any) => {
+    if (result.type === 'socketState') {
+      webSocketState.value = result.data.state
+    }
+  })
+})
+
+onUnmounted(() => {
+  pubsub.unsubscribe(pubId)
+})
+</script>
 
 <style scoped lang="less">
 footer {

@@ -1,18 +1,24 @@
 import pubsub from 'pubsub-js'
 class WS {
   ws: WebSocket
-  state: 'connecting' | 'open' | 'closing' | 'closed'
+  state: 'notConnected' | 'open' | 'close'
   constructor(url: string = 'ws://localhost:8003') {
     const ws = new WebSocket(url)
     this.ws = ws
-    this.state = 'closed'
+    this.state = 'notConnected'
     this.init()
   }
   init() {
     const ws = this.ws
     ws.onopen = () => {
       this.state = 'open'
-      console.log('[WebSocket] onopen')
+      const data = {
+        type: 'socketState',
+        data: {
+          state: '已连接'
+        }
+      }
+      pubsub.publish('webSocket', data)
     }
 
     ws.onmessage = (e: any) => {
@@ -22,8 +28,15 @@ class WS {
     }
 
     ws.onclose = (e: any) => {
-      this.state = 'closed'
-      console.log('[WebSocket] WebSocket onclose')
+      console.log(e)
+      this.state = 'close'
+      const data = {
+        type: 'socketState',
+        data: {
+          state: '已断开'
+        }
+      }
+      pubsub.publish('webSocket', data)
     }
   }
   send(data: string) {

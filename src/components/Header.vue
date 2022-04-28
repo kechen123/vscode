@@ -22,7 +22,15 @@
 </template>
 
 <script lang="ts" setup>
-import { fileContextMenu } from '@config/contextmenu'
+import {
+  fileContextMenu,
+  editContextMenu,
+  selectContextMenu,
+  viewContextMenu,
+  goContextMenu,
+  terminalsContextMenu,
+  helpContextMenu
+} from '@config/contextmenu'
 const btns = [
   {
     id: 1,
@@ -60,27 +68,27 @@ const btnList = [
   },
   {
     id: 2,
-    list: fileContextMenu
+    list: editContextMenu
   },
   {
     id: 3,
-    list: fileContextMenu
+    list: selectContextMenu
   },
   {
     id: 4,
-    list: fileContextMenu
+    list: viewContextMenu
   },
   {
     id: 5,
-    list: fileContextMenu
+    list: goContextMenu
   },
   {
     id: 6,
-    list: fileContextMenu
+    list: terminalsContextMenu
   },
   {
     id: 7,
-    list: fileContextMenu
+    list: helpContextMenu
   }
 ]
 const contextMenu = ref({
