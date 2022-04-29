@@ -122,7 +122,7 @@ const contextMenuClick = (e: any) => {
   width: 100%;
   height: 30px;
   min-height: 30px;
-  background: #444;
+  background: #333;
   display: flex;
   align-items: center;
   box-sizing: border-box;

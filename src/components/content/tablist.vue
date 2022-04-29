@@ -377,13 +377,13 @@ const contextMenuClick = (data: TabContextMenuType) => {
         ul {
           display: block;
         }
-        .icon-guanbi::before {
-          content: '\e604';
+        .codicon-chrome-close::before {
+          content: '\ea71';
         }
       }
       .icon-dirty:hover {
-        .icon-guanbi::before {
-          content: '\eca0';
+        .codicon-chrome-close::before {
+          content: '\eab8';
         }
       }
     }
@@ -447,7 +447,6 @@ const contextMenuClick = (data: TabContextMenuType) => {
 .demo-tabs > .el-tabs__content {
   color: #6b778c;
   font-size: 32px;
-  font-weight: 600;
 }
 .el-tabs__header {
   height: 35px;
@@ -485,6 +484,7 @@ const contextMenuClick = (data: TabContextMenuType) => {
   background-color: rgb(37, 37, 38);
   height: 35px;
   padding: 0 !important;
+  font-weight: unset;
 }
 .el-tabs--card > .el-tabs__header {
   border-bottom: 0 !important;
