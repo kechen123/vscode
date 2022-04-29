@@ -29,8 +29,9 @@
 
 <script setup lang="ts">
 import pubsub from 'pubsub-js'
-const webSocketState = ref('未连接')
+const webSocketState = ref(window.WS.state === 'open' ? '已连接' : '未连接')
 let pubId: any
+
 onMounted(() => {
   pubId = pubsub.subscribe('webSocket', (msg: string, result: any) => {
     if (result.type === 'socketState') {

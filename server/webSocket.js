@@ -39,11 +39,12 @@ const messageFun = {
   },
   openTerminal: (data, ws) => {
     const shell = process.env[os.platform() === 'win32' ? 'COMSPEC' : 'SHELL']
+    console.log(process.env)
     ptyProcess = pty.spawn(shell, [], {
       name: 'xterm-color',
       cols: 80,
       rows: 30,
-      cwd: process.env.HOME,
+      cwd: data.path || process.env.INIT_CWD,
       env: process.env
     })
     ptyProcess.on('data', function (data) {
