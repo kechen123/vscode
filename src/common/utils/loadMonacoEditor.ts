@@ -47,6 +47,7 @@ export function initLoadScript() {
           'https://unpkg.com/prettier@2.5.1/parser-typescript.js'
         ],
         (prettier: any, ...args: any[]) => {
+          window.prettier = prettier
           const prettierPlugins = {
             babel: args[0],
             html: args[1],

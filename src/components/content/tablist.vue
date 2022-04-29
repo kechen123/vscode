@@ -457,7 +457,6 @@ const contextMenuClick = (data: TabContextMenuType) => {
 
 .custom-tabs-content {
   width: 100%;
-  height: 100%;
 }
 .el-tabs__item .is-icon-close:hover {
   background-color: rgba(90, 93, 94, 0.31) !important;

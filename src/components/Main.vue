@@ -16,23 +16,29 @@
   <QuickInput ref="quickInput" />
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
 import useKeyPress from '@hook/useKeyPress'
 
-const quickInput = ref()
-
-useKeyPress(['f1'], (event) => {
-  event.preventDefault()
-  quickInput.value.show()
-})
-new Promise((resolve, reject) => {
-  const interval = setInterval(() => {
-    if (window.monaco) {
-      clearInterval(interval)
-      resolve(true)
-    }
-  })
-})
+export default {
+  name: 'Main',
+  async setup() {
+    const quickInput = ref()
+    useKeyPress(['f1'], (event) => {
+      event.preventDefault()
+      quickInput.value.show()
+    })
+    let p = new Promise((resolve, reject) => {
+      const interval = setInterval(() => {
+        if (window.monaco && window.prettier) {
+          clearInterval(interval)
+          console.log(1)
+          resolve(true)
+        }
+      })
+    })
+    return p
+  }
+}
 </script>
 
 <style scoped lang="less">
