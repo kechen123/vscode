@@ -7,10 +7,17 @@
       <Skeleton />
     </template>
   </Suspense>
+  <QuickInput ref="quickInput" />
 </template>
 
 <script setup lang="ts">
+import useKeyPress from '@hook/useKeyPress'
 const Main = defineAsyncComponent(() => import('@components/Main.vue'))
+const quickInput = ref()
+useKeyPress(['f1'], (event) => {
+  event.preventDefault()
+  quickInput.value.show()
+})
 </script>
 
 <style lang="less">

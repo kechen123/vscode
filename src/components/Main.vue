@@ -13,20 +13,12 @@
     </template>
   </Layout>
   <Footer />
-  <QuickInput ref="quickInput" />
 </template>
 
 <script lang="ts">
-import useKeyPress from '@hook/useKeyPress'
-
 export default {
   name: 'Main',
   async setup() {
-    const quickInput = ref()
-    useKeyPress(['f1'], (event) => {
-      event.preventDefault()
-      quickInput.value.show()
-    })
     let p = new Promise((resolve, reject) => {
       const interval = setInterval(() => {
         if (window.monaco && window.prettier) {
