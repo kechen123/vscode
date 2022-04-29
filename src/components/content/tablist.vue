@@ -27,7 +27,7 @@
                   :class="[tabData.active === item.pathStr ? 'selected' : '']"
                 >
                   <li>
-                    <i class="codicon codicon-chrome-close"></i>
+                    <i class="codicon codicon-chrome-close" title="关闭 (Ctrl+F4)"></i>
                   </li>
                 </ul>
               </div>
