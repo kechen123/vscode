@@ -54,8 +54,6 @@ onMounted(() => {
   terminal.prompt = () => {
     terminal.write('\r')
   }
-  terminal.prompt()
-  // terminal.write('D:\\code\\vscode_web>')
   terminal.focus()
   terminal.onKey((e: { key: string; domEvent: KeyboardEvent }) => {
     const ev = e.domEvent
@@ -63,18 +61,12 @@ onMounted(() => {
     window.WS.terminal(e.key)
     if (ev.code === 'Enter') {
       terminal.prompt()
-      // console.log('enter')
-    } else if (ev.code === 'Backspace') {
-      // Do not delete the prompt
-      if (terminal._core.buffer.x > 2) {
-        terminal.write('\b \b')
-        // cmd.value = cmd.value.substring(0, cmd.value.length - 1)
-      }
-    } else if (printable) {
-      // if (!ev.code.includes('Arrow')) {
-      //   cmd.value += e.key
-      // }
-      // terminal.write(e.key)
+    } else if (ev.code === 'Backspace' && terminal._core.buffer.x > 2) {
+      terminal.write('\b \b')
+    } else if (ev.code === 'Tab') {
+      terminal.write('\r')
+    } else if (ev.ctrlKey && ev.code === 'C') {
+      terminal.write('\n')
     }
   })
 
@@ -97,26 +89,24 @@ onMounted(() => {
 <style scoped lang="less">
 .container {
   width: 100%;
-  height: calc(100% - 35px);
-  padding: 0 10px;
-  overflow: auto;
+  height: 100%;
 }
-
-.container::-webkit-scrollbar {
-  width: 0px;
-  height: 0px;
+</style>
+<style>
+.xterm-viewport.xterm-viewport {
+  scrollbar-width: thin;
 }
-.container:hover::-webkit-scrollbar {
+.xterm-viewport::-webkit-scrollbar {
   width: 12px;
-  height: 12px;
 }
-
-.container::-webkit-scrollbar-thumb {
-  background: #333;
+.xterm-viewport:hover::-webkit-scrollbar {
+  width: 12px;
 }
-
-.container::-webkit-scrollbar-track {
-  border-radius: 0;
-  background: transparent;
+.xterm-viewport::-webkit-scrollbar-track {
+  opacity: 0;
+}
+.xterm-viewport::-webkit-scrollbar-thumb {
+  min-height: 20px;
+  background-color: #333;
 }
 </style>

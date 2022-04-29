@@ -7,7 +7,6 @@ let ptyProcess = null
 
 const createWebSocket = () => {
   let ws = new WebSocket.Server({ port: 8003 })
-  console.log(11111)
   ws.on('connection', (ws) => {
     console.log('server connection')
     ws.on('message', (msg) => {
@@ -39,12 +38,11 @@ const messageFun = {
   },
   openTerminal: (data, ws) => {
     const shell = process.env[os.platform() === 'win32' ? 'COMSPEC' : 'SHELL']
-    console.log(process.env)
+    const path = data && data.path ? data.path : process.env.HOMEDRIVE + process.env.HOMEPATH
     ptyProcess = pty.spawn(shell, [], {
       name: 'xterm-color',
-      cols: 80,
-      rows: 30,
-      cwd: data.path || process.env.INIT_CWD,
+
+      cwd: path, //process.env.INIT_CWD
       env: process.env
     })
     ptyProcess.on('data', function (data) {
@@ -57,7 +55,6 @@ const messageFun = {
         type: 'terminal',
         data
       }
-      console.log(222)
       ws.send(JSON.stringify(msg))
     })
   },

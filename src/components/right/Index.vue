@@ -1,7 +1,9 @@
 <template>
   <div class="right-view">
     <RightTitle />
-    <RightContainer />
+    <div class="terminal">
+      <RightContainer />
+    </div>
   </div>
 </template>
 
@@ -17,5 +19,10 @@
   border-left-style: solid;
   width: 100%;
   height: 100%;
+  .terminal {
+    width: 100%;
+    height: calc(100% - 35px);
+    padding: 10px;
+  }
 }
 </style>
