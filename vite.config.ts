@@ -60,6 +60,7 @@ export default ({ command }: ConfigEnv): UserConfigExport => {
     server: {
       port: 4000, // 设置服务启动端口号
       open: false, // 设置服务启动时是否自动打开浏览器
+      https: false, //启用 TLS + HTTP/2。注意：当 server.proxy 选项 也被使用时，将会仅使用 TLS
       cors: true // 允许跨域
 
       // 设置代理，根据我们项目实际情况配置
@@ -71,6 +72,22 @@ export default ({ command }: ConfigEnv): UserConfigExport => {
       //     rewrite: (path) => path.replace('/api/', '/')
       //   }
       // }
+    },
+    build: {
+      outDir: 'dist', //指定输出路径（相对于 项目根目录).
+      assetsDir: 'static', //指定生成静态资源的存放路径（相对于 build.outDir）
+      //自定义底层的 Rollup 打包配置。这与从 Rollup 配置文件导出的选项相同，并将与 Vite 的内部 Rollup 选项合并
+      rollupOptions: {
+        input: {
+          //直接修改入口文件名字
+          index: resolve(__dirname, 'index.html')
+        },
+        output: {
+          chunkFileNames: 'static/js/[name]-[hash].js',
+          entryFileNames: 'static/js/[name]-[hash].js',
+          assetFileNames: 'static/[ext]/[name]-[hash].[ext]'
+        }
+      }
     }
   }
 }

@@ -2,7 +2,7 @@ import pubsub from 'pubsub-js'
 class WS {
   ws: WebSocket
   state: 'notConnected' | 'open' | 'close'
-  constructor(url: string = 'ws://localhost:8003') {
+  constructor(url: string = 'ws://localhost:3005') {
     const ws = new WebSocket(url)
     this.ws = ws
     this.state = 'notConnected'
