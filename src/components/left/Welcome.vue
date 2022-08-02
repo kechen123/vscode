@@ -19,6 +19,7 @@ import pubsub from 'pubsub-js'
 import { isChromeOrEdge } from '@/common/utils/browserVersion'
 import { showDirectoryPicker, handleDirectoryEntry } from '@commonUtils/fileSystemAccessApi'
 import { themeIcons } from 'seti-icons'
+
 const getIcon = themeIcons({
   blue: '#268bd2',
   grey: '#657b83',
@@ -37,6 +38,8 @@ interface Em {
   data: any
   local: boolean
 }
+
+
 const emit = defineEmits<{
   (e: 'openFolder', data: any, local: boolean): void
   (e: 'showLoading'): void
@@ -44,28 +47,30 @@ const emit = defineEmits<{
 }>()
 
 const openFinder = async () => {
-  if (isChromeOrEdge()) {
-    //https://developer.mozilla.org/en-US/docs/Web/API/File_and_Directory_Entries_API
-    //https://stackoverflow.com/questions/69803693/svelte-how-to-use-native-web-apis/69804292#69804292
-    const dirHandle = await showDirectoryPicker()
-    let list = <any>[]
-    let obj = <any>[
-      {
-        id: 1,
-        label: dirHandle.name,
-        children: []
-      }
-    ]
-    emit('showLoading')
-    await handleDirectoryEntry(dirHandle, list)
-    let arr = mySort(list)
-    setTreeFileIcon(arr)
-    obj[0].children = arr
-    emit('openFolder', obj, true)
-    emit('hideLoading')
-  } else {
-    console.log('当前的浏览器不支持本地文件系统访问')
-  }
+  const result = await electron.ipcRenderer.invoke('openDirectory', 'some data')
+  window.WS.finderTree(result)
+  // if (isChromeOrEdge()) {
+  //   //https://developer.mozilla.org/en-US/docs/Web/API/File_and_Directory_Entries_API
+  //   //https://stackoverflow.com/questions/69803693/svelte-how-to-use-native-web-apis/69804292#69804292
+  //   const dirHandle = await showDirectoryPicker()
+  //   let list = <any>[]
+  //   let obj = <any>[
+  //     {
+  //       id: 1,
+  //       label: dirHandle.name,
+  //       children: []
+  //     }
+  //   ]
+  //   emit('showLoading')
+  //   await handleDirectoryEntry(dirHandle, list)
+  //   let arr = mySort(list)
+  //   setTreeFileIcon(arr)
+  //   obj[0].children = arr
+  //   emit('openFolder', obj, true)
+  //   emit('hideLoading')
+  // } else {
+  //   console.log('当前的浏览器不支持本地文件系统访问')
+  // }
 }
 
 const mySort = (list: any): [] => {
@@ -150,6 +155,10 @@ onMounted(() => {
       setTreeFileIcon(list[0].children)
       emit('openFolder', list, false)
     }
+    else if (data.type === 'openFile') {
+      const { data: list } = data
+      console.log(list)
+    }
   })
 })
 </script>
@@ -163,17 +172,20 @@ onMounted(() => {
   align-items: center;
   width: 100%;
   height: 100%;
-  > * {
+
+  >* {
     margin-block-start: 1em;
     margin-block-end: 0;
     margin-inline-start: 0;
     margin-inline-end: 0;
     width: 100%;
   }
+
   .button-container {
     width: 100%;
     max-width: 300px;
     transition: max-width 0.2s ease-out;
+
     button {
       width: 100%;
     }

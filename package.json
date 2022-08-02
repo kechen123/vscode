@@ -2,10 +2,13 @@
   "name": "test",
   "private": true,
   "version": "0.0.0",
+  "main": "dist/electron/main/index.js",
+  "description": "Really simple Electron + Vue + Vite boilerplate.",
+  "author": "kkk",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "vue-tsc --noEmit && vite build && electron-builder"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^1.1.4",
@@ -30,6 +33,8 @@
     "@typescript-eslint/eslint-plugin": "^5.18.0",
     "@typescript-eslint/parser": "^5.18.0",
     "@vitejs/plugin-vue": "^2.3.1",
+    "electron": "^19.0.8",
+    "electron-builder": "^23.1.0",
     "eslint": "^8.13.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.5.0",
@@ -42,7 +47,12 @@
     "unplugin-auto-import": "^0.7.0",
     "unplugin-vue-components": "^0.19.1",
     "vite": "^2.9.1",
+    "vite-plugin-electron": "^0.8.1",
     "vite-plugin-mock": "^2.9.6",
     "vue-tsc": "^0.34.3"
+  },
+  "env": {
+    "VITE_DEV_SERVER_HOST": "127.0.0.1",
+    "VITE_DEV_SERVER_PORT": 3344
   }
 }

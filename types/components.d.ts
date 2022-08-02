@@ -4,7 +4,7 @@
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    Content: typeof import('./../src/components/content/Index.vue')['default']
+    Content: typeof import('./../src/components/content/index.vue')['default']
     ContentTablist: typeof import('./../src/components/content/tablist.vue')['default']
     ContentWelcome: typeof import('./../src/components/content/Welcome.vue')['default']
     ContextMenu: typeof import('./../src/components/ContextMenu.vue')['default']

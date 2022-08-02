@@ -43,11 +43,11 @@ class WS {
     const { ws, state } = this
     if (state === 'open') ws.send(data)
   }
-  finderTree() {
+  finderTree(path: string) {
     const data = {
       type: 'finderTree',
       data: {
-        path: `D:\\code\\vscode_web`
+        path: path
       }
     }
     this.send(JSON.stringify(data))
