@@ -43,10 +43,6 @@ const messageFun = {
       ptyProcess = createTerminal(data.path)
       ptyProcess.on('data', function (data) {
         data = data.toString('utf-8')
-        console.log('cmd-result-data:')
-        console.log('-------------')
-        console.log(data)
-        console.log('-------------')
         const msg = {
           type: 'terminal',
           data
