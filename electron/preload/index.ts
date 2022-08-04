@@ -10,15 +10,12 @@ const message = [
   'win-close'
 ]
 
-const url = `http://${process.env['VITE_DEV_SERVER_HOST']}:${process.env['VITE_DEV_SERVER_PORT']}/`
-
 contextBridge.exposeInMainWorld('electron', {
   versions: {
     node: () => process.versions.node,
     chrome: () => process.versions.chrome,
     electron: () => process.versions.electron
   },
-  ROOT_PATH: url,
   send: (channel, data) => {
     // whitelist channels
     if (message.includes(channel)) {

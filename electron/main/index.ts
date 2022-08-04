@@ -70,7 +70,6 @@ async function createWindow() {
 
 app.whenReady().then(async () => {
   const win = await createWindow()
-  console.log(win)
   if (win) new W(win)
 })
 

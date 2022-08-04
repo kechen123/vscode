@@ -16,16 +16,23 @@
 </template>
 
 <script lang="ts">
+
 export default {
   name: 'Main',
   async setup() {
+    // let p = new Promise((resolve, reject) => {
+    //   const interval = setInterval(() => {
+    //     if (window.monaco) {
+    //       clearInterval(interval)
+    //       resolve(true)
+    //     }
+    //   })
+    // })
     let p = new Promise((resolve, reject) => {
-      const interval = setInterval(() => {
-        if (window.monaco) {
-          clearInterval(interval)
-          resolve(true)
-        }
-      })
+      const timeout = setTimeout(() => {
+        clearTimeout(timeout)
+        resolve(true)
+      }, 500)
     })
     return p
   }

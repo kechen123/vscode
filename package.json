@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "@types/node": "^17.0.23",
+    "@types/prettier": "^2.6.4",
     "@types/pubsub-js": "^1.8.3",
     "@types/wicg-file-system-access": "^2020.9.5",
     "@typescript-eslint/eslint-plugin": "^5.18.0",

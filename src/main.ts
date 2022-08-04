@@ -5,7 +5,7 @@ import App from './App.vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import '@vscode/codicons/dist/codicon.css'
-import { initLoadScript } from '@commonUtils/loadMonacoEditor'
+// import { initLoadScript } from '@commonUtils/loadMonacoEditor'
 import WS from '@commonUtils/webSocket'
 
 import styleImport from '@/common/utils/style-import'
@@ -15,7 +15,7 @@ const app = createApp(App)
 // styleImport(app).use(router).use(store, key).mount('#app')
 app.use(store).use(ElementPlus).mount('#vscode')
 
-initLoadScript()
+// initLoadScript()
 const ws = new WS()
 declare global {
   interface Window {

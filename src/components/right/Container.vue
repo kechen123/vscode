@@ -23,6 +23,7 @@ let obj = reactive<Obj>({
 const cmd = ref('')
 let pubId: any
 const bodyReSize = (event: Element, width: number, height: number) => {
+  console.log('resize>>>');
   try {
     obj.fit?.fit()
   } catch (e) {
@@ -34,8 +35,8 @@ const [terminalRef] = useElementResize({ resize: bodyReSize, className: 'contain
 
 onMounted(() => {
   const terminal: any = new Terminal({
-    fontSize: 12,
-    fontFamily: 'Menlo, Monaco, "Courier New", monospace',
+    fontSize: 14,
+    fontFamily: 'Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
     cursorStyle: 'bar', //光标样式
     cursorBlink: true, //光标闪烁
     convertEol: true, //启用时，光标将设置为下一行的开头
@@ -59,15 +60,15 @@ onMounted(() => {
     const ev = e.domEvent
     const printable = !ev.altKey && !ev.ctrlKey && !ev.metaKey
     window.WS.terminal(e.key)
-    if (ev.code === 'Enter') {
-      terminal.prompt()
-    } else if (ev.code === 'Backspace' && terminal._core.buffer.x > 2) {
-      terminal.write('\b \b')
-    } else if (ev.code === 'Tab') {
-      terminal.write('\r')
-    } else if (ev.ctrlKey && ev.code === 'C') {
-      terminal.write('\n')
-    }
+    // if (ev.code === 'Enter') {
+    //   terminal.prompt()
+    // } else if (ev.code === 'Backspace' && terminal._core.buffer.x > 2) {
+    //   terminal.write('\b \b')
+    // } else if (ev.code === 'Tab') {
+    //   terminal.write('\r')
+    // } else if (ev.ctrlKey && ev.code === 'C') {
+    //   terminal.write('\n')
+    // }
   })
 
   fit.fit()
@@ -76,10 +77,10 @@ onMounted(() => {
   window.WS.openTerminal()
   pubId = pubsub.subscribe('webSocket', (msg: string, result: any) => {
     if (result.type === 'terminal') {
-      console.log('收到服务端控制台消息')
-      console.log('-------------')
-      console.log(result.data)
-      console.log('-------------')
+      // console.log('收到服务端控制台消息')
+      // console.log('-------------')
+      // console.log(result.data)
+      // console.log('-------------')
       terminal.write(result.data)
     }
   })

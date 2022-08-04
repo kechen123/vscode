@@ -370,6 +370,11 @@
     "@types/node" "*"
     xmlbuilder ">=11.0.1"
 
+"@types/prettier@^2.6.4":
+  version "2.6.4"
+  resolved "https://registry.npmjs.org/@types/prettier/-/prettier-2.6.4.tgz#ad899dad022bab6b5a9f0a0fe67c2f7a4a8950ed"
+  integrity sha512-fOwvpvQYStpb/zHMx0Cauwywu9yLDmzWiiQBC7gJyq5tYLUXFZvDG7VK1B7WBxxjBJNKFOZ0zLoOQn8vmATbhw==
+
 "@types/pubsub-js@^1.8.3":
   version "1.8.3"
   resolved "https://registry.npmjs.org/@types/pubsub-js/-/pubsub-js-1.8.3.tgz#f480a9e4f72f50e1e3cc598ef1b32f3bfbbcd6b6"

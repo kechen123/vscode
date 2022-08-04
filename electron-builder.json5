@@ -3,7 +3,7 @@
  */
 {
   appId: 'com.lvais',
-  asar: true,
+  asar: false, //加密
   directories: {
     output: 'release/${version}'
   },

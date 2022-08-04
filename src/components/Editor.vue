@@ -15,7 +15,7 @@ import { language, conf } from '@config/vueLanguage'
 import { editorLanguage } from '@config/fileExt'
 import { TabList, Tab } from '@common/types/editor'
 import { getFileExt, getFileType } from '@commonUtils/common'
-import usePrettier from '@hook/usePrettier'
+// import usePrettier from '@hook/usePrettier'
 /**
  * 不支持vue语法=> https://github.com/microsoft/monaco-editor/issues/1630
  * 动态language切换=> https://github.com/vitejs/vite/discussions/1791#discussioncomment-321046
@@ -60,7 +60,7 @@ export default defineComponent({
     const editorStatus = ref(new Map())
     const preFilePath = ref('')
     const listener = ref<any>(null)
-    usePrettier()
+    // usePrettier()
     let defaultOption = {
       format: false, //自定义属性，是否自动格式化
       value: '', //自定义属性，默认值
@@ -119,7 +119,7 @@ export default defineComponent({
     }
     const openFile = (path: string[], name: string) => {
       let pathStr = getFileUrl(path)
-      const model = window.monaco.editor.getModels().find((model) => model.uri.path === pathStr)
+      const model = monaco.editor.getModels().find((model) => model.uri.path === pathStr)
       if (pathStr !== preFilePath.value) {
         // 储存上一个path的编辑器的状态
         editorStatus.value.set(preFilePath.value, editor.saveViewState())
@@ -147,7 +147,7 @@ export default defineComponent({
     }
     const initEditor = () => {
       const arr = props.tabData.list
-      const models = window.monaco.editor.getModels()
+      const models = monaco.editor.getModels()
       models.forEach((model) => {
         const path = model.uri.path
         const tab = arr.find((tab) => getFileUrl(tab.path) === path)
@@ -164,10 +164,10 @@ export default defineComponent({
           if (fileExt != '' && Object.keys(editorLanguage).includes(fileExt)) {
             language = editorLanguage[fileExt]
           }
-          window.monaco.editor.createModel(
+          monaco.editor.createModel(
             item.text,
             language,
-            new window.monaco.Uri().with({ path })
+            new monaco.Uri().with({ path })
           )
         }
       })
@@ -204,18 +204,18 @@ export default defineComponent({
       return editor?.getValue()
     }
     onMounted(() => {
-      window.monaco.languages.register({
+      monaco.languages.register({
         id: 'vue',
         extensions: ['.vue'],
         aliases: ['Vue', 'vuejs']
       })
 
-      window.monaco.languages.setMonarchTokensProvider('vue', language)
-      window.monaco.languages.setLanguageConfiguration('vue', conf)
+      monaco.languages.setMonarchTokensProvider('vue', language)
+      monaco.languages.setLanguageConfiguration('vue', conf)
       let option: any = Object.assign({}, defaultOption, props.option || {})
       if (myRef.value) {
-        editor = window.monaco.editor.create(myRef.value, option)
-        window.monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+        editor = monaco.editor.create(myRef.value, option)
+        monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
           noSemanticValidation: true,
           noSyntaxValidation: true
         })
