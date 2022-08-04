@@ -38,13 +38,11 @@ async function createWindow() {
     title: 'Main window',
     icon: join(ROOT_PATH.public, 'favicon.ico'),
     webPreferences: {
-      nodeIntegration: true,
+      // nodeIntegration: true,
       // contextIsolation: false,
       preload
     }
   })
-  console.log('openExec is null')
-  console.log('服务端webSocket已启动')
   createWebSocket()
   if (app.isPackaged) {
     win.loadFile(indexHtml)

@@ -63,21 +63,8 @@ export default ({ command }: ConfigEnv): UserConfigExport => {
               outDir: 'dist/electron/preload'
             }
           }
-        },
-        // Enables use of Node.js API in the Renderer-process
-        renderer: {}
+        }
       })
-      // electron({
-      //   main: {
-      //     entry: 'electron/main/index.ts'
-      //   },
-      //   preload: {
-      //     // Must be use absolute path, this is the limit of rollup
-      //     input: join(__dirname, 'electron/preload/index.ts')
-      //   }
-      // })
-      // electronRenderer(),
-      // polyfillExports()
     ],
     resolve: {
       alias: {
