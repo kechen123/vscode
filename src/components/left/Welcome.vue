@@ -47,8 +47,9 @@ const emit = defineEmits<{
 }>()
 
 const openFinder = async () => {
-  const result = await electron.ipcRenderer.invoke('openDirectory', 'some data')
-  window.WS.finderTree(result)
+  electron.send("openDirectory", "some data");
+  // const result = await electron.ipcRenderer.invoke('openDirectory', 'some data')
+  // window.WS.finderTree(result)
   // if (isChromeOrEdge()) {
   //   //https://developer.mozilla.org/en-US/docs/Web/API/File_and_Directory_Entries_API
   //   //https://stackoverflow.com/questions/69803693/svelte-how-to-use-native-web-apis/69804292#69804292
@@ -160,6 +161,10 @@ onMounted(() => {
       console.log(list)
     }
   })
+
+  electron.receive("openDirectory", (data) => {
+    window.WS.finderTree(data)
+  });
 })
 </script>
 

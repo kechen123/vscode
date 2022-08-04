@@ -4,5 +4,6 @@ declare const electron: {
     chrome: () => string
     electron: () => string
   }
-  ipcRenderer: any
+  send: (key: string, val: any) => void
+  receive: (key: string, fn: (event: any, ...args: []) => void) => void
 }

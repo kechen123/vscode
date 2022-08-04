@@ -96,15 +96,19 @@ onMounted(() => {
 .xterm-viewport.xterm-viewport {
   scrollbar-width: thin;
 }
+
 .xterm-viewport::-webkit-scrollbar {
   width: 12px;
 }
+
 .xterm-viewport:hover::-webkit-scrollbar {
   width: 12px;
 }
+
 .xterm-viewport::-webkit-scrollbar-track {
   opacity: 0;
 }
+
 .xterm-viewport::-webkit-scrollbar-thumb {
   min-height: 20px;
   background-color: #333;

@@ -6,7 +6,6 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import electron from 'vite-plugin-electron'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import pkg from './package.json'
 
 // 如果编辑器提示 path 模块找不到，则可以安装一下 @types/node -> npm i @types/node -D
 import { resolve, join } from 'path'
@@ -68,6 +67,17 @@ export default ({ command }: ConfigEnv): UserConfigExport => {
         // Enables use of Node.js API in the Renderer-process
         renderer: {}
       })
+      // electron({
+      //   main: {
+      //     entry: 'electron/main/index.ts'
+      //   },
+      //   preload: {
+      //     // Must be use absolute path, this is the limit of rollup
+      //     input: join(__dirname, 'electron/preload/index.ts')
+      //   }
+      // })
+      // electronRenderer(),
+      // polyfillExports()
     ],
     resolve: {
       alias: {
@@ -104,6 +114,7 @@ export default ({ command }: ConfigEnv): UserConfigExport => {
       // }
     },
     build: {
+      emptyOutDir: false, // 必须配置，否则electron相关文件将不会生成build后的文件
       outDir: 'dist', //指定输出路径（相对于 项目根目录).
       assetsDir: 'static', //指定生成静态资源的存放路径（相对于 build.outDir）
       //自定义底层的 Rollup 打包配置。这与从 Rollup 配置文件导出的选项相同，并将与 Vite 的内部 Rollup 选项合并

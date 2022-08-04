@@ -18,11 +18,13 @@ function loadScript(url: string, cb: () => void) {
 }
 
 export function initLoadScript() {
+  console.log('loader.min.js', window.require)
   loadScript(
     // '/node_modules/monaco-editor/min/vs/loader.js',
     'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.1/min/vs/loader.min.js',
     // '/loader.min.js',
     () => {
+      console.log('loader.min.js loaded', typeof window.require)
       window.require.config({
         paths: {
           vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.30.1/min/vs'

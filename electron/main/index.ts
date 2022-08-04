@@ -1,6 +1,7 @@
 import { app, BrowserWindow, shell, dialog, ipcMain } from 'electron'
 import { release } from 'os'
 import { join } from 'path'
+import { createWebSocket } from './webSocket'
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration()
@@ -37,22 +38,21 @@ async function createWindow() {
     title: 'Main window',
     icon: join(ROOT_PATH.public, 'favicon.ico'),
     webPreferences: {
-      preload,
-      // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
-      // Consider using contextBridge.exposeInMainWorld
-      // Read more on https://www.electronjs.org/docs/latest/tutorial/context-isolation
       nodeIntegration: true,
-      contextIsolation: true
+      // contextIsolation: false,
+      preload
     }
   })
-
+  console.log('openExec is null')
+  console.log('服务端webSocket已启动')
+  createWebSocket()
   if (app.isPackaged) {
     win.loadFile(indexHtml)
   } else {
     win.loadURL(url)
-    // Open devTool if the app is not packaged
-    win.webContents.openDevTools()
   }
+  // Open devTool if the app is not packaged
+  win.webContents.openDevTools()
 
   // Test actively push message to the Electron-Renderer
   win.webContents.on('did-finish-load', () => {
@@ -91,7 +91,7 @@ app.on('activate', () => {
 })
 
 // new window example arg: new windows url
-ipcMain.handle('open-win', (event, arg) => {
+ipcMain.on('open-win', (event, arg) => {
   const childWindow = new BrowserWindow({
     webPreferences: {
       preload
@@ -106,14 +106,14 @@ ipcMain.handle('open-win', (event, arg) => {
   }
 })
 
-ipcMain.handle('openDirectory', async function (event, arg) {
+ipcMain.on('openDirectory', async function (event, arg) {
   const { canceled, filePaths } = await dialog.showOpenDialog({
     properties: ['openDirectory']
   })
 
   if (canceled) {
-    return ''
+    win?.webContents.send('openDirectory', '')
   } else {
-    return filePaths[0]
+    win?.webContents.send('openDirectory', filePaths[0])
   }
 })
