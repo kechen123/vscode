@@ -1,5 +1,5 @@
 import * as WebSocket from 'ws'
-// import * as pty from 'node-pty'
+import * as pty from 'node-pty'
 import * as os from 'os'
 import { getFinderPathTree, getFileText } from './file'
 
@@ -39,26 +39,26 @@ const messageFun = {
   },
   openTerminal: (data, ws) => {
     try {
-      // const shell: any = process.env[os.platform() === 'win32' ? 'COMSPEC' : 'SHELL']
-      // // @ts-ignore
-      // const path = data.path ?? process.env.HOMEDIR + process.env.HOMEPATH
-      // ptyProcess = pty.spawn(shell, [], {
-      //   name: 'xterm-color',
-      //   cwd: path, //process.env.INIT_CWD
-      //   env: process.env as any
-      // })
-      // ptyProcess.on('data', function (data) {
-      //   data = data.toString('utf-8')
-      //   console.log('cmd-result-data:')
-      //   console.log('-------------')
-      //   console.log(data)
-      //   console.log('-------------')
-      //   const msg = {
-      //     type: 'terminal',
-      //     data
-      //   }
-      //   ws.send(JSON.stringify(msg))
-      // })
+      const shell: any = process.env[os.platform() === 'win32' ? 'COMSPEC' : 'SHELL']
+      // @ts-ignore
+      const path = data.path ?? process.env.HOMEDIR + process.env.HOMEPATH
+      ptyProcess = pty.spawn(shell, [], {
+        name: 'xterm-color',
+        cwd: path, //process.env.INIT_CWD
+        env: process.env as any
+      })
+      ptyProcess.on('data', function (data) {
+        data = data.toString('utf-8')
+        console.log('cmd-result-data:')
+        console.log('-------------')
+        console.log(data)
+        console.log('-------------')
+        const msg = {
+          type: 'terminal',
+          data
+        }
+        ws.send(JSON.stringify(msg))
+      })
     } catch (error) {
       console.log(error)
     }
