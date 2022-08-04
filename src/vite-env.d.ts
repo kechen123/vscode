@@ -1,4 +1,5 @@
 declare const electron: {
+  ROOT_PATH: string
   versions: {
     node: () => string
     chrome: () => string

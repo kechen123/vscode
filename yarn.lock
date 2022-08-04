@@ -69,30 +69,6 @@
   resolved "https://registry.npmjs.org/@element-plus/icons-vue/-/icons-vue-2.0.6.tgz#8490e7a3193c17515d10c3be0544d800afe6a228"
   integrity sha512-lPpG8hYkjL/Z97DH5Ei6w6o22Z4YdNglWCNYOPcB33JCF2A4wye6HFgSI7hEt9zdLyxlSpiqtgf9XcYU+m5mew==
 
-"@esbuild-kit/cjs-loader@^2.3.1":
-  version "2.3.2"
-  resolved "https://registry.npmjs.org/@esbuild-kit/cjs-loader/-/cjs-loader-2.3.2.tgz#abec215e6ae4436058fbef58b8f7700e9446a8d7"
-  integrity sha512-3UIFKrGfq2d2R2A/SpJaeHTP5z3nrOnVMxE+cNpOuuW+Lotm0Sfbc9lVHCjcxaxgcx0MKI7g2FvxvWlylzDRKg==
-  dependencies:
-    "@esbuild-kit/core-utils" "^2.1.0"
-    get-tsconfig "^4.1.0"
-
-"@esbuild-kit/core-utils@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.npmjs.org/@esbuild-kit/core-utils/-/core-utils-2.1.0.tgz#90f3a22b68305ae739a83b02e24ed0cdcba2917f"
-  integrity sha512-fZirrc2KjeTumVjE4bpleWOk2gD83b7WuGeQqOceKFQL+heNKKkNB5G5pekOUTLzfSBc0hP7hCSBoD9TuR0hLw==
-  dependencies:
-    esbuild "~0.14.47"
-    source-map-support "^0.5.21"
-
-"@esbuild-kit/esm-loader@^2.4.1":
-  version "2.4.2"
-  resolved "https://registry.npmjs.org/@esbuild-kit/esm-loader/-/esm-loader-2.4.2.tgz#b358112c6592f422cc43c0439396537481518412"
-  integrity sha512-N9dPKAj8WOx6djVnStgILWXip4fjDcBk9L7azO0/uQDpu8Ee0eaL78mkN4Acid9BzvNAKWwdYXFJZnsVahNEew==
-  dependencies:
-    "@esbuild-kit/core-utils" "^2.1.0"
-    get-tsconfig "^4.1.0"
-
 "@esbuild/linux-loong64@0.14.53":
   version "0.14.53"
   resolved "https://registry.npmjs.org/@esbuild/linux-loong64/-/linux-loong64-0.14.53.tgz#251b4cd6760fadb4d68a05815e6dc5e432d69cd6"
@@ -1181,11 +1157,6 @@ chalk@^4.0.0, chalk@^4.0.2, chalk@^4.1.0, chalk@^4.1.1, chalk@^4.1.2:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
-chalk@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.npmjs.org/chalk/-/chalk-5.0.1.tgz#ca57d71e82bb534a296df63bbacc4a1c22b2a4b6"
-  integrity sha512-Fo07WOYGqMfCWHOzSXOt2CxDbC6skS/jO9ynEcmpANMoPrD+W1r1K6Vx7iNm+AQmETU1Xr2t+n8nzkV9t6xh3w==
-
 chokidar@^3.5.2, chokidar@^3.5.3:
   version "3.5.3"
   resolved "https://registry.npmjs.org/chokidar/-/chokidar-3.5.3.tgz#1cf37c8707b932bd1af1ae22c0432e2acd1903bd"
@@ -2031,7 +2002,7 @@ esbuild@0.11.3:
   resolved "https://registry.npmjs.org/esbuild/-/esbuild-0.11.3.tgz#b57165b907be4ffba651f6450538ce8d8c1d5eb0"
   integrity sha512-BzVRHcCtFepjS9WcqRjqoIxLqgpK21a8J4Zi4msSGxDxiXVO1IbcqT1KjhdDDnJxKfe7bvzZrvMEX+bVO0Elcw==
 
-esbuild@^0.14.27, esbuild@~0.14.47:
+esbuild@^0.14.27:
   version "0.14.53"
   resolved "https://registry.npmjs.org/esbuild/-/esbuild-0.14.53.tgz#20b1007f686e8584f2a01a1bec5a37aac9498ce4"
   integrity sha512-ohO33pUBQ64q6mmheX1mZ8mIXj8ivQY/L4oVuAshr+aJI+zLl+amrp3EodrUNDNYVrKJXGPfIHFGhO8slGRjuw==
@@ -2229,13 +2200,6 @@ eslint@^8.13.0:
     strip-json-comments "^3.1.0"
     text-table "^0.2.0"
     v8-compile-cache "^2.0.3"
-
-esno@^0.16.3:
-  version "0.16.3"
-  resolved "https://registry.npmjs.org/esno/-/esno-0.16.3.tgz#182bf9b9608278fba1ba2f97d589cb80ba731bc5"
-  integrity sha512-6slSBEV1lMKcX13DBifvnDFpNno5WXhw4j/ff7RI0y51BZiDqEe5dNhhjhIQ3iCOQuzsm2MbVzmwqbN78BBhPg==
-  dependencies:
-    tsx "^3.2.1"
 
 espree@^9.0.0, espree@^9.3.2, espree@^9.3.3:
   version "9.3.3"
@@ -2545,11 +2509,6 @@ get-symbol-description@^1.0.0:
   dependencies:
     call-bind "^1.0.2"
     get-intrinsic "^1.1.1"
-
-get-tsconfig@^4.1.0:
-  version "4.2.0"
-  resolved "https://registry.npmjs.org/get-tsconfig/-/get-tsconfig-4.2.0.tgz#ff368dd7104dab47bf923404eb93838245c66543"
-  integrity sha512-X8u8fREiYOE6S8hLbq99PeykTDoLVnxvF4DjWKJmz9xy2nNRdUcV8ZN9tniJFeKyTU3qnC9lL8n4Chd6LmVKHg==
 
 glob-parent@^5.1.2, glob-parent@~5.1.2:
   version "5.1.2"
@@ -4393,7 +4352,7 @@ source-map-js@^1.0.2:
   resolved "https://registry.npmjs.org/source-map-js/-/source-map-js-1.0.2.tgz#adbc361d9c62df380125e7f161f71c826f1e490c"
   integrity sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==
 
-source-map-support@^0.5.19, source-map-support@^0.5.21:
+source-map-support@^0.5.19:
   version "0.5.21"
   resolved "https://registry.npmjs.org/source-map-support/-/source-map-support-0.5.21.tgz#04fe7c7f9e1ed2d662233c28cb2b35b9f63f6e4f"
   integrity sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w==
@@ -4640,17 +4599,6 @@ tsutils@^3.21.0:
   integrity sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==
   dependencies:
     tslib "^1.8.1"
-
-tsx@^3.2.1:
-  version "3.8.0"
-  resolved "https://registry.npmjs.org/tsx/-/tsx-3.8.0.tgz#40528c8e5d44fa98877db9dfd463b46fb1c00a23"
-  integrity sha512-PcvTwRXTm6hDWfPihA4n5WW/9SmgFNxKaDKqvLLG+FKNEPA4crsipChzC7PVozPtdOaMfR5QctDlkC/hKoIsxw==
-  dependencies:
-    "@esbuild-kit/cjs-loader" "^2.3.1"
-    "@esbuild-kit/core-utils" "^2.1.0"
-    "@esbuild-kit/esm-loader" "^2.4.1"
-  optionalDependencies:
-    fsevents "~2.3.2"
 
 tunnel@^0.0.6:
   version "0.0.6"

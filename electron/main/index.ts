@@ -2,6 +2,7 @@ import { app, BrowserWindow, shell, dialog, ipcMain } from 'electron'
 import { release } from 'os'
 import { join } from 'path'
 import { createWebSocket } from './webSocket'
+import W from './window'
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration()
@@ -13,7 +14,6 @@ if (!app.requestSingleInstanceLock()) {
   app.quit()
   process.exit(0)
 }
-
 // Remove electron security warnings
 // This warning only shows in development mode
 // Read more on https://www.electronjs.org/docs/latest/tutorial/security
@@ -27,16 +27,19 @@ export const ROOT_PATH = {
 }
 
 let win: BrowserWindow | null = null
-// Here, you can also use other preload
-const preload = join(__dirname, '../preload/index.js')
-// 🚧 Use ['ENV_NAME'] avoid vite:define plugin
-const url = `http://${process.env['VITE_DEV_SERVER_HOST']}:${process.env['VITE_DEV_SERVER_PORT']}`
-const indexHtml = join(ROOT_PATH.dist, 'index.html')
 
 async function createWindow() {
+  // Here, you can also use other preload
+  const preload = join(__dirname, '../preload/index.js')
+  // 🚧 Use ['ENV_NAME'] avoid vite:define plugin
+  const url = `http://${process.env['VITE_DEV_SERVER_HOST']}:${process.env['VITE_DEV_SERVER_PORT']}`
+  const indexHtml = join(ROOT_PATH.dist, 'index.html')
   win = new BrowserWindow({
     title: 'Main window',
     icon: join(ROOT_PATH.public, 'favicon.ico'),
+    frame: false,
+    width: 1400,
+    height: 1000,
     webPreferences: {
       // nodeIntegration: true,
       // contextIsolation: false,
@@ -62,9 +65,14 @@ async function createWindow() {
     if (url.startsWith('https:')) shell.openExternal(url)
     return { action: 'deny' }
   })
+  return win
 }
 
-app.whenReady().then(createWindow)
+app.whenReady().then(async () => {
+  const win = await createWindow()
+  console.log(win)
+  if (win) new W(win)
+})
 
 app.on('window-all-closed', () => {
   win = null
@@ -85,33 +93,5 @@ app.on('activate', () => {
     allWindows[0].focus()
   } else {
     createWindow()
-  }
-})
-
-// new window example arg: new windows url
-ipcMain.on('open-win', (event, arg) => {
-  const childWindow = new BrowserWindow({
-    webPreferences: {
-      preload
-    }
-  })
-
-  if (app.isPackaged) {
-    childWindow.loadFile(indexHtml, { hash: arg })
-  } else {
-    childWindow.loadURL(`${url}/#${arg}`)
-    // childWindow.webContents.openDevTools({ mode: "undocked", activate: true })
-  }
-})
-
-ipcMain.on('openDirectory', async function (event, arg) {
-  const { canceled, filePaths } = await dialog.showOpenDialog({
-    properties: ['openDirectory']
-  })
-
-  if (canceled) {
-    win?.webContents.send('openDirectory', '')
-  } else {
-    win?.webContents.send('openDirectory', filePaths[0])
   }
 })

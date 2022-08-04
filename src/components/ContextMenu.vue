@@ -4,8 +4,7 @@
       ref="target"
       v-show="isShow"
       class="context-view"
-      :style="{ left: props.rect.x + 'px', top: props.rect.y + 'px' }"
-    >
+      :style="{ left: props.rect.x + 'px', top: props.rect.y + 'px' }">
       <div class="context">
         <div class="group" v-for="(item, key) in props.menu">
           <div class="item" v-for="(item1, key1) in item" @click="click(item1, item)">
@@ -52,6 +51,7 @@ onClickOutside(target, (event) => {
 
 const click = (item1: TabContextMenu, item: TabContextMenu[]) => {
   emit('click', item1)
+  isShow.value = false
 }
 
 watch([() => props.name, () => props.rect], (val) => {
@@ -68,6 +68,7 @@ watch([() => props.name, () => props.rect], (val) => {
   z-index: 2500;
   position: absolute;
   width: initial;
+
   .context {
     background: #252526;
     color: #fff;
@@ -75,9 +76,11 @@ watch([() => props.name, () => props.rect], (val) => {
     box-shadow: 0 0 10px rgb(0 0 0 / 40%);
     display: flex;
     flex-direction: column;
+
     .group {
       padding: 10px 0;
       position: relative;
+
       .item {
         cursor: pointer;
         padding: 4px 30px;
@@ -85,6 +88,7 @@ watch([() => props.name, () => props.rect], (val) => {
         display: flex;
         width: 324px;
         justify-content: space-between;
+
         span {
           text-transform: capitalize;
         }
@@ -94,6 +98,7 @@ watch([() => props.name, () => props.rect], (val) => {
         }
       }
     }
+
     .group:not(:last-child)::after {
       content: '';
       position: absolute;

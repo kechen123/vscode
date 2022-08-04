@@ -662,7 +662,7 @@ export const helpContextMenu: Array<Array<TabContextMenu>> = [
   ],
   [
     {
-      id: 'split-up',
+      id: 'open-dev',
       label: '切换开发人员工具'
     },
     {

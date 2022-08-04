@@ -21,9 +21,8 @@ export default {
   async setup() {
     let p = new Promise((resolve, reject) => {
       const interval = setInterval(() => {
-        if (window.monaco && window.prettier) {
+        if (window.monaco) {
           clearInterval(interval)
-          console.log(1)
           resolve(true)
         }
       })
