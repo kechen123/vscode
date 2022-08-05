@@ -54,9 +54,19 @@ class WS {
   }
   getFileText(path: string) {
     const data = {
-      type: 'fileText',
+      type: 'getFileText',
       data: {
         path: path
+      }
+    }
+    this.send(JSON.stringify(data))
+  }
+  writeFile(path: string, text: string) {
+    const data = {
+      type: 'writeFile',
+      data: {
+        path: path,
+        text: text
       }
     }
     this.send(JSON.stringify(data))

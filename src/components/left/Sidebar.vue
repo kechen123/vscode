@@ -7,15 +7,13 @@
       :indent="5"
       :icon="ArrowRight"
       highlight-current
-      :check-on-click-node="true"
-    >
+      :check-on-click-node="true">
       <template #default="{ node, data }">
         <div
           v-if="node.isLeaf"
           class="custom-tree-node"
           @click="treeClick(data, node)"
-          @dblclick.native="treeDbClick(data, node)"
-        >
+          @dblclick.native="treeDbClick(data, node)">
           <div class="icon" :style="{ fill: data.color }" v-html="data.svg"></div>
           <div>{{ node.label }}</div>
         </div>
@@ -53,17 +51,21 @@ const useTab = useTabList()
 
 const treeClick = (data: Tree, node: any) => {
   clearTimeout(time)
+  console.log('treeClick', data, node)
   time = setTimeout(() => {
     const name = node.label
     emit('showLoading')
     if (useTab.list.has(name)) {
       //已经打开当前文件，选中当前文件选项卡
       useTab.changeActive(name)
-    } else if (data.file && props.isLocal) {
-      // 读取文件内容并打开新选项卡,当前状态为预览状态
-      let path = getFilePath(node)
-      getLocalFileText(data, path)
-    } else if (data?.url && props.isLocal === false) {
+    }
+    // else if (data.file && props.isLocal) {
+    //   // 读取文件内容并打开新选项卡,当前状态为预览状态
+    //   debugger
+    //   let path = getFilePath(node)
+    //   getLocalFileText(data, path)
+    // }
+    else if (data?.url && props.isLocal === false) {
       getServerFileText(data)
     }
     emit('hideLoading')
@@ -88,26 +90,26 @@ const treeDbClick = (data: Tree, node: any) => {
   }
 }
 //本地文件内容
-const getLocalFileText = async (
-  data: any,
-  path: string[],
-  state: 'preview' | 'edit' | 'dirty' = 'preview'
-) => {
-  let text: string = ''
-  text = await data.file.text()
-  path.reverse()
-  useTab.addTab({
-    name: data.file.name,
-    text,
-    state,
-    svg: data.svg,
-    color: data.color,
-    pathStr: path.join('/'),
-    path: path,
-    entry: data.entry,
-    file: data.file
-  })
-}
+// const getLocalFileText = async (
+//   data: any,
+//   path: string[],
+//   state: 'preview' | 'edit' | 'dirty' = 'preview'
+// ) => {
+//   let text: string = ''
+//   text = await data.file.text()
+//   path.reverse()
+//   useTab.addTab({
+//     name: data.file.name,
+//     text,
+//     state,
+//     svg: data.svg,
+//     color: data.color,
+//     pathStr: path.join('/'),
+//     path: path,
+//     entry: data.entry,
+//     file: data.file
+//   })
+// }
 
 const getServerFileText = async (data: any, state: 'preview' | 'edit' | 'dirty' = 'preview') => {
   const { label, url, path, svg, color } = data
@@ -127,17 +129,17 @@ const getFilePath = (node: any, path: string[] = []) => {
 
 onMounted(() => {
   pubId = pubsub.subscribe('webSocket', (msg: string, result: any) => {
-    if (result.type === 'fileText' && idle) {
+    if (result.type === 'getFileText' && idle) {
       const { state, label, url, path, svg, color, relativePath } = idle
       let pathUrl = relativePath.split('\\')
-      pathUrl.reverse()
+      // pathUrl.reverse()
       useTab.addTab({
         name: label,
         text: result.data,
         state,
         svg: svg,
         color: color,
-        pathStr: relativePath,
+        pathStr: url,
         path: pathUrl
       })
     }
@@ -163,6 +165,7 @@ onUnmounted(() => {
   width: 0px;
   height: 0px;
 }
+
 .sidebar:hover::-webkit-scrollbar {
   width: 12px;
   height: 12px;
@@ -176,6 +179,7 @@ onUnmounted(() => {
   border-radius: 0;
   background: transparent;
 }
+
 .el-tree {
   background-color: unset !important;
   --el-tree-node-hover-bg-color: #2a2d2e;
@@ -192,11 +196,13 @@ onUnmounted(() => {
   align-items: center;
   font-size: 13px;
   padding-right: 8px;
+
   .icon {
     width: 18px;
     height: 18px;
     fill: #ccc;
     margin-right: 2px;
+
     svg {
       --fill: inherit;
       height: 1em;
@@ -219,11 +225,13 @@ onUnmounted(() => {
   width: 3px;
   padding: 0;
 }
+
 .el-tree-node__content {
   height: 22px !important;
 }
+
 .el-tree-node:focus {
-  > .el-tree-node__content {
+  >.el-tree-node__content {
     background-color: #094771 !important;
     outline: 1px solid #007fd4;
     outline-offset: -1px;

@@ -5,16 +5,14 @@
         v-for="(item, key) in tabData.list"
         :key="`${key}-${item.state}`"
         :label="item.name"
-        :name="item.pathStr"
-      >
+        :name="item.pathStr">
         <template #label>
           <div class="tabs-label-content">
             <div
               class="tabs-label"
               @click.stop="clickTab(item.pathStr, item.path)"
               @dblclick.stop="dblclickTab(item.pathStr, item.state)"
-              @contextmenu.stop="contextmenuTab(item.pathStr, $event)"
-            >
+              @contextmenu.stop="contextmenuTab(item.pathStr, $event)">
               <div class="file-ext">
                 <div class="svg" :style="{ fill: item.color }" v-html="item.svg"></div>
               </div>
@@ -24,8 +22,7 @@
               <div :class="['icon-' + item.state, 'file-state']">
                 <ul
                   @click.stop="removeTab(item.pathStr)"
-                  :class="[tabData.active === item.pathStr ? 'selected' : '']"
-                >
+                  :class="[tabData.active === item.pathStr ? 'selected' : '']">
                   <li>
                     <i class="codicon codicon-chrome-close" title="关闭 (Ctrl+F4)"></i>
                   </li>
@@ -42,8 +39,7 @@
                   v-if="pathIndex === item.path.length - 1"
                   class="svg"
                   :style="{ fill: item.color }"
-                  v-html="item.svg"
-                ></span>
+                  v-html="item.svg"></span>
                 <span>{{ pathItem }}</span>
               </span>
             </el-breadcrumb-item>
@@ -56,15 +52,13 @@
     class="custom-tabs-content"
     :style="{
       height: `${pageSize[1] - headerHeight - footerHeight - tabHeight - breadcrumbHeight}px`
-    }"
-  >
+    }">
     <Editor
       v-show="activeData?.fileType != `image`"
       ref="editorRef"
       :tabData="tabData"
       :option="option"
-      @changeCode="changeCode"
-    />
+      @changeCode="changeCode" />
     <VSImage v-if="activeData?.fileType === `image`" :file="activeData?.file" />
     <!-- <FileView
       :file="activeData.file"
@@ -80,8 +74,7 @@
     :name="contextMenu.name"
     :rect="contextMenu.rect"
     :menu="contextMenu.menu"
-    @click="contextMenuClick"
-  />
+    @click="contextMenuClick" />
   <el-dialog
     v-model="closeDialogVisible"
     title="vscode"
@@ -89,8 +82,7 @@
     :modal="false"
     draggable
     custom-class="tabsDialog"
-    :close-on-click-modal="false"
-  >
+    :close-on-click-modal="false">
     <h2>是否保存更改？</h2>
     <h3>如果不保存，你的更改将会消失</h3>
     <template #footer>
@@ -109,6 +101,7 @@
 
 <script setup lang="ts">
 import { ElMessage } from 'element-plus'
+import pubsub from 'pubsub-js'
 import { ArrowRight } from '@element-plus/icons-vue'
 import { useTabList } from '@store/tabs'
 import { TabList, Tab } from '@common/types/editor'
@@ -198,14 +191,15 @@ watchEffect(() => {
 })
 
 const saveFile = async (pathStr: string, text: string) => {
-  const res = await writeFile(store.getListByName(pathStr)?.entry, text)
-  if (res) {
-    store.editTabListState(pathStr, 'edit')
-  } else {
-    ElMessage.error({
-      message: '保存失败'
-    })
-  }
+  window.WS.writeFile(pathStr, text)
+  // const res = await writeFile(store.getListByName(pathStr)?.entry, text)
+  // if (res) {
+  //   store.editTabListState(pathStr, 'edit')
+  // } else {
+  //   ElMessage.error({
+  //     message: '保存失败'
+  //   })
+  // }
 }
 
 const removeTab = (targetName: string | undefined, save: boolean = true) => {
@@ -264,6 +258,18 @@ const saveFileHandler = () => {
 const contextMenuClick = (data: TabContextMenuType) => {
   console.log('tab右键菜单点击', data)
 }
+
+onMounted(() => {
+  pubsub.subscribe('webSocket', (msg: string, data: any) => {
+    const { type, data: result } = data
+    if (type === 'writeFile') {
+      console.log("writeFile", result)
+      if (result.code === 200) {
+        store.editTabListState(result.url, 'edit')
+      }
+    }
+  })
+})
 </script>
 
 <style scoped lang="less">
@@ -278,15 +284,18 @@ const contextMenuClick = (data: TabContextMenuType) => {
     .tabs-label {
       padding: 0 4px 0 10px;
       display: flex;
-      > div {
+
+      >div {
         display: flex;
       }
+
       .file-ext {
         width: 24px;
         height: 20px;
         align-items: center;
         margin-top: 7px;
         margin-bottom: auto;
+
         .svg {
           fill: #fff;
           display: flex;
@@ -294,6 +303,7 @@ const contextMenuClick = (data: TabContextMenuType) => {
           justify-content: center;
           width: 20px;
           height: 20px;
+
           svg {
             --fill: inherit;
             height: 1em;
@@ -309,16 +319,20 @@ const contextMenuClick = (data: TabContextMenuType) => {
           }
         }
       }
+
       .file-name {
         line-height: 35px;
+
         .label {
           user-select: none;
           font-size: 13px;
         }
+
         .preview {
           font-style: italic;
         }
       }
+
       .file-state {
         margin-top: 7px;
         margin-bottom: auto;
@@ -326,14 +340,17 @@ const contextMenuClick = (data: TabContextMenuType) => {
         height: 22px;
         align-items: center;
         justify-content: center;
+
         .selected {
           display: block;
         }
+
         ul {
           width: 22px;
           height: 22px;
           display: none;
           position: relative;
+
           li {
             display: flex;
             align-items: center;
@@ -343,6 +360,7 @@ const contextMenuClick = (data: TabContextMenuType) => {
             top: 0;
             height: 100%;
             width: 100%;
+
             i {
               --color: inherit;
               height: 1em;
@@ -357,30 +375,36 @@ const contextMenuClick = (data: TabContextMenuType) => {
               font-size: inherit;
               z-index: 0;
             }
+
             .dirty {
               z-index: 0;
             }
           }
         }
       }
+
       .file-state:hover {
         ul {
           display: block;
           background-color: rgba(90, 93, 94, 0.31);
           border-radius: 4px;
+
           .el-icon {
             z-index: 1;
           }
         }
       }
+
       .icon-dirty {
         ul {
           display: block;
         }
+
         .codicon-chrome-close::before {
           content: '\ea71';
         }
       }
+
       .icon-dirty:hover {
         .codicon-chrome-close::before {
           content: '\eab8';
@@ -388,22 +412,26 @@ const contextMenuClick = (data: TabContextMenuType) => {
       }
     }
   }
+
   .el-tabs__item:hover {
     ul {
       display: block;
     }
   }
+
   .tabs-breadcrumbs {
     font-size: 13px;
     color: #cccccc;
     flex: 1 100%;
     height: 22px;
     cursor: default;
+
     .tabs-breadcrumbs-item {
       display: flex;
       align-items: center;
       justify-content: flex-start;
       color: rgba(204, 204, 204, 0.8);
+
       .svg {
         fill: #fff;
         display: flex;
@@ -411,6 +439,7 @@ const contextMenuClick = (data: TabContextMenuType) => {
         justify-content: center;
         width: 20px;
         height: 20px;
+
         svg {
           --fill: inherit;
           height: 1em;
@@ -425,6 +454,7 @@ const contextMenuClick = (data: TabContextMenuType) => {
           font-size: inherit;
         }
       }
+
       .el-breadcrumb__separator {
         margin: 0 5px;
       }
@@ -444,10 +474,12 @@ const contextMenuClick = (data: TabContextMenuType) => {
   width: 100%;
   height: 57px;
 }
-.demo-tabs > .el-tabs__content {
+
+.demo-tabs>.el-tabs__content {
   color: #6b778c;
   font-size: 32px;
 }
+
 .el-tabs__header {
   height: 35px;
   background-color: rgb(37, 37, 38);
@@ -457,10 +489,12 @@ const contextMenuClick = (data: TabContextMenuType) => {
 .custom-tabs-content {
   width: 100%;
 }
+
 .el-tabs__item .is-icon-close:hover {
   background-color: rgba(90, 93, 94, 0.31) !important;
 }
-.el-tabs--card > .el-tabs__header .el-tabs__item .is-icon-close {
+
+.el-tabs--card>.el-tabs__header .el-tabs__item .is-icon-close {
   position: relative;
   font-size: 14px !important;
   width: 0;
@@ -476,30 +510,36 @@ const contextMenuClick = (data: TabContextMenuType) => {
   visibility: hidden;
 }
 
-.el-tabs--card > .el-tabs__header .el-tabs__nav {
+.el-tabs--card>.el-tabs__header .el-tabs__nav {
   border: 0 !important;
 }
-.el-tabs--card > .el-tabs__header .el-tabs__item {
+
+.el-tabs--card>.el-tabs__header .el-tabs__item {
   border: 0 !important;
   background-color: rgb(37, 37, 38);
   height: 35px;
   padding: 0 !important;
   font-weight: unset;
 }
-.el-tabs--card > .el-tabs__header {
+
+.el-tabs--card>.el-tabs__header {
   border-bottom: 0 !important;
 }
+
 .el-tabs__item:hover {
   color: var(--el-text-color-primary) !important;
 }
+
 .el-tabs__item.is-active {
   color: var(--el-color-primary) !important;
   border-right: 1px solid rgb(37, 37, 38);
   background-color: rgb(30, 30, 30) !important;
 }
+
 .el-dialog__header {
   padding: 10px 14px !important;
 }
+
 .el-dialog__body {
   padding: 20px !important;
 }

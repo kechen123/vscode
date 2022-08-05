@@ -84,6 +84,21 @@ function getFileText(url) {
   return text.toString('utf-8')
 }
 
+function writeFile(url, text) {
+  try {
+    console.log('writeFileSync', url)
+    const result = fs.writeFileSync(url, text)
+    console.log('writeFileSync--success', result)
+    return {
+      msg: '写入成功',
+      code: 200,
+      url: url
+    }
+  } catch (error) {
+    return error
+  }
+}
+
 function watchFile(url) {
   let p3 = 'D:\\code\\vscode_web\\server\\shell.txt'
   fs.watch(p3, (event, filename) => {
@@ -93,4 +108,4 @@ function watchFile(url) {
   })
 }
 
-export { getFinderPathTree, getFileText, watchFile }
+export { getFinderPathTree, getFileText, writeFile, watchFile }

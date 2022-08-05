@@ -7,10 +7,10 @@
     <div class="button-container">
       <el-button size="small" type="primary">最近</el-button>
     </div>
-    <p>可以打开服务器文件.</p>
+    <!-- <p>可以打开服务器文件.</p>
     <div class="button-container">
       <el-button size="small" type="primary" @click="cloudFinder">服务器文件夹</el-button>
-    </div>
+    </div> -->
   </div>
 </template>
 

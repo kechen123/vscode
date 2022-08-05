@@ -1,7 +1,9 @@
 <template>
   <div class="left">
     <div class="title">
-      <div class="label"><h2>源代码管理</h2></div>
+      <div class="label">
+        <h2>源代码管理</h2>
+      </div>
       <div class="actions">
         <div class="content">
           <el-dropdown trigger="click">
@@ -27,16 +29,14 @@
         <LeftWelcome
           @openFolder="OpenFolder"
           @showLoading="showLoading"
-          @hideLoading="hideLoading"
-        />
+          @hideLoading="hideLoading" />
       </el-collapse-item>
       <el-collapse-item v-else-if="tree[0].children" :title="tree[0].label" name="1">
         <LeftSidebar
           :tree="tree[0].children"
           :isLocal="isLocal"
           @showLoading="showLoading"
-          @hideLoading="hideLoading"
-        />
+          @hideLoading="hideLoading" />
       </el-collapse-item>
       <el-collapse-item title="Outline" name="2">
         <div>
@@ -109,6 +109,7 @@ useEventListener('resize', setWindowSize, {
   outline-color: rgba(83, 89, 93, 0.5);
   width: 100%;
   height: 100%;
+
   .title {
     display: none;
     height: 35px;
@@ -118,6 +119,7 @@ useEventListener('resize', setWindowSize, {
     padding-left: 8px;
     padding-right: 8px;
     color: rgb(187, 187, 187);
+
     .label h2 {
       font-size: 11px;
       line-height: 35px;
@@ -129,14 +131,17 @@ useEventListener('resize', setWindowSize, {
       text-overflow: ellipsis;
     }
   }
+
   .loading {
     position: relative;
     height: 2px;
     overflow: hidden;
   }
+
   .actions {
     flex: 1;
     padding-left: 5px;
+
     .content {
       display: flex;
       margin: 0 auto;
@@ -145,6 +150,7 @@ useEventListener('resize', setWindowSize, {
       width: 100%;
       align-items: center;
       justify-content: flex-end;
+
       .el-dropdown-link {
         cursor: pointer;
         color: #ccc;
@@ -152,6 +158,7 @@ useEventListener('resize', setWindowSize, {
     }
   }
 }
+
 .el-collapse {
   --el-collapse-content-bg-color: unset;
   --el-collapse-header-bg-color: unset;
@@ -169,15 +176,18 @@ useEventListener('resize', setWindowSize, {
   padding-left: 20px;
   text-transform: uppercase;
 }
+
 .el-collapse-item__arrow {
   margin: 4px !important;
   left: 0px;
   position: absolute !important;
 }
+
 .el-collapse-item__content {
   padding-bottom: 0 !important;
   height: v-bind(size.h);
 }
+
 .el-collapse-item:last-child .el-collapse-item__header {
   border-bottom: none;
 }

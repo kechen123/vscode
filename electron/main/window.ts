@@ -30,10 +30,7 @@ class W {
       const { canceled, filePaths } = await dialog.showOpenDialog({
         properties: ['openDirectory']
       })
-
-      if (canceled) {
-        win.webContents.send('openDirectory', '')
-      } else {
+      if (!canceled) {
         win.webContents.send('openDirectory', filePaths[0])
       }
     })

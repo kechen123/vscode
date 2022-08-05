@@ -1,7 +1,7 @@
 import * as WebSocket from 'ws'
 import * as pty from 'node-pty'
 import * as os from 'os'
-import { getFinderPathTree, getFileText } from './file'
+import { getFinderPathTree, getFileText, writeFile } from './file'
 import { createTerminal } from './terminal'
 
 let ptyProcess: any = null
@@ -34,10 +34,15 @@ const messageFun = {
     const finder = getFinderPathTree(data.path)
     return finder
   },
-  fileText: (data) => {
+  getFileText: (data) => {
     const text = getFileText(data.path)
     return text
   },
+  writeFile: (data) => {
+    const text = writeFile(data.path, data.text)
+    return text
+  },
+
   openTerminal: (data, ws) => {
     try {
       ptyProcess = createTerminal(data.path)
