@@ -26,10 +26,7 @@
     </div>
     <el-collapse v-model="activeNames" @change="handleChange" accordion>
       <el-collapse-item v-if="tree.length === 0" title="无法打开文件夹" name="1">
-        <LeftWelcome
-          @openFolder="OpenFolder"
-          @showLoading="showLoading"
-          @hideLoading="hideLoading" />
+        <LeftWelcome />
       </el-collapse-item>
       <el-collapse-item v-else-if="tree[0].children" :title="tree[0].label" name="1">
         <LeftSidebar
@@ -52,6 +49,8 @@
 </template>
 
 <script setup lang="ts">
+import pubsub from 'pubsub-js'
+import { themeIcons } from 'seti-icons'
 import { useDebounceFn } from '@vueuse/core'
 import useEventListener from '@hook/useEventListener'
 interface Tree {
@@ -77,6 +76,7 @@ interface Em {
 }
 const OpenFolder = (data: any, local: boolean) => {
   tree.value = data
+  console.log(tree.value[0].children)
   isLocal.value = local
 }
 const handleChange = (val: any) => {
@@ -98,8 +98,57 @@ const setWindowSize = useDebounceFn((event: Event) => {
     h: document.documentElement.clientHeight - otherHeight + 'px'
   }
 })
+const getIcon = themeIcons({
+  blue: '#268bd2',
+  grey: '#657b83',
+  'grey-light': '#839496',
+  green: '#859900',
+  orange: '#cb4b16',
+  pink: '#d33682',
+  purple: '#6c71c4',
+  red: '#dc322f',
+  white: '#fdf6e3',
+  yellow: '#b58900',
+  ignore: '#586e75'
+})
+
+//文件图标
+const setTreeFileIcon = (list: any) => {
+  for (let i = 0; i < list.length; i++) {
+    const element = list[i]
+    if (element.children || element?.type === 'dir') {
+      setTreeFileIcon(element.children)
+    } else {
+      const { svg, color } = getIcon(element.label)
+      element.svg = svg
+      element.color = color
+    }
+  }
+}
 useEventListener('resize', setWindowSize, {
   target: window
+})
+
+onMounted(() => {
+  pubsub.subscribe('webSocket', (msg: string, data: any) => {
+    if (data.type === 'finderTree') {
+      hideLoading()
+      const { data: list } = data
+      setTreeFileIcon(list[0].children)
+      OpenFolder(list, false)
+    }
+    else if (data.type === 'openFile') {
+      const { data: list } = data
+      console.log(list)
+    }
+  })
+  electron.receive("open-directory", (data) => {
+    showLoading()
+    window.WS.finderTree(data)
+  });
+})
+onUnmounted(() => {
+  pubsub.unsubscribe('webSocket');
 })
 </script>
 

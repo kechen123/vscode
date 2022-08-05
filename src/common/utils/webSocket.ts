@@ -24,7 +24,6 @@ class WS {
     ws.onmessage = (e: any) => {
       const data = JSON.parse(e.data)
       pubsub.publish('webSocket', data)
-      console.log('[WebSocket] 客户端收到消息:', e)
     }
 
     ws.onclose = (e: any) => {

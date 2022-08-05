@@ -26,12 +26,12 @@ class W {
       win.close()
     })
 
-    ipcMain.on('openDirectory', async function (event, arg) {
+    ipcMain.on('open-directory', async function (event, arg) {
       const { canceled, filePaths } = await dialog.showOpenDialog({
         properties: ['openDirectory']
       })
       if (!canceled) {
-        win.webContents.send('openDirectory', filePaths[0])
+        win.webContents.send('open-directory', filePaths[0])
       }
     })
 

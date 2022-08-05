@@ -94,7 +94,7 @@ export const fileContextMenu: Array<Array<TabContextMenu>> = [
       label: '打开文件'
     },
     {
-      id: 'close-to-right',
+      id: 'open-directory',
       label: '打开文件夹'
     },
     {

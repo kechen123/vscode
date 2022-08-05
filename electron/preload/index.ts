@@ -1,7 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron'
 
 const message = [
-  'openDirectory',
+  'open-directory',
   'open-dev',
   'open-win',
   'win-maximize',

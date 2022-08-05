@@ -3,6 +3,7 @@ import * as monaco from 'monaco-editor'
 import IRichLanguageConfiguration = monaco.languages.LanguageConfiguration
 import ILanguage = monaco.languages.IMonarchLanguage
 
+// https://github.com/rebornix/monaco-vue/blob/master/src/vueLanguage.ts
 // Allow for running under nodejs/requirejs in tests
 const _monaco: typeof monaco = typeof monaco === 'undefined' ? (<any>self).monaco : monaco
 

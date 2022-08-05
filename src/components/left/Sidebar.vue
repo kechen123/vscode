@@ -2,7 +2,7 @@
   <div class="sidebar">
     <el-tree
       :default-expanded-keys="[1]"
-      :data="props.tree"
+      :data="tree"
       node-key="id"
       :indent="5"
       :icon="ArrowRight"
@@ -29,6 +29,7 @@
 import pubsub from 'pubsub-js'
 import { ArrowRight } from '@element-plus/icons-vue'
 import { useTabList } from '@store/tabs'
+import { getFileExt, getFileType } from '@commonUtils/common'
 interface Tree {
   label: string
   file?: any
@@ -48,10 +49,10 @@ let time: any = null
 let pubId: any = null
 let idle: any = null
 const useTab = useTabList()
+const tree = ref<Tree[]>([])
 
 const treeClick = (data: Tree, node: any) => {
   clearTimeout(time)
-  console.log('treeClick', data, node)
   time = setTimeout(() => {
     const name = node.label
     emit('showLoading')
@@ -85,8 +86,7 @@ const treeDbClick = (data: Tree, node: any) => {
     }
   } else if (data.file) {
     // 读取文件内容并打开新选项卡,当前状态为编辑状态
-    let path = getFilePath(node)
-    getFileText(data, path, 'edit')
+    getServerFileText(data, 'edit')
   }
 }
 //本地文件内容
@@ -130,18 +130,23 @@ const getFilePath = (node: any, path: string[] = []) => {
 onMounted(() => {
   pubId = pubsub.subscribe('webSocket', (msg: string, result: any) => {
     if (result.type === 'getFileText' && idle) {
-      const { state, label, url, path, svg, color, relativePath } = idle
-      let pathUrl = relativePath.split('\\')
-      // pathUrl.reverse()
-      useTab.addTab({
-        name: label,
-        text: result.data,
-        state,
-        svg: svg,
-        color: color,
-        pathStr: url,
-        path: pathUrl
-      })
+      console.log('getFileText', result)
+      const { code, data, type } = result.data
+      if (code === 200) {
+        const { state, label, url, path, svg, color, relativePath } = idle
+        let pathUrl = relativePath.split('\\')
+        // pathUrl.reverse()
+        useTab.addTab({
+          name: label,
+          text: data,
+          state,
+          svg: svg,
+          color: color,
+          pathStr: url,
+          path: pathUrl,
+          fileType: type
+        })
+      }
     }
   })
 })
@@ -149,6 +154,17 @@ onMounted(() => {
 onUnmounted(() => {
   pubsub.unsubscribe(pubId)
 })
+
+watch(
+  () => props.tree,
+  (newValue, oldValue) => {
+    console.log('watch', newValue)
+    tree.value = newValue
+  },
+  {
+    immediate: true
+  }
+)
 </script>
 
 <style scoped lang="less">

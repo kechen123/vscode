@@ -54,12 +54,13 @@
       height: `${pageSize[1] - headerHeight - footerHeight - tabHeight - breadcrumbHeight}px`
     }">
     <Editor
-      v-show="activeData?.fileType != `image`"
+      v-show="activeData?.fileType.indexOf('image') === -1"
       ref="editorRef"
       :tabData="tabData"
       :option="option"
       @changeCode="changeCode" />
-    <VSImage v-if="activeData?.fileType === `image`" :file="activeData?.file" />
+    <VSImage v-if="activeData?.fileType.indexOf('image') !== -1"
+      :url="`data:${activeData?.fileType};base64,${activeData?.text}`" />
     <!-- <FileView
       :file="activeData.file"
       :name="activeData.name"
@@ -112,9 +113,7 @@ import { tabContextMenu } from '@config/contextmenu'
 import { getFileExt, getFileType } from '@commonUtils/common'
 import { writeFile } from '@commonUtils/fileSystemAccessApi'
 
-interface ActiveData extends Tab {
-  fileType: string
-}
+const image = ['jpeg', 'png', 'gif']
 
 const closeDialogVisible = ref(false)
 const tabsRef = ref()
@@ -146,8 +145,7 @@ const tabData = reactive<TabList>({
   fileNames: [],
   active: ''
 })
-const activeFileType = ref('text')
-const activeData = ref<ActiveData | undefined>()
+const activeData = ref<Tab | undefined>()
 
 useKeyPress(['ctrl', 's'], (event) => {
   event.preventDefault()
@@ -180,14 +178,9 @@ watchEffect(() => {
   let active = store.getActiveTabContent()
 
   if (active) {
-    activeData.value = {
-      ...active,
-      fileType: getFileType(active?.file)
-    }
+    console.log('active', active)
+    activeData.value = active
   }
-
-  //  fileType: getFileType(active?.file)
-  // console.log(activeData.value)
 })
 
 const saveFile = async (pathStr: string, text: string) => {

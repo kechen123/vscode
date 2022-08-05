@@ -1,5 +1,6 @@
 import * as fs from 'fs'
 import * as path from 'path'
+import * as mime from 'mime'
 const filterList = ['.git', '.gitignore', '.idea', '.vscode', 'node_modules']
 
 //文件夹目录
@@ -80,8 +81,31 @@ function getFinderPathTree(startPath) {
 
 //文件内容
 function getFileText(url) {
-  const text = fs.readFileSync(url)
-  return text.toString('utf-8')
+  try {
+    const type = mime.getType(url) || 'text/plain'
+    if (type.includes('image')) {
+      const content = fs.readFileSync(url, 'base64')
+      return {
+        msg: '读取成功',
+        code: 200,
+        data: content,
+        type: type
+      }
+    }
+    const text = fs.readFileSync(url, 'utf-8')
+    return {
+      msg: '读取成功',
+      code: 200,
+      data: text,
+      type: type
+    }
+  } catch (error) {
+    return {
+      msg: '读取失败',
+      code: 500,
+      data: error
+    }
+  }
 }
 
 function writeFile(url, text) {
