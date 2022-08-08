@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && electron-builder",
+    "build:web": "vite build",
     "build:1": "vite build && esno build/index.ts"
   },
   "dependencies": {
