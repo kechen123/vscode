@@ -10,8 +10,9 @@ class WS {
   }
   init() {
     const ws = this.ws
-    ws.onopen = () => {
+    ws.onopen = (e) => {
       this.state = 'open'
+      console.log('ws open', e)
       const data = {
         type: 'socketState',
         data: {
@@ -70,18 +71,21 @@ class WS {
     }
     this.send(JSON.stringify(data))
   }
-  openTerminal(path?: string) {
+  openTerminal(id: string, path?: string) {
     const data = {
       type: 'openTerminal',
-      data: {}
+      data: {
+        id
+      }
     }
     this.send(JSON.stringify(data))
   }
-  terminal(cmd: string) {
+  terminal(cmd: string, id: string) {
     const data = {
       type: 'terminal',
       data: {
-        cmd: cmd
+        cmd,
+        id
       }
     }
     this.send(JSON.stringify(data))

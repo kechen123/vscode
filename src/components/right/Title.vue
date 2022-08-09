@@ -2,17 +2,16 @@
   <div class="title">
     <div class="panel-switch">
       <ul>
-        <li>
-          <a> 终端 </a>
-          <div class="active-item-indicator"></div>
-        </li>
-        <li>
-          <a style="color: rgba(231, 231, 231, 0.6)"> 输出 </a>
-          <div></div>
-        </li>
-        <li>
-          <a style="color: rgba(231, 231, 231, 0.6)"> 调试控制台 </a>
-          <div></div>
+
+        <li v-for="(item, i) in Object.keys(props.terminalList)"
+          :class="['terminal', `${item === props.active ? 'active' : ''}`]"
+          @click="props.change(item)">
+          <a> 终端 {{ i + 1 }}
+            <div class="close">
+              <i class="codicon codicon-chrome-close" title="关闭 (Ctrl+F4)"></i>
+            </div>
+          </a>
+
         </li>
       </ul>
     </div>
@@ -21,8 +20,7 @@
         <li>
           <a
             class="action-label codicon codicon-split-horizontal"
-            title="拆分终端 (Ctrl+Shift+5)"
-          ></a>
+            title="拆分终端 (Ctrl+Shift+5)"></a>
         </li>
         <li>
           <a class="action-label codicon codicon-trash" title="终止终端"></a>
@@ -35,14 +33,30 @@
           <a class="action-label codicon codicon-chevron-left" title="最大化面板大小"></a>
         </li>
         <li>
-          <a class="action-label codicon codicon-close" title="关闭面板"></a>
+          <a class="action-label codicon codicon-close" title="关闭面板" @click="store.showTerminal(false)"></a>
         </li>
       </ul>
     </div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { FitAddon } from 'xterm-addon-fit'
+import { useLayout } from '@store/layout'
+type TerminalList = {
+  [key: string]: {
+    terminal: any
+    fit: FitAddon | undefined
+  }
+}
+type Props = {
+  active: string
+  terminalList: TerminalList
+  change: (val: string) => void
+}
+const store = useLayout()
+const props = defineProps<Props>()
+</script>
 
 <style scoped lang="less">
 .title {
@@ -54,10 +68,13 @@
   padding-left: 8px;
   padding-right: 8px;
   color: #c5c5c5;
+  // border-bottom: solid 1px rgba(128, 128, 128, 0.35);
+
   .panel-switch {
     line-height: 27px;
     height: 35px;
     white-space: nowrap;
+
     ul {
       display: flex;
       margin: 0 auto;
@@ -65,44 +82,50 @@
       height: 100%;
       width: 100%;
       align-items: center;
+
       li {
         text-transform: uppercase;
         font-size: 11px;
-        padding: 2px 10px;
+        padding: 2px 6px;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         position: relative;
-        a {
-          color: rgb(231, 231, 231);
-          border-bottom-color: rgb(231, 231, 231);
+      }
+
+      .terminal a {
+        padding: 0 2px;
+        color: rgba(231, 231, 231, 0.6);
+      }
+
+      .active a {
+        color: rgb(231, 231, 231);
+        border-bottom: solid 1px rgb(231, 231, 231);
+      }
+
+      .close {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        margin-left: 5px;
+        color: rgba(231, 231, 231, 0.6);
+        cursor: pointer;
+
+        .codicon {
+          font-size: 12px;
         }
-        .active-item-indicator {
-          position: absolute;
-          z-index: 1;
-          bottom: 0;
-          overflow: hidden;
-          pointer-events: none;
-          height: 100%;
-          top: -6px;
-          left: 10px;
-          width: calc(100% - 20px);
-        }
-        .active-item-indicator::before {
-          content: '';
-          position: absolute;
-          z-index: 1;
-          bottom: 0;
-          width: 100%;
-          height: 0;
-          border-top-width: 1px;
-          border-top-style: solid;
-          border-top-color: #e7e7e7;
+
+        .codicon:hover {
+          color: rgba(231, 231, 231, 0.8);
+          background-color: rgba(90, 93, 94, 0.31);
         }
       }
+
+
     }
   }
+
   .title-actions {
     flex: 1;
     padding-left: 5px;
@@ -117,6 +140,7 @@
       width: 100%;
       align-items: center;
       justify-content: flex-end;
+
       li {
         display: block;
         align-items: center;
@@ -127,9 +151,11 @@
       }
     }
   }
+
   .global-actions {
     white-space: nowrap;
     height: 100%;
+
     ul {
       display: flex;
       margin: 0 auto;
@@ -137,6 +163,7 @@
       height: 100%;
       width: 100%;
       align-items: center;
+
       li {
         display: block;
         align-items: center;
@@ -146,6 +173,7 @@
       }
     }
   }
+
   .action-label {
     padding: 3px;
     display: block;
@@ -157,6 +185,7 @@
     height: 16px;
     box-sizing: content-box;
   }
+
   .action-label:hover {
     background-color: rgba(90, 93, 94, 0.31);
   }

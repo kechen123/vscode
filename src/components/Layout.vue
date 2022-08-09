@@ -8,7 +8,7 @@
     <div class="content" ref="contentRef" :style="{ width: content.realTimeWidth + 'px' }">
       <slot name="content"></slot>
     </div>
-    <div class="right" :style="{ width: right.realTimeWidth + 'px' }">
+    <div class="right" :style="{ width: right.realTimeWidth + 'px', display: right.show ? 'block' : 'none' }">
       <div class="line" ref="rightLineRef" style="left: 0"></div>
       <slot name="right"></slot>
     </div>
@@ -25,26 +25,16 @@ import {
   defaultRightWidth,
   defaultRightMinWidth
 } from '@config/layout'
+import { useLayout } from '@store/layout'
 
-const leftWidth = defaultActivitybarWidth + defaultLeftWidth
-const rightWidth = defaultRightWidth
+const store = useLayout()
+
+
 const contentRef = ref()
-const body = reactive({
-  realTimeWidth: leftWidth,
-  downWidth: leftWidth
-})
-const left = reactive({
-  realTimeWidth: leftWidth,
-  downWidth: leftWidth
-})
-const content = reactive({
-  realTimeWidth: 0,
-  downWidth: 0
-})
-const right = reactive({
-  realTimeWidth: rightWidth,
-  downWidth: rightWidth
-})
+const body = reactive(store.body)
+const left = reactive(store.tree)
+const content = reactive(store.content)
+const right = reactive(store.terminal)
 const downLeft = () => {
   left.downWidth = left.realTimeWidth
 }
@@ -96,6 +86,10 @@ onMounted(() => {
     content.downWidth = width
   }
 })
+
+watch([body, left, content, right], (val) => {
+  store.update(...val)
+})
 </script>
 
 <style scoped lang="less">
@@ -107,6 +101,7 @@ onMounted(() => {
   height: 100%;
   flex-grow: 1;
   background: #f1f1f1;
+
   .left,
   .content,
   .right {
@@ -114,12 +109,15 @@ onMounted(() => {
     height: 100%;
     position: relative;
   }
+
   .left {
     display: flex;
   }
+
   .content {
     flex: 1;
   }
+
   .line {
     width: 4px;
     height: 100%;
@@ -128,6 +126,7 @@ onMounted(() => {
     top: 0;
     right: 0;
   }
+
   .line:before {
     content: '';
     pointer-events: none;
@@ -137,6 +136,7 @@ onMounted(() => {
     transition: background-color 0.1s ease-out;
     background: transparent;
   }
+
   .hover:before {
     background: #007fd4;
   }

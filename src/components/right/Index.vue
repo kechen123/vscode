@@ -1,13 +1,29 @@
 <template>
   <div class="right-view">
-    <RightTitle />
-    <div class="terminal">
-      <RightContainer />
-    </div>
+    <RightTitle :active="active" :terminalList="terminalList" :change="changeActive" />
+    <RightContainer :active="active" :terminalList="terminalList" :change="change" />
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { FitAddon } from 'xterm-addon-fit'
+
+type Obj = {
+  terminal: any
+  fit: FitAddon | undefined
+}
+
+const active = ref('')
+let terminalList = reactive<{ [key: string]: Obj }>({})
+const change = (key: string, val: any) => {
+  active.value = key
+  terminalList[key] = val
+}
+const changeActive = (val: string) => {
+  active.value = val
+}
+
+</script>
 
 <style scoped lang="less">
 .right-view {
@@ -19,10 +35,6 @@
   border-left-style: solid;
   width: 100%;
   height: 100%;
-  .terminal {
-    width: 100%;
-    height: calc(100% - 35px);
-    padding: 10px;
-  }
+
 }
 </style>

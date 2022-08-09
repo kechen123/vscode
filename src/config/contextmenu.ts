@@ -525,7 +525,7 @@ export const goContextMenu: Array<Array<TabContextMenu>> = [
 export const terminalsContextMenu: Array<Array<TabContextMenu>> = [
   [
     {
-      id: 'close',
+      id: 'new-terminal',
       label: '新建终端',
       keyPress: 'ctrl',
       keyCode: 81

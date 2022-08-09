@@ -1,5 +1,8 @@
 <template>
-  <div class="container" ref="terminalRef"></div>
+  <div class="terminal" ref="terminalRef">
+    <div v-for="item in Object.keys(props.terminalList)" :key="item" :id="'terminal-' + item"
+      v-show="item === props.active"></div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -8,24 +11,34 @@ import { FitAddon } from 'xterm-addon-fit'
 import 'xterm/css/xterm.css'
 import 'xterm/lib/xterm.js'
 import pubsub from 'pubsub-js'
+import { v4 as uuidv4 } from 'uuid'
+import { useLayout } from '@store/layout'
 import useElementResize from '@hook/useElementResize'
 
-type Obj = {
-  terminal: any
-  fit: FitAddon | undefined
+
+type TerminalList = {
+  [key: string]: {
+    terminal: any
+    fit: FitAddon | undefined
+  }
+}
+type Props = {
+  terminalList: TerminalList
+  active: string
+  change: (key: string, val: any) => void
 }
 
-let obj = reactive<Obj>({
-  terminal: undefined,
-  fit: undefined
-})
+const props = defineProps<Props>()
+const store = useLayout()
 
-const cmd = ref('')
-let pubId: any
 const bodyReSize = (event: Element, width: number, height: number) => {
   console.log('resize>>>');
   try {
-    obj.fit?.fit()
+    Object.values(props.terminalList).forEach(item => {
+      if (item.fit) {
+        item.fit.fit()
+      }
+    })
   } catch (e) {
     console.log('e', e)
   }
@@ -33,7 +46,11 @@ const bodyReSize = (event: Element, width: number, height: number) => {
 
 const [terminalRef] = useElementResize({ resize: bodyReSize, className: 'container' })
 
-onMounted(() => {
+
+const createTerminal = (id: string, ref: HTMLElement) => {
+  if (props.terminalList[id].terminal) {
+    return
+  }
   const terminal: any = new Terminal({
     fontSize: 14,
     fontFamily: 'Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
@@ -44,14 +61,14 @@ onMounted(() => {
     disableStdin: false, //是否应禁用输入
     theme: {
       background: '#1e1e1e', //背景色
-      foreground: '#FFF', //字体
+      foreground: '#ccc', //字体
       cursor: 'help' //设置光标
     },
     windowsMode: true
   })
   const fit = new FitAddon()
   terminal.loadAddon(fit)
-  terminal.open(terminalRef?.value as HTMLElement)
+  terminal.open(ref)
   terminal.prompt = () => {
     terminal.write('\r')
   }
@@ -59,7 +76,7 @@ onMounted(() => {
   terminal.onKey((e: { key: string; domEvent: KeyboardEvent }) => {
     const ev = e.domEvent
     const printable = !ev.altKey && !ev.ctrlKey && !ev.metaKey
-    window.WS.terminal(e.key)
+    window.WS.terminal(e.key, id)
     // if (ev.code === 'Enter') {
     //   terminal.prompt()
     // } else if (ev.code === 'Backspace' && terminal._core.buffer.x > 2) {
@@ -72,25 +89,52 @@ onMounted(() => {
   })
 
   fit.fit()
-  obj.terminal = terminal
-  obj.fit = fit
-  window.WS.openTerminal()
-  pubId = pubsub.subscribe('webSocket', (msg: string, result: any) => {
+  props.change(id, {
+    terminal,
+    fit
+  })
+}
+
+onMounted(() => {
+  pubsub.subscribe('webSocket', (msg: string, result: any) => {
     if (result.type === 'terminal') {
+      const id = result.data.id
       // console.log('收到服务端控制台消息')
-      // console.log('-------------')
-      // console.log(result.data)
-      // console.log('-------------')
-      terminal.write(result.data)
+      console.log('收到服务端控制台消息-------------')
+      console.log(msg)
+      console.log(result)
+      console.log('-------------')
+      props.terminalList[id].terminal.write(result.data.msg)
     }
+  })
+  pubsub.subscribe('new-terminal', async (msg: string, result: any) => {
+    if (!store.terminal.show) {
+      store.showTerminal(true)
+    }
+
+    const id: string = uuidv4().substring(0, 8)
+    props.change(id, {
+      terminal: undefined,
+      fit: undefined
+    })
+    await nextTick()
+    window.WS.openTerminal(id)
+    const ref = document.getElementById(`terminal-${id}`) as HTMLElement
+    createTerminal(id, ref)
   })
 })
 </script>
 
 <style scoped lang="less">
-.container {
+.terminal {
   width: 100%;
-  height: 100%;
+  height: calc(100% - 35px);
+  padding: 10px;
+
+  .container {
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>
 <style>

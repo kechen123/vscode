@@ -1,20 +1,18 @@
 import * as WebSocket from 'ws'
-import * as pty from 'node-pty'
-import * as os from 'os'
 import { getFinderPathTree, getFileText, writeFile } from './file'
 import { createTerminal } from './terminal'
 
-let ptyProcess: any = null
+let terminals: any = {}
 
 const createWebSocket = () => {
   let ws = new (WebSocket as any).Server({ port: 3005 })
-  console.log('服务端webSocket已启动')
+  console.log('webSocket start...')
   ws.on('connection', (ws) => {
     console.log('server connection')
     ws.on('message', (msg) => {
       let msgData = msg.toString('utf-8')
       msgData = JSON.parse(msgData)
-      console.log('收到消息:', msgData)
+      console.log('get message:', msgData)
       if (messageFun[msgData.type]) {
         const data = messageFun[msgData.type](msgData.data, ws)
         if (data) {
@@ -45,22 +43,27 @@ const messageFun = {
 
   openTerminal: (data, ws) => {
     try {
-      ptyProcess = createTerminal(data.path)
+      const { id, path } = data
+      const ptyProcess = createTerminal(path)
+      terminals[id] = ptyProcess
       ptyProcess.on('data', function (data) {
-        data = data.toString('utf-8')
         const msg = {
           type: 'terminal',
-          data
+          data: {
+            msg: data,
+            id
+          }
         }
+        console.log('send message:', msg)
         ws.send(JSON.stringify(msg))
       })
     } catch (error) {
       console.log(error)
     }
   },
-  terminal: (data) => {
-    console.log('收到cmd-data:', data.cmd)
-    ptyProcess.write(data.cmd)
+  terminal: (data: { id: string; cmd: string }) => {
+    console.log('cmd-data:', data.cmd)
+    terminals[data.id].write(data.cmd)
   }
 }
 
